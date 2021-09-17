@@ -22,6 +22,8 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.2.2",
     "@lukeed/uuid": "^2.0.0",
+    "@tiptap/core": "^2.0.0-beta.106",
+    "@tiptap/starter-kit": "^2.0.0-beta.105",
     "cookie": "^0.4.1"
   }
 }

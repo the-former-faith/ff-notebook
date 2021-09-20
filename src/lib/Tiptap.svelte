@@ -2,6 +2,8 @@
     import { onMount, onDestroy } from 'svelte'
     import { Editor } from '@tiptap/core'
     import StarterKit from '@tiptap/starter-kit'
+    import Lang from '$lib/marks/lang'
+    import Link from '@tiptap/extension-link'
   
     let element
     let editor
@@ -11,6 +13,10 @@
         element: element,
         extensions: [
           StarterKit,
+          Lang,
+          Link.configure({
+            openOnClick: false,
+          })
         ],
         content: '<p>Hello World! 🌍️ </p>',
         onTransaction: () => {
@@ -19,6 +25,40 @@
         },
       })
     })
+
+
+    const setLink = () => {
+      const previousUrl = editor.getAttributes('link').href
+      const url = window.prompt('URL', previousUrl)
+
+      // cancelled
+      if (url === null) {
+        return
+      }
+
+      // empty
+      if (url === '') {
+        editor
+          .chain()
+          .focus()
+          .extendMarkRange('link')
+          .unsetLink()
+          .run()
+
+        return
+      }
+
+      // update link
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .setLink({ href: url })
+        .run()
+    }
+
+
+    const logContent = () => console.log(editor.getJSON())
   
     onDestroy(() => {
       if (editor) {
@@ -28,6 +68,20 @@
   </script>
   
   {#if editor}
+    <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
+      lang
+    </button>
+    <button on:click={() => setLink()} class:active={editor.isActive('link')}>
+      link
+    </button>
+    {#if editor.isActive('link')}
+      <button on:click={() => editor.chain().focus().unsetLink().run()} >
+        unsetLink
+      </button>
+    {/if}
+    <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
+      bold
+    </button>
     <button
       on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
       class:active={editor.isActive('heading', { level: 1 })}
@@ -43,6 +97,11 @@
     <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
       P
     </button>
+    <button
+    on:click={() => logContent()}
+  >
+    Log content
+  </button>
   {/if}
   
   <div bind:this={element} />

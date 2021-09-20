@@ -1,115 +1,135 @@
 <script type="module">
-    import { onMount, onDestroy } from 'svelte'
-    import { Editor } from '@tiptap/core'
-    import StarterKit from '@tiptap/starter-kit'
-    import Lang from '$lib/marks/lang'
-    import Link from '@tiptap/extension-link'
+  import { onMount, onDestroy } from 'svelte'
+  import { Editor } from '@tiptap/core'
+  import StarterKit from '@tiptap/starter-kit'
+  import Lang from '$lib/marks/lang'
+  import Link from '@tiptap/extension-link'
+  import Collaboration from '@tiptap/extension-collaboration'
+  import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+  import * as Y from 'yjs'
+  import { WebsocketProvider } from 'y-websocket'
   
-    let element
-    let editor
   
-    onMount(() => {
-      editor = new Editor({
-        element: element,
-        extensions: [
-          StarterKit,
-          Lang,
-          Link.configure({
-            openOnClick: false,
-          })
-        ],
-        content: '<p>Hello World! 🌍️ </p>',
-        onTransaction: () => {
-          // force re-render so `editor.isActive` works as expected
-          editor = editor
-        },
-      })
+  let element
+  let editor
+  let provider
+  let HP
+  let ydoc
+
+  onMount(async() => {
+    ydoc = new Y.Doc()
+    //HP = (await import('@hocuspocus/provider'))
+    provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document', ydoc)
+
+    editor = new Editor({
+      element: element,
+      extensions: [
+        StarterKit.configure({
+          history: false,
+        }),
+        Lang,
+        Link.configure({
+          openOnClick: false,
+        }),
+        Collaboration.configure({document: ydoc}),
+        CollaborationCursor.configure({
+          provider: provider,
+          user: {
+            name: 'Cyndi Lauper',
+            color: '#f783ac',
+          },
+        }),
+      ],
+      onTransaction: () => {
+        // force re-render so `editor.isActive` works as expected
+        editor = editor
+      },
     })
 
+  })
 
-    const setLink = () => {
-      const previousUrl = editor.getAttributes('link').href
-      const url = window.prompt('URL', previousUrl)
 
-      // cancelled
-      if (url === null) {
-        return
-      }
+  const setLink = () => {
+    const previousUrl = editor.getAttributes('link').href
+    const url = window.prompt('URL', previousUrl)
 
-      // empty
-      if (url === '') {
-        editor
-          .chain()
-          .focus()
-          .extendMarkRange('link')
-          .unsetLink()
-          .run()
+    // cancelled
+    if (url === null) {
+      return
+    }
 
-        return
-      }
-
-      // update link
+    // empty
+    if (url === '') {
       editor
         .chain()
         .focus()
         .extendMarkRange('link')
-        .setLink({ href: url })
+        .unsetLink()
         .run()
+
+      return
     }
 
+    // update link
+    editor
+      .chain()
+      .focus()
+      .extendMarkRange('link')
+      .setLink({ href: url })
+      .run()
+  }
 
-    const logContent = () => console.log(editor.getJSON())
+
+  const logContent = () => console.log(editor.getJSON())
+
+  onDestroy(() => {
+    if (editor) {
+      editor.destroy()
+    }
+  })
+</script>
   
-    onDestroy(() => {
-      if (editor) {
-        editor.destroy()
-      }
-    })
-  </script>
-  
-  {#if editor}
-    <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
-      lang
+{#if editor}
+  <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
+    lang
+  </button>
+  <button on:click={() => setLink()} class:active={editor.isActive('link')}>
+    link
+  </button>
+  {#if editor.isActive('link')}
+    <button on:click={() => editor.chain().focus().unsetLink().run()} >
+      unsetLink
     </button>
-    <button on:click={() => setLink()} class:active={editor.isActive('link')}>
-      link
-    </button>
-    {#if editor.isActive('link')}
-      <button on:click={() => editor.chain().focus().unsetLink().run()} >
-        unsetLink
-      </button>
-    {/if}
-    <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
-      bold
-    </button>
-    <button
-      on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
-      class:active={editor.isActive('heading', { level: 1 })}
-    >
-      H1
-    </button>
-    <button
-      on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-      class:active={editor.isActive('heading', { level: 2 })}
-    >
-      H2
-    </button>
-    <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
-      P
-    </button>
-    <button
-    on:click={() => logContent()}
+  {/if}
+  <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
+    bold
+  </button>
+  <button
+    on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
+    class:active={editor.isActive('heading', { level: 1 })}
   >
+    H1
+  </button>
+  <button
+    on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+    class:active={editor.isActive('heading', { level: 2 })}
+  >
+    H2
+  </button>
+  <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
+    P
+  </button>
+  <button on:click={() => logContent()}>
     Log content
   </button>
-  {/if}
+{/if}
   
-  <div bind:this={element} />
+<div bind:this={element} />
   
-  <style>
-    button.active {
-      background: black;
-      color: white;
-    }
-  </style>
+<style>
+  button.active {
+    background: black;
+    color: white;
+  }
+</style>
   

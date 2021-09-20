@@ -9,16 +9,13 @@
   import * as Y from 'yjs'
   import { WebsocketProvider } from 'y-websocket'
   
-  
   let element
   let editor
   let provider
-  let HP
   let ydoc
 
   onMount(async() => {
     ydoc = new Y.Doc()
-    //HP = (await import('@hocuspocus/provider'))
     provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document', ydoc)
 
     editor = new Editor({
@@ -35,7 +32,7 @@
         CollaborationCursor.configure({
           provider: provider,
           user: {
-            name: 'Cyndi Lauper',
+            name: 'Cyndig Lauper',
             color: '#f783ac',
           },
         }),
@@ -85,6 +82,10 @@
   onDestroy(() => {
     if (editor) {
       editor.destroy()
+    }
+
+    if (provider) {
+      provider.destroy()
     }
   })
 </script>

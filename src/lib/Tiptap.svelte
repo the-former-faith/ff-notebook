@@ -14,12 +14,16 @@
   let provider
   let ydoc
   let ytext
-
-  $: ytext = ytext
+  let titleFieldText
 
   onMount(async() => {
     ydoc = new Y.Doc()
+    //@TODO - Try changing to use a map for text fields.
     ytext = ydoc.getText('my text type') 
+    ytext.observe(event => {
+      console.log(event)
+      ytext = ytext
+    })
     provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document-2', ydoc)
 
     editor = new Editor({
@@ -97,12 +101,12 @@
   })
 
   const updateYText = (e) => {
-    ytext.insert(0, e.target.value)
-    console.log(ytext.toString())
+    ytext.set(e.target.value)
+    //console.log(ytext.toString())
   }
 </script>
 
-<input type="text" on:blur={(e) => updateYText(e)}/>
+<input type="text" bind:value={titleFieldText} on:blur={(e) => updateYText(e)}/>
 
 {#if ytext}
   <p>Text: {ytext.toString()}</p>

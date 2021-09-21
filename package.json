@@ -21,6 +21,8 @@
   "type": "module",
   "dependencies": {
     "@fontsource/fira-mono": "^4.2.2",
+    "@hocuspocus/extension-logger": "^1.0.0-alpha.45",
+    "@hocuspocus/extension-monitor": "^1.0.0-alpha.70",
     "@hocuspocus/extension-rocksdb": "^1.0.0-alpha.72",
     "@hocuspocus/provider": "^1.0.0-alpha.16",
     "@hocuspocus/server": "^1.0.0-alpha.70",

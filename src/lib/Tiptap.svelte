@@ -13,10 +13,14 @@
   let editor
   let provider
   let ydoc
+  let ytext
+
+  $: ytext = ytext
 
   onMount(async() => {
     ydoc = new Y.Doc()
-    provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document', ydoc)
+    ytext = ydoc.getText('my text type') 
+    provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document-2', ydoc)
 
     editor = new Editor({
       element: element,
@@ -28,7 +32,10 @@
         Link.configure({
           openOnClick: false,
         }),
-        Collaboration.configure({document: ydoc}),
+        Collaboration.configure({
+          document: ydoc,
+          field: 'content',
+        }),
         CollaborationCursor.configure({
           provider: provider,
           user: {
@@ -88,7 +95,18 @@
       provider.destroy()
     }
   })
+
+  const updateYText = (e) => {
+    ytext.insert(0, e.target.value)
+    console.log(ytext.toString())
+  }
 </script>
+
+<input type="text" on:blur={(e) => updateYText(e)}/>
+
+{#if ytext}
+  <p>Text: {ytext.toString()}</p>
+{/if}
   
 {#if editor}
   <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>

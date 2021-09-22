@@ -24,6 +24,8 @@
     ywebsocket = await import ('y-websocket')
     provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com:1234', 'example-document-2', ydoc)
 
+    awareness = provider.awareness
+
     editor = new Editor({
       element: element,
       extensions: [
@@ -34,17 +36,17 @@
         Link.configure({
           openOnClick: false,
         }),
-        //Collaboration.configure({
-          //document: ydoc,
-          //field: 'content',
-        //}),
-        //CollaborationCursor.configure({
-          //provider: provider,
-          //user: {
-            //name: 'Cyndig Lauper',
-            //color: '#f783ac',
-          //},
-        //}),
+        Collaboration.configure({
+          document: ydoc,
+          field: 'content',
+        }),
+        CollaborationCursor.configure({
+          provider: provider,
+          user: {
+            name: 'Cyndig Lauper',
+            color: '#f783ac',
+          },
+        }),
       ],
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected

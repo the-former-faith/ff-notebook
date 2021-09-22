@@ -22,7 +22,7 @@
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    //provider = new ywebsocket.WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
+    provider = new ywebsocket.WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
 
     editor = new Editor({
       element: element,

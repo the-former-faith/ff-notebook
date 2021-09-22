@@ -7,9 +7,10 @@
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
   import * as Y from 'yjs'
-  import { WebsocketProvider } from 'y-websocket'
+  //import { WebsocketProvider } from 'y-websocket'
   import { readableMap } from 'svelt-yjs'
-  
+
+  let ywebsocket
   let element
   let editor
   let provider
@@ -20,7 +21,8 @@
   let awareness
 
   onMount(async() => {
-    provider = new WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
+    ywebsocket = await import ('y-websocket')
+    provider = new ywebsocket.WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
 
     awareness = provider.awareness
 

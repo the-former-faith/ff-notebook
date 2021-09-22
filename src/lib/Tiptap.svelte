@@ -22,7 +22,36 @@
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    
+    //provider = new ywebsocket.WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
+
+    editor = new Editor({
+      element: element,
+      extensions: [
+        StarterKit.configure({
+          history: false,
+        }),
+        Lang,
+        Link.configure({
+          openOnClick: false,
+        }),
+        //Collaboration.configure({
+          //document: ydoc,
+          //field: 'content',
+        //}),
+        //CollaborationCursor.configure({
+          //provider: provider,
+          //user: {
+            //name: 'Cyndig Lauper',
+            //color: '#f783ac',
+          //},
+        //}),
+      ],
+      onTransaction: () => {
+        // force re-render so `editor.isActive` works as expected
+        editor = editor
+      },
+    })
+
   })
 
 

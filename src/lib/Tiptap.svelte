@@ -8,23 +8,36 @@
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
   import * as Y from 'yjs'
   import { WebsocketProvider } from 'y-websocket'
+  import { readableMap } from 'svelt-yjs'
   
   let element
   let editor
   let provider
   let ydoc
-  let ytext
-  let titleFieldText
+  ydoc = new Y.Doc()
+  const ymap = ydoc.getMap('fields')
+  const fields = readableMap(ymap)
+  let awareness
 
   onMount(async() => {
-    ydoc = new Y.Doc()
-    //@TODO - Try changing to use a map for text fields.
-    ytext = ydoc.getText('my text type') 
-    ytext.observe(event => {
-      console.log(event)
-      ytext = ytext
-    })
     provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document-2', ydoc)
+
+    awareness = provider.awareness
+
+    awareness.on('change', changes => {
+      // Whenever somebody updates their awareness information,
+      // we log all awareness information from all users.
+      console.log(Array.from(awareness.getStates().values()))
+    })
+    
+    document.addEventListener('mousemove', event => {
+      awareness.setLocalStateField('user', {
+        name: 'Kevin Jahns',
+        color: '#ffcc00',
+        mouseX: event.clientX,
+        mouseY: event.clientY,
+      })
+    })
 
     editor = new Editor({
       element: element,
@@ -99,19 +112,11 @@
       provider.destroy()
     }
   })
-
-  const updateYText = (e) => {
-    ytext.set(e.target.value)
-    //console.log(ytext.toString())
-  }
 </script>
 
-<input type="text" bind:value={titleFieldText} on:blur={(e) => updateYText(e)}/>
 
-{#if ytext}
-  <p>Text: {ytext.toString()}</p>
-{/if}
-  
+<input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>
+
 {#if editor}
   <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
     lang

@@ -20,7 +20,7 @@
   let awareness
 
   onMount(async() => {
-    provider = new WebsocketProvider('ws://127.0.0.1:1234', 'example-document-2', ydoc)
+    provider = new WebsocketProvider('ws://ff-server.onrender.com:1234', 'example-document-2', ydoc)
 
     awareness = provider.awareness
 

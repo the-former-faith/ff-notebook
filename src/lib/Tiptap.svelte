@@ -22,7 +22,7 @@
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com:1200', 'example-document-2', ydoc)
+    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'example-document', ydoc)
 
     awareness = provider.awareness
 

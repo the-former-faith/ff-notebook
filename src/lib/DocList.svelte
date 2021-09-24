@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte'
   import * as Y from 'yjs'
   //import { WebsocketProvider } from 'y-websocket'
-  import { readableMap, readableArray } from 'svelt-yjs'
+  import { readableArray } from 'svelt-yjs'
   import { currentDoc } from '$lib/stores.js';
 
   let ywebsocket
@@ -13,11 +13,14 @@
   const documentList = ydoc.getArray('doc-list')
   const readableDocumentList = readableArray(documentList)
 
+  $: if($readableDocumentList[0]){
+    //console.log($readableDocumentList[0].getMap('fields').get('title'))
+  }
+
   const createDoc = () => {
-    const newDoc = new Y.Text()
+    const newDoc = new Y.Doc()
     documentList.push([newDoc])
-    //@TODO - fix editor binding
-    //bindEditor(newDoc)
+    currentDoc.set(newDoc)
   }
 
   onMount(async() => {
@@ -40,7 +43,7 @@
   <ul>
     {#each $readableDocumentList as doc, i}
       <li>
-        <button index={i} on:click={() => currentDoc.set(documentList.get(i).doc)}>Document {i}</button>
+        <button index={i} on:click={() => currentDoc.set(documentList.get(i))}>Document {i}</button>
       </li>
     {/each}
   </ul>

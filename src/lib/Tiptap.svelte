@@ -6,8 +6,6 @@
   import Link from '@tiptap/extension-link'
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-  import * as Y from 'yjs'
-  //import { WebsocketProvider } from 'y-websocket'
   import { readableMap } from 'svelt-yjs'
   import { currentDoc } from '$lib/stores.js';
 
@@ -19,26 +17,28 @@
   let fields
   let awareness
 
-  $: {
-    if($currentDoc && ywebsocket) {
-      console.log($currentDoc)
-      if (editor) {
-        editor.destroy()
-      }
-
-      if (provider) {
-        provider.destroy()
-      }
-      //@todo - Change from 'example-document' to actual document
-      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'example-document', $currentDoc)
-      createEditor()
-      awareness = provider.awareness
-    }
-  }
+  $: loadDoc($currentDoc)
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
   })
+
+  const loadDoc = async(doc) => {
+    if(doc && ywebsocket) {
+
+      if (editor) {
+        await editor.destroy()
+      }
+
+      if (provider) {
+        await provider.destroy()
+      }
+
+      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, doc)
+      createEditor()
+      awareness = provider.awareness
+    }
+  }
 
   const createEditor = () => {
     ymap = $currentDoc.getMap('fields')

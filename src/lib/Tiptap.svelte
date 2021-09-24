@@ -1,4 +1,4 @@
-<script type="module">
+<script>
   import { onMount, onDestroy } from 'svelte'
   import { Editor } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
@@ -14,8 +14,7 @@
   let element
   let editor
   let provider
-  let ydoc
-  ydoc = new Y.Doc()
+  let ydoc = new Y.Doc()
   const ymap = ydoc.getMap('fields')
   const fields = readableMap(ymap)
   let awareness
@@ -87,9 +86,6 @@
       .run()
   }
 
-
-  const logContent = () => console.log(editor.getJSON())
-
   onDestroy(() => {
     if (editor) {
       editor.destroy()
@@ -101,45 +97,48 @@
   })
 </script>
 
-
+<div>
 <input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>
 
 {#if editor}
-  <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
-    lang
-  </button>
-  <button on:click={() => setLink()} class:active={editor.isActive('link')}>
-    link
-  </button>
-  {#if editor.isActive('link')}
-    <button on:click={() => editor.chain().focus().unsetLink().run()} >
-      unsetLink
+  <div class="toolbar">
+    <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
+      lang
     </button>
-  {/if}
-  <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
-    bold
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
-    class:active={editor.isActive('heading', { level: 1 })}
-  >
-    H1
-  </button>
-  <button
-    on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-    class:active={editor.isActive('heading', { level: 2 })}
-  >
-    H2
-  </button>
-  <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
-    P
-  </button>
-  <button on:click={() => logContent()}>
-    Log content
-  </button>
+    <button on:click={() => setLink()} class:active={editor.isActive('link')}>
+      link
+    </button>
+    {#if editor.isActive('link')}
+      <button on:click={() => editor.chain().focus().unsetLink().run()} >
+        unsetLink
+      </button>
+    {/if}
+    <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
+      bold
+    </button>
+    <button
+      on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
+      class:active={editor.isActive('heading', { level: 1 })}
+    >
+      H1
+    </button>
+    <button
+      on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+      class:active={editor.isActive('heading', { level: 2 })}
+    >
+      H2
+    </button>
+    <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
+      P
+    </button>
+    <button on:click={() => console.log(editor.getJSON())}>
+      Log content
+    </button>
+  </div>
 {/if}
   
 <div bind:this={element} />
+</div>
   
 <style>
   button.active {
@@ -147,4 +146,3 @@
     color: white;
   }
 </style>
-  

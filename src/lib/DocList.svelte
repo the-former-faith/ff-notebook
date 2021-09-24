@@ -2,19 +2,27 @@
   import { onMount, onDestroy } from 'svelte'
   import * as Y from 'yjs'
   //import { WebsocketProvider } from 'y-websocket'
-  import { readableMap } from 'svelt-yjs'
+  import { readableMap, readableArray } from 'svelt-yjs'
 
   let ywebsocket
   let provider
-  let ydoc = new Y.Doc()
-  //const ymap = ydoc.getMap('fields')
-  //const fields = readableMap(ymap)
   let awareness
+
+  let ydoc = new Y.Doc()
+  const documentList = ydoc.getArray('doc-list')
+  const readableDocumentList = readableArray(documentList)
+  console.log($readableDocumentList)
+
+  const createDoc = () => {
+    const newDoc = new Y.Text()
+    documentList.push([newDoc])
+    //@TODO - fix editor binding
+    //bindEditor(newDoc)
+  }
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'example-document', ydoc)
-
+    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'all-docs ', ydoc)
     awareness = provider.awareness
   })
 
@@ -27,4 +35,13 @@
 
 <aside>
   <h2>All Docs</h2>
+  <button on:click={() => createDoc()}>+ Create New Document</button>
+  <button on:click={() => documentList.delete(0, documentList.length)}>- Delete All</button>
+  <ul>
+    {#each $readableDocumentList as doc, i}
+      <li>
+        <button index={i}>Document {i}</button>
+      </li>
+    {/each}
+  </ul>
 </aside>

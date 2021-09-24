@@ -9,21 +9,40 @@
   import * as Y from 'yjs'
   //import { WebsocketProvider } from 'y-websocket'
   import { readableMap } from 'svelt-yjs'
+  import { currentDoc } from '$lib/stores.js';
 
   let ywebsocket
   let element
   let editor
   let provider
-  let ydoc = new Y.Doc()
-  const ymap = ydoc.getMap('fields')
-  const fields = readableMap(ymap)
+  let ymap
+  let fields
   let awareness
+
+  $: {
+    if($currentDoc && ywebsocket) {
+      console.log($currentDoc)
+      if (editor) {
+        editor.destroy()
+      }
+
+      if (provider) {
+        provider.destroy()
+      }
+      //@todo - Change from 'example-document' to actual document
+      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'example-document', $currentDoc)
+      createEditor()
+      awareness = provider.awareness
+    }
+  }
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'example-document', ydoc)
+  })
 
-    awareness = provider.awareness
+  const createEditor = () => {
+    ymap = $currentDoc.getMap('fields')
+    fields = readableMap(ymap)
 
     editor = new Editor({
       element: element,
@@ -36,7 +55,7 @@
           openOnClick: false,
         }),
         Collaboration.configure({
-          document: ydoc,
+          document: $currentDoc,
           field: 'content',
         }),
         CollaborationCursor.configure({
@@ -52,8 +71,7 @@
         editor = editor
       },
     })
-
-  })
+  }
 
 
   const setLink = () => {
@@ -98,9 +116,10 @@
 </script>
 
 <div>
-<input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>
 
 {#if editor}
+  <input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>
+
   <div class="toolbar">
     <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
       lang

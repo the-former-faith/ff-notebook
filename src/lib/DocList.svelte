@@ -3,6 +3,7 @@
   import * as Y from 'yjs'
   //import { WebsocketProvider } from 'y-websocket'
   import { readableMap, readableArray } from 'svelt-yjs'
+  import { currentDoc } from '$lib/stores.js';
 
   let ywebsocket
   let provider
@@ -11,7 +12,6 @@
   let ydoc = new Y.Doc()
   const documentList = ydoc.getArray('doc-list')
   const readableDocumentList = readableArray(documentList)
-  console.log($readableDocumentList)
 
   const createDoc = () => {
     const newDoc = new Y.Text()
@@ -40,7 +40,7 @@
   <ul>
     {#each $readableDocumentList as doc, i}
       <li>
-        <button index={i}>Document {i}</button>
+        <button index={i} on:click={() => currentDoc.set(documentList.get(i).doc)}>Document {i}</button>
       </li>
     {/each}
   </ul>

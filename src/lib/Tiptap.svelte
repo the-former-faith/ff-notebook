@@ -7,7 +7,8 @@
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
   import { readableMap } from 'svelt-yjs'
-  import { currentDoc } from '$lib/stores.js';
+  import { currentDoc } from '$lib/stores.js'
+  import { IndexeddbPersistence } from 'y-indexeddb'
 
   let ywebsocket
   let element
@@ -16,6 +17,7 @@
   let ymap
   let fields
   let awareness
+  let persistence
 
   $: loadDoc($currentDoc)
 
@@ -35,8 +37,13 @@
       }
 
       provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, doc)
+      persistence = new IndexeddbPersistence(doc.guid, doc)
       createEditor()
       awareness = provider.awareness
+
+      persistence.on('synced', () => {
+        console.log('subdoc is loaded')
+      })
     }
   }
 

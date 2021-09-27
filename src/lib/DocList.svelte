@@ -3,7 +3,8 @@
   import * as Y from 'yjs'
   //import { WebsocketProvider } from 'y-websocket'
   import { readableArray } from 'svelt-yjs'
-  import { currentDoc } from '$lib/stores.js';
+  import { IndexeddbPersistence } from 'y-indexeddb'
+  import { currentDoc } from '$lib/stores.js'
 
   let ywebsocket
   let provider
@@ -12,6 +13,11 @@
   let ydoc = new Y.Doc()
   const documentList = ydoc.getArray('doc-list')
   const readableDocumentList = readableArray(documentList)
+  const persistence = new IndexeddbPersistence('doc-list', ydoc)
+
+  persistence.on('synced', () => {
+    console.log('content from the database is loaded')
+  })
 
   $: if($readableDocumentList[0]){
     //console.log($readableDocumentList[0].getMap('fields').get('title'))

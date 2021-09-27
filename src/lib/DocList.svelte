@@ -5,6 +5,7 @@
   import { readableArray } from 'svelt-yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import { currentDoc } from '$lib/stores.js'
+  import { online } from '$lib/stores.js'
 
   let ywebsocket
   let provider
@@ -18,6 +19,8 @@
   persistence.on('synced', () => {
     console.log('content from the database is loaded')
   })
+
+  $:console.log($online)
 
   $: if($readableDocumentList[0]){
     //console.log($readableDocumentList[0].getMap('fields').get('title'))

@@ -1,3 +1,4 @@
-import { writable } from 'svelte/store';
+import { writable } from 'svelte/store'
 
-export const currentDoc = writable(undefined);
+export const online = writable(false)
+export const currentDoc = writable(undefined)

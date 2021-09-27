@@ -20,7 +20,13 @@
     console.log('content from the database is loaded')
   })
 
-  $:console.log($online)
+  $: if(!$online && provider) {
+    provider.destroy()
+    console.log('destyoring provider')
+  } else if ($online && ywebsocket) {
+    console.log('creating provider')
+    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'all-docs ', ydoc)
+  }
 
   $: if($readableDocumentList[0]){
     //console.log($readableDocumentList[0].getMap('fields').get('title'))
@@ -34,8 +40,7 @@
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
-    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', 'all-docs ', ydoc)
-    awareness = provider.awareness
+    //awareness = provider.awareness
   })
 
   onDestroy(() => {

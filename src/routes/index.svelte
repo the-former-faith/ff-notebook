@@ -1,7 +1,6 @@
 <script context="module">
 	export const prerender = true
 	import Tiptap from '$lib/Tiptap.svelte'
-	import DocList from '$lib/DocList.svelte'
 </script>
 
 <svelte:head>
@@ -9,7 +8,6 @@
 </svelte:head>
 
 <main>
-	<DocList />
 	<Tiptap />
 </main>
 

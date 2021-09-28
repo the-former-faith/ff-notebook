@@ -2,6 +2,7 @@
 	import '../app.css'
 	import { browser } from '$app/env'
 	import { online } from '$lib/stores.js'
+	import DocList from '$lib/DocList.svelte'
 
 	$: if (browser) {
 		$online = window.navigator.onLine
@@ -11,5 +12,6 @@
 </script>
 
 <main>
+	<DocList />
 	<slot />
 </main>

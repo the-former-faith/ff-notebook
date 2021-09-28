@@ -27,6 +27,7 @@
     "prettier-plugin-svelte": "^2.2.0",
     "rxdb": "^10.1.0",
     "rxjs": "^7.3.0",
+    "stream": "^0.0.2",
     "svelt-yjs": "^1.1.0",
     "svelte": "^3.34.0",
     "y-indexeddb": "^9.0.6",

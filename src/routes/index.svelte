@@ -1,6 +1,7 @@
 <script context="module">
 	export const prerender = true
 	import Tiptap from '$lib/Tiptap.svelte'
+  import DocEditor from '$lib/DocEditor.svelte'
 </script>
 
 <svelte:head>
@@ -8,7 +9,7 @@
 </svelte:head>
 
 <main>
-	<Tiptap />
+	<DocEditor />
 </main>
 
 <style>

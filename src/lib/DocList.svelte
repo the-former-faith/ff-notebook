@@ -22,7 +22,13 @@
     body.set(note.body)
   }
 
-  const deleteNote = async (note) => await note.remove()
+  const deleteNote = async (doc) => {
+    if ($currentDoc.get('guid') === doc.guid) {
+      currentDoc.set(undefined)
+    }
+
+    await doc.remove()
+  }
 </script>
 
 <aside>

@@ -5,14 +5,14 @@
     const createDoc = async () => {
       const blankDoc = {
         guid: uuidv1(),
-        name: '',
+        name: 'new note',
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),
       }
       const db$ = await db()
       const newDoc = await db$.notes.insert(blankDoc)
       currentDoc.set(newDoc)
-      name.set('')
+      name.set('new note')
       body.set({})
     }
 </script>

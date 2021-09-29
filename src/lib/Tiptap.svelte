@@ -7,7 +7,7 @@
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
   import { readableMap } from 'svelt-yjs'
-  import { currentDoc, body } from '$lib/stores.js'
+  import { currentDoc, body, online } from '$lib/stores.js'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
 
@@ -22,6 +22,14 @@
   let persistence
 
   $: if($currentDoc && ywebsocket) loadDoc($currentDoc.toJSON())
+
+  $: if(!$online && provider) {
+    provider.destroy()
+    console.log('destroying provider')
+  } else if ($online && ywebsocket) {
+    console.log('creating provider')
+    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', $currentDoc.toJSON.id, ydoc)
+  }
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')

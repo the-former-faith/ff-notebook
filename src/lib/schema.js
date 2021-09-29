@@ -7,8 +7,11 @@ const noteSchema = {
       'createdAt',
       'updatedAt'
     ],
-    primaryKey: 'name',
+    primaryKey: 'guid',
     properties: {
+      guid: {
+        type: 'string',
+      },
       name: {
         type: 'string',
       },

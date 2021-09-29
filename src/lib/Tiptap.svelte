@@ -36,7 +36,7 @@
         await provider.destroy()
       }
 
-      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, doc)
+      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, ydoc)
       persistence = new IndexeddbPersistence(doc.guid, doc)
       createEditor()
       awareness = provider.awareness

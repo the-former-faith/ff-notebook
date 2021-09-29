@@ -1,20 +1,17 @@
 <script>
     import { db, currentDoc, name, body } from '$lib/stores'
-    import * as Y from 'yjs'
+    import { v1 as uuidv1 } from 'uuid'
 
     const createDoc = async () => {
-      let ydoc = new Y.Doc()
-      console.log(ydoc)
+      const blankDoc = {
+        guid: uuidv1(),
+        name: '',
+        createdAt: new Date().getTime(),
+        updatedAt: new Date().getTime(),
+      }
       const db$ = await db()
-      await db$.notes
-        .insert({
-          guid: ydoc.guid,
-          name: $name,
-          body: $body,
-          createdAt: new Date().getTime(),
-          updatedAt: new Date().getTime(),
-        })
-        //.then(resetForm)
+      await db$.notes.insert(blankDoc)
+      currentDoc.set(blankDoc)
     }
 </script>
 

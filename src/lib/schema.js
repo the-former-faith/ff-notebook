@@ -16,7 +16,42 @@ const noteSchema = {
         type: 'string',
       },
       body: {
-        type: 'string'
+        type: 'array',
+        items: [
+          {
+            type: 'object',
+            properties: {
+              type: {
+                type: 'string'
+              },
+              content: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    type: {
+                      type: 'string'
+                    },
+                    marks: {
+                      type: 'array',
+                      items: {
+                        type: 'object',
+                        properties: {
+                          type: {
+                            type: 'string'
+                          }
+                        },
+                      }
+                    },
+                    text: {
+                      type: 'string'
+                    }
+                  },
+                }
+              }
+            }
+          }
+        ]
       },
       createdAt: {
         type: 'number',

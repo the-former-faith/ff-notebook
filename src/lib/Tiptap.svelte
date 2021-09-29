@@ -9,6 +9,7 @@
   import { readableMap } from 'svelt-yjs'
   import { currentDoc } from '$lib/stores.js'
   import { IndexeddbPersistence } from 'y-indexeddb'
+  import * as Y from 'yjs'
 
   let ywebsocket
   let element
@@ -36,20 +37,21 @@
         await provider.destroy()
       }
 
+      let ydoc = new Y.Doc()
       provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, ydoc)
-      persistence = new IndexeddbPersistence(doc.guid, doc)
+      persistence = new IndexeddbPersistence(ydoc.guid, ydoc)
       createEditor()
       awareness = provider.awareness
 
       persistence.on('synced', () => {
-        console.log('subdoc is loaded')
+        console.log('doc is loaded')
       })
     }
   }
 
   const createEditor = () => {
-    ymap = $currentDoc.getMap('fields')
-    fields = readableMap(ymap)
+    //ymap = $currentDoc.getMap('fields')
+    //fields = readableMap(ymap)
 
     editor = new Editor({
       element: element,
@@ -61,17 +63,17 @@
         Link.configure({
           openOnClick: false,
         }),
-        Collaboration.configure({
-          document: $currentDoc,
-          field: 'content',
-        }),
-        CollaborationCursor.configure({
-          provider: provider,
-          user: {
-            name: 'Cyndig Lauper',
-            color: '#f783ac',
-          },
-        }),
+        // Collaboration.configure({
+        //   document: ydoc,
+        //   field: 'content',
+        // }),
+        // CollaborationCursor.configure({
+        //   provider: provider,
+        //   user: {
+        //     name: 'Cyndig Lauper',
+        //     color: '#f783ac',
+        //   },
+        // }),
       ],
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
@@ -125,7 +127,7 @@
 <div>
 
 {#if editor}
-  <input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>
+  <!--<input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>-->
 
   <div class="toolbar">
     <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>

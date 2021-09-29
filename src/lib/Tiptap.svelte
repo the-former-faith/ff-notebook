@@ -21,15 +21,13 @@
   let awareness
   let persistence
 
-  $: loadDoc($currentDoc)
+  $: if($currentDoc && ywebsocket) loadDoc($currentDoc.toJSON())
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
   })
 
   const loadDoc = async(doc) => {
-    if(doc && ywebsocket) {
-
       if (editor) {
         await editor.destroy()
       }
@@ -47,7 +45,6 @@
       persistence.on('synced', () => {
         console.log('doc is loaded')
       })
-    }
   }
 
   const createEditor = () => {

@@ -12,6 +12,8 @@
       const db$ = await db()
       const newDoc = await db$.notes.insert(blankDoc)
       currentDoc.set(newDoc)
+      name.set('')
+      body.set({})
     }
 </script>
 

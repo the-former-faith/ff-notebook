@@ -1,19 +1,21 @@
 import { writable } from 'svelte/store'
-import { createRxDatabase, addRxPlugin } from 'rxdb/plugins/core';
-import { addPouchPlugin, getRxStoragePouch } from 'rxdb/plugins/pouchdb';
-import * as idb from 'pouchdb-adapter-idb';
+import { createRxDatabase, addRxPlugin } from 'rxdb/plugins/core'
+import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
+import { addPouchPlugin, getRxStoragePouch } from 'rxdb/plugins/pouchdb'
+import * as idb from 'pouchdb-adapter-idb'
 
-import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder';
-import { RxDBValidatePlugin } from 'rxdb/plugins/validate';
-import noteSchema from '$lib/schema';
+import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
+import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
+import noteSchema from '$lib/schema'
 
 /**
  * RxDB ========================================================================
  */
 
-addRxPlugin(RxDBQueryBuilderPlugin);
-addRxPlugin(RxDBValidatePlugin);
-addPouchPlugin(idb);
+addRxPlugin(RxDBQueryBuilderPlugin)
+addRxPlugin(RxDBValidatePlugin)
+addRxPlugin(RxDBUpdatePlugin)
+addPouchPlugin(idb)
 
 let dbPromise;
 
@@ -34,11 +36,8 @@ export const db = () => dbPromise ? dbPromise : _create();
  * Svelte Writables ============================================================
  */
 
-export const noteList = writable([]);
-export const selectedNote = writable({});
-export const name = writable('');
-export const body = writable('');
-
-
+export const noteList = writable([])
+export const name = writable('')
+export const body = writable('')
 export const online = writable(false)
 export const currentDoc = writable(undefined)

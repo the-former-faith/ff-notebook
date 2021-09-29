@@ -7,7 +7,7 @@
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
   import { readableMap } from 'svelt-yjs'
-  import { currentDoc } from '$lib/stores.js'
+  import { currentDoc, body } from '$lib/stores.js'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
 
@@ -15,6 +15,7 @@
   let element
   let editor
   let provider
+  let ydoc
   let ymap
   let fields
   let awareness
@@ -37,9 +38,9 @@
         await provider.destroy()
       }
 
-      let ydoc = new Y.Doc()
+      ydoc = new Y.Doc()
       provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, ydoc)
-      persistence = new IndexeddbPersistence(ydoc.guid, ydoc)
+      persistence = new IndexeddbPersistence(doc.guid, ydoc)
       createEditor()
       awareness = provider.awareness
 
@@ -63,18 +64,22 @@
         Link.configure({
           openOnClick: false,
         }),
-        // Collaboration.configure({
-        //   document: ydoc,
-        //   field: 'content',
-        // }),
-        // CollaborationCursor.configure({
-        //   provider: provider,
-        //   user: {
-        //     name: 'Cyndig Lauper',
-        //     color: '#f783ac',
-        //   },
-        // }),
+        Collaboration.configure({
+          document: ydoc,
+          field: 'content',
+        }),
+        CollaborationCursor.configure({
+          provider: provider,
+          user: {
+            name: 'Cyndig Lauper',
+            color: '#f783ac',
+          },
+        }),
       ],
+      onUpdate() {
+        const json = this.getJSON()
+        body.set(json.content)
+      },
       onTransaction: () => {
         // force re-render so `editor.isActive` works as expected
         editor = editor

@@ -10,8 +10,8 @@
         updatedAt: new Date().getTime(),
       }
       const db$ = await db()
-      await db$.notes.insert(blankDoc)
-      currentDoc.set(blankDoc)
+      const newDoc = await db$.notes.insert(blankDoc)
+      currentDoc.set(newDoc)
     }
 </script>
 

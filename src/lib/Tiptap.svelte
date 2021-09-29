@@ -37,8 +37,8 @@
       }
 
       ydoc = new Y.Doc()
-      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.guid, ydoc)
-      persistence = new IndexeddbPersistence(doc.guid, ydoc)
+      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.id, ydoc)
+      persistence = new IndexeddbPersistence(doc.id, ydoc)
       createEditor()
       awareness = provider.awareness
 

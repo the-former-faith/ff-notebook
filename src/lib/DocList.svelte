@@ -23,7 +23,7 @@
   }
 
   const deleteNote = async (doc) => {
-    if ($currentDoc.get('guid') === doc.guid) {
+    if ($currentDoc.get('id') === doc.id) {
       currentDoc.set(undefined)
     }
 

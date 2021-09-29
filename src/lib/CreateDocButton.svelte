@@ -4,7 +4,7 @@
 
     const createDoc = async () => {
       const blankDoc = {
-        guid: uuidv1(),
+        id: uuidv1(),
         name: 'new note',
         createdAt: new Date().getTime(),
         updatedAt: new Date().getTime(),

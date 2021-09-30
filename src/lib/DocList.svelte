@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { db, currentDoc, name, body } from '$lib/stores'
   import CreateDocButton from './CreateDocButton.svelte'
+
   let db$
   let noteList = []
 

@@ -2,7 +2,7 @@
     import { currentDoc, name, body } from '$lib/stores'
     import Tiptap from '$lib/Tiptap.svelte'
 
-    $: console.log($currentDoc ? $currentDoc.toJSON() : 'no doc')
+    //$: console.log($currentDoc ? $currentDoc.toJSON() : 'no doc')
     
     const resetForm = () => {
       name.set('')

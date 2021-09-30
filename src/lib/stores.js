@@ -9,6 +9,9 @@ import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
 import noteSchema from '$lib/schema'
 
+import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
+//addRxPlugin(RxDBDevModePlugin);
+
 /**
  * RxDB ========================================================================
  */
@@ -106,6 +109,7 @@ const _create = async () => {
   const delteUnusedFields = (doc) => {
     delete doc._attachments
     delete doc._rev
+    return doc
   }
 
   //Sync GraphQL
@@ -130,6 +134,10 @@ const _create = async () => {
   })
 
   replicationState.send$.subscribe(d => {
+    console.log(d);
+  })
+
+  replicationState.received$.subscribe(d => {
     console.log(d);
   })
 

@@ -52,13 +52,10 @@ const pushQueryBuilder = doc => {
   `;
   
   const fixedDoc = (doc) => {
-    doc.deleted = doc._deleted
-
-    delete doc._attachments
-    delete doc._rev
-    delete doc._deleted
-    console.log(doc)
-    return doc
+    const clone = (({ _attachments, _rev, _deleted, ...o }) => o)(doc) 
+    clone.deleted = doc._deleted
+    clone.updatedAt = new Date().getTime()
+    return clone
   }
 
   const variables = {
@@ -139,11 +136,11 @@ const _create = async () => {
   })
 
   replicationState.send$.subscribe(d => {
-    console.log(d);
+    console.log("Sent: ", d);
   })
 
   replicationState.received$.subscribe(d => {
-    console.log(d);
+    console.log("Received: ", d);
   })
 
   dbPromise = db;

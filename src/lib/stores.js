@@ -25,7 +25,6 @@ addPouchPlugin(idb)
 let dbPromise
 
 const pushQueryBuilder = doc => {
-  console.log(doc)
   const query = `
     mutation($doc: [AddDocInput!]!) {
       addDoc(input: $doc, upsert: true) {
@@ -103,7 +102,8 @@ const _create = async () => {
     name: 'rxdbdemo',
     storage: getRxStoragePouch('idb'),
     ignoreDuplicate: true
-  });
+  })
+
   await db.addCollections({ notes: { schema: noteSchema } })
 
   const delteUnusedFields = (doc) => {

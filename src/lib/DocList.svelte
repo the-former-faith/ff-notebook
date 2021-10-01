@@ -41,13 +41,7 @@
     {:then results}
       {#each results as note}
         <li>
-          <span class="elipsis">
-            <button on:click={() => handleEditNote(note)} class="nostyle link">{note.name}</button>
-            {#if note.body !== ''}<span style="color: #757575">—</span>{/if}
-            <span class="mute">
-              {note.body ?? ''}
-            </span>
-          </span>
+          <a sveltekit:prefetch href={note.id}>{note.name}</a>
 
           <span class="meta">
             {new Date(note.updatedAt).toLocaleDateString('en-US')}

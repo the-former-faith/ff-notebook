@@ -6,8 +6,6 @@
 		return {
 			id: id,
 		}
-
-    //@TODO: load doc from server if not window
 	}
 
 	export const prerender = true
@@ -34,7 +32,7 @@
 
 <main>
     <h2>{doc ? doc.toJSON().name : ''}</h2>
-    <DocEditor />
+    <DocEditor {id} />
 </main>
 
 <style>

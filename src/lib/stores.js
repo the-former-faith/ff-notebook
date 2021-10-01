@@ -31,7 +31,7 @@ const pushQueryBuilder = doc => {
         doc {
           id
           name
-          _deleted
+          deleted
           createdAt
           updatedAt
           body {
@@ -50,8 +50,19 @@ const pushQueryBuilder = doc => {
       }
     }
   `;
+  
+  const fixedDoc = (doc) => {
+    doc.deleted = doc._deleted
+
+    delete doc._attachments
+    delete doc._rev
+    delete doc._deleted
+    console.log(doc)
+    return doc
+  }
+
   const variables = {
-    doc: doc
+    doc: fixedDoc(doc)
   };
   return {
       query,
@@ -73,7 +84,7 @@ const pullQueryBuilder = doc => {
     queryDoc(filter: {updatedAt: {gt: ${doc.updatedAt}}}, order: {desc: updatedAt}) {
       id
       name
-      _deleted
+      deleted
       createdAt
       updatedAt
       body {
@@ -106,12 +117,6 @@ const _create = async () => {
 
   await db.addCollections({ notes: { schema: noteSchema } })
 
-  const delteUnusedFields = (doc) => {
-    delete doc._attachments
-    delete doc._rev
-    return doc
-  }
-
   //Sync GraphQL
   const replicationState = db.notes.syncGraphQL({
     url: 'https://blue-surf-410066.us-east-1.aws.cloud.dgraph.io/graphql', // url to the GraphQL endpoint
@@ -122,9 +127,9 @@ const _create = async () => {
     push: {
       queryBuilder: pushQueryBuilder, // the queryBuilder from above
       batchSize: 5, // (optional) amount of documents that will be send in one batch
-      modifier: doc => delteUnusedFields(doc) // (optional) modifies all pushed documents before they are send to the GraphQL endpoint. Returning null will skip the document.
+      modifier: doc => doc // (optional) modifies all pushed documents before they are send to the GraphQL endpoint. Returning null will skip the document.
     },
-    deletedFlag: '_deleted', // the flag which indicates if a pulled document is deleted
+    deletedFlag: 'deleted', // the flag which indicates if a pulled document is deleted
     live: true // if this is true, rxdb will watch for ongoing changes and sync them, when false, a one-time-replication will be done
   })
 

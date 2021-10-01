@@ -1,8 +1,8 @@
 <script>
-    import { currentDoc, name, body } from '$lib/stores'
+    import { name } from '$lib/stores'
     import Tiptap from '$lib/Tiptap.svelte'
 
-    $: console.log($currentDoc ? $currentDoc.toJSON() : 'no doc')
+    export let id
     
     const resetForm = () => {
       name.set('')
@@ -11,23 +11,23 @@
     }
   
     const saveNote = async () => {
-      await $currentDoc
-        .update({
-          $set: {
-            name: $name,
-            body: $body,
-            updatedAt: new Date().getTime(),
-          },
-        })
-      resetForm()
+    //   await $currentDoc
+    //     .update({
+    //       $set: {
+    //         name: $name,
+    //         body: $body,
+    //         updatedAt: new Date().getTime(),
+    //       },
+    //     })
+    //   resetForm()
     }
   </script>
   
   <div>
     <h2>NoteEditor</h2>
-    {#if $currentDoc}
+    {#if id}
       <input bind:value={$name} placeholder="Note Title" />
-      <Tiptap />
+      <Tiptap {id} />
       <button on:click={saveNote}>Save Note</button>
     {/if}
   </div>

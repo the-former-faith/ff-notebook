@@ -6,7 +6,6 @@
   import Link from '@tiptap/extension-link'
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-  import { readableMap } from 'svelt-yjs'
   import { currentDoc, body, online } from '$lib/stores.js'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
@@ -16,12 +15,11 @@
   let editor
   let provider
   let ydoc
-  let ymap
-  let fields
   let awareness
   let persistence
+  export let id
 
-  $: if($currentDoc && ywebsocket) loadDoc($currentDoc.toJSON())
+  $: if(ywebsocket) loadDoc(id)
 
   $: if(!$online && provider) {
     provider.destroy()
@@ -35,7 +33,7 @@
     ywebsocket = await import ('y-websocket')
   })
 
-  const loadDoc = async(doc) => {
+  const loadDoc = async(id) => {
       if (editor) {
         await editor.destroy()
       }
@@ -45,8 +43,8 @@
       }
 
       ydoc = new Y.Doc()
-      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', doc.id, ydoc)
-      persistence = new IndexeddbPersistence(doc.id, ydoc)
+      provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', id, ydoc)
+      persistence = new IndexeddbPersistence(id, ydoc)
       createEditor()
       awareness = provider.awareness
 

@@ -54,6 +54,8 @@ const pushQueryBuilder = doc => {
   const fixedDoc = (doc) => {
     const clone = (({ _attachments, _rev, _deleted, ...o }) => o)(doc) 
     clone.deleted = doc._deleted
+    //This only seems to be a problem on deleted docs,
+    //So I could move this to set on delete, instead.
     clone.updatedAt = new Date().getTime()
     return clone
   }

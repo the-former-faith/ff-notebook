@@ -5,7 +5,9 @@ const config = {
 		adapter: netlify(),
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
-		serviceWorker: "src/service-worker",
+		files: {
+			serviceWorker: 'src/service-worker.ts',
+		},
 		vite: {
 			ssr: {
 				noExternal: ['pouchdb-browser', 'pouchdb-utils']

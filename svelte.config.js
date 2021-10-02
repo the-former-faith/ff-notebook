@@ -8,9 +8,6 @@ const config = {
 		files: {
 			serviceWorker: 'src/service-worker',
 		},
-		serviceWorker: {
-			exclude: []
-		},
 		vite: {
 			ssr: {
 				noExternal: ['pouchdb-browser', 'pouchdb-utils']

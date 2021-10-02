@@ -1,3 +1,8 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
 :root {
   --foreground-color: #1a1a1a;
   --background-color: #fff;
@@ -21,11 +26,26 @@ body {
   color: var(--foreground-color);
   background-color: var(--background-color);
   font-family: sans-serif;
+  min-height: 100vh;
+  padding: 2rem;
 }
 
 button {
   background-color: var(--accent-color);
   border: none;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+input {
+  background: inherit;
+  color: inherit;
+  border: 2px solid;
+  min-height: 44px;
+  padding: 8px;
+  width: 100%;
 }
 
 

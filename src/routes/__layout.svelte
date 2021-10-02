@@ -10,8 +10,17 @@
 	}
 </script>
 
+<p>Online status: {$connectionStatusService.value}</p>
 <main>
-	<p>Online status: {$connectionStatusService.value}</p>
 	<DocList />
 	<slot />
 </main>
+
+<style>
+  @media screen and (min-width: 1024px) {
+    main {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+    }
+  }
+</style>

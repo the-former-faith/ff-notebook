@@ -9,7 +9,7 @@ import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
 import noteSchema from '$lib/schema'
 
-import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
+//import { RxDBDevModePlugin } from 'rxdb/plugins/dev-mode';
 //addRxPlugin(RxDBDevModePlugin);
 
 /**
@@ -117,6 +117,8 @@ const _create = async () => {
   await db.addCollections({ notes: { schema: noteSchema } })
 
   //Sync GraphQL
+  //TODO - Only turn on replication when online.
+  //And cancel replication if network is lost.
   const replicationState = db.notes.syncGraphQL({
     url: 'https://blue-surf-410066.us-east-1.aws.cloud.dgraph.io/graphql', // url to the GraphQL endpoint
     pull: {

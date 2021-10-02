@@ -118,6 +118,7 @@ const _create = async () => {
 
   //Sync GraphQL
   //TODO - Only turn on replication when online.
+  
   //And cancel replication if network is lost.
   const replicationState = db.notes.syncGraphQL({
     url: 'https://blue-surf-410066.us-east-1.aws.cloud.dgraph.io/graphql', // url to the GraphQL endpoint

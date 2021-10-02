@@ -1,3 +1,34 @@
+:root {
+  --foreground-color: #1a1a1a;
+  --background-color: #fff;
+  --accent-color: hsl(313, 100%, 26%);
+  accent-color: var(--accent-color);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    --foreground-color: #fff;
+    --background-color: #1a1a1a;
+    --accent-color: hsl(313, 100%, 70%);
+  }
+}
+
+:link {
+  color: var(--accent-color);
+}
+
+body {
+  color: var(--foreground-color);
+  background-color: var(--background-color);
+  font-family: sans-serif;
+}
+
+button {
+  background-color: var(--accent-color);
+  border: none;
+}
+
+
 .collaboration-cursor__caret {
 	position: relative;
 	margin-left: -1px;

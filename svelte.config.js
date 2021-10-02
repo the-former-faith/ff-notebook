@@ -6,7 +6,10 @@ const config = {
 		// hydrate the <div id="svelte"> element in src/app.html
 		target: '#svelte',
 		files: {
-			serviceWorker: 'src/service-worker.js',
+			serviceWorker: 'src/service-worker',
+		},
+		serviceWorker: {
+			exclude: []
 		},
 		vite: {
 			ssr: {

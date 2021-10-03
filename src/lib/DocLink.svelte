@@ -6,6 +6,6 @@
 
 <a 
   href={doc.id} 
-  on:mouseover={() => mainService.send('NEW_EDITOR.ADD', doc)}
-  on:focus={() => mainService.send('NEW_EDITOR.ADD', doc)}
+  on:mouseover={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: doc.id})}
+  on:focus={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: doc.id})}
 >{doc.name}</a>

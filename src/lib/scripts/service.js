@@ -1,4 +1,5 @@
-import { createMachine, interpret } from 'xstate'
+import { createMachine, interpret, assign, spawn } from 'xstate'
+import editorMachine from '$lib/scripts/editorMachine'
 import { browser } from '$app/env'
 
 let initialOnlineStatus = 'online'
@@ -10,6 +11,9 @@ if (browser) {
 const mainMachine = createMachine({
   id: 'main machine',
   type: 'parallel',
+  context: {
+    editors: []
+  },
   states: {
     connectionStatus: {
       initial: initialOnlineStatus,
@@ -22,21 +26,28 @@ const mainMachine = createMachine({
         }
       }
     },
-    docEditors: {
-      initial: 'idle',
+    user: {
+      initial: 'loggedIn',
       states: {
-        idle: {
+        loggedIn: {
           on: {
             'NEW_EDITOR.ADD': {
-              actions: ()=> console.log('hello world')
+              actions: assign({
+                editors: (context, event) => [
+                  ...context.editors,
+                  {
+                    ref: spawn(editorMachine(event.doc), event.id)
+                  }
+                ]
+              })
             }
-            // ...
           }
-        }
+        },
+        loggedOut: {}
       }
     }
   }
 })
 
-export const mainService = interpret(mainMachine).start()
+export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
 

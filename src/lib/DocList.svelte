@@ -7,6 +7,7 @@
   let db$
   let noteList = []
 
+  //@TODO: Move this to rxdbMachine
   onMount(() => {
     const getNoteList = async () => {
       db$ = await db()

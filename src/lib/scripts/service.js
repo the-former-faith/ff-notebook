@@ -2,6 +2,8 @@ import { createMachine, interpret, assign, spawn } from 'xstate'
 import editorMachine from '$lib/scripts/editorMachine'
 import { browser } from '$app/env'
 
+//Set online state
+
 let initialOnlineStatus = 'online'
 
 if (browser) {
@@ -12,6 +14,7 @@ const mainMachine = createMachine({
   id: 'main machine',
   type: 'parallel',
   context: {
+    db: undefined,
     editors: []
   },
   states: {

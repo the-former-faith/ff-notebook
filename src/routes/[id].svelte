@@ -3,8 +3,6 @@
   export async function load({ page }) {
     const id = page.params.id
 
-    console.log(id)
-
 		return {
       props: {
 			  id: id

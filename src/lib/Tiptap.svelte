@@ -6,7 +6,7 @@
   import Link from '@tiptap/extension-link'
   import Collaboration from '@tiptap/extension-collaboration'
   import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-  import { currentDoc, body, online } from '$lib/stores.js'
+  import { body } from '$lib/stores.js'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
 
@@ -20,21 +20,22 @@
 
   export let id
 
-  $: if(ywebsocket) loadDoc(id)
+  //$: if(ywebsocket) loadDoc(id)
 
-  $: if(!$online && provider) {
-    provider.destroy()
-    console.log('destroying provider')
-  } else if ($online && ywebsocket) {
-    console.log('creating provider')
-    provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', id, ydoc)
-  }
+  // $: if(!$online && provider) {
+  //   provider.destroy()
+  //   console.log('destroying provider')
+  // } else if ($online && ywebsocket) {
+  //   console.log('creating provider')
+  //   provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', id, ydoc)
+  // }
 
   onMount(async() => {
     ywebsocket = await import ('y-websocket')
   })
 
   const loadDoc = async(id) => {
+      console.log('page id: ', id)
       if (editor) {
         await editor.destroy()
       }
@@ -50,7 +51,7 @@
       awareness = provider.awareness
 
       persistence.on('synced', () => {
-        console.log('doc is loaded')
+        console.log('doc is loaded: ', ydoc)
       })
   }
 
@@ -135,40 +136,7 @@
   {#if editor}
     <!--<input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>-->
 
-    <div class="toolbar">
-      <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
-        lang
-      </button>
-      <button on:click={() => setLink()} class:active={editor.isActive('link')}>
-        link
-      </button>
-      {#if editor.isActive('link')}
-        <button on:click={() => editor.chain().focus().unsetLink().run()} >
-          unsetLink
-        </button>
-      {/if}
-      <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
-        bold
-      </button>
-      <button
-        on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
-        class:active={editor.isActive('heading', { level: 1 })}
-      >
-        H1
-      </button>
-      <button
-        on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        class:active={editor.isActive('heading', { level: 2 })}
-      >
-        H2
-      </button>
-      <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
-        P
-      </button>
-      <button on:click={() => console.log(editor.getJSON())}>
-        Log content
-      </button>
-    </div>
+
   {/if}
     
   <div bind:this={element} class="body" />
@@ -176,10 +144,6 @@
 </div>
   
 <style>
-  button.active {
-    background: black;
-    color: white;
-  }
 
   .editor {
     border: 2px solid;
@@ -191,9 +155,5 @@
 
   .body {
     padding: 0.5rem;
-  }
-
-  .toolbar {
-    display: flex;
   }
 </style>

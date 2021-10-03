@@ -1,16 +1,16 @@
 <script>
 	import '../app.css'
 	import { browser } from '$app/env'
-	import { connectionStatusService } from '$lib/service'
+	import { mainService } from '$lib/scripts/service'
 	import DocList from '$lib/DocList.svelte'
 
 	$: if (browser) {
-		window.addEventListener('offline', () => connectionStatusService.send('TOGGLE'))
-		window.addEventListener('online', () => connectionStatusService.send('TOGGLE'))
+		window.addEventListener('offline', () => mainService.send('TOGGLE'))
+		window.addEventListener('online', () => mainService.send('TOGGLE'))
 	}
 </script>
 
-<p>Online status: {$connectionStatusService.value}</p>
+<p>Online status: {$mainService.value.connectionStatus}</p>
 <main>
 	<DocList />
 	<slot />

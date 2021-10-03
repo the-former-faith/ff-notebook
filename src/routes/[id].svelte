@@ -19,12 +19,15 @@
   import DocEditor from '$lib/DocEditor.svelte'
   import { onMount } from 'svelte'
   import { db, currentDoc } from '$lib/stores'
+  import { mainService } from '$lib/scripts/service'
 
   export let id
   
   onMount(async() => {
-    const db$ = await db()
 
+    //I should be able to pass this before page tansition,
+    //And then only load it this way if server side loading
+    const db$ = await db()
     $currentDoc = await db$.notes.findOne(id).exec()
   })
 </script>

@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { db, currentDoc, name, body } from '$lib/stores'
   import CreateDocButton from './CreateDocButton.svelte'
+  import DocLink from '$lib/DocLink.svelte'
 
   let db$
   let noteList = []
@@ -39,13 +40,13 @@
     {#await noteList}
       Loading Notes...
     {:then results}
-      {#each results as note}
+      {#each results as doc}
         <li>
-          <a sveltekit:prefetch href={note.id}>{note.name}</a>
+          <DocLink {doc} />
 
           <span class="meta">
-            {new Date(note.updatedAt).toLocaleDateString('en-US')}
-            <button on:click={() => deleteNote(note)} class="btn btn-delete">delete</button>
+            {new Date(doc.updatedAt).toLocaleDateString('en-US')}
+            <button on:click={() => deleteNote(doc)} class="btn btn-delete">delete</button>
           </span>
         </li>
       {/each}

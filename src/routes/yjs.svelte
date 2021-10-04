@@ -2,30 +2,56 @@
 	import { browser } from '$app/env'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
+  import { v1 as uuidv1 } from 'uuid'
 
   let documentList
+  let myList
   let ydoc
 
   if(browser) {
-    // A Yjs document holds the shared data
-    ydoc = new Y.Doc()
-    // This Y.Array contains a list of documents represented as Y.Text
 
-    const persistence = new IndexeddbPersistence('database', ydoc)
-    persistence.once('synced', () => { console.log('initial content loaded') })
+    ydoc = new Y.Doc()
+
     documentList = ydoc.getMap('doc-list')
 
-    documentList.observe( ( event => console.log(event) ) )
+    const persistence = new IndexeddbPersistence('database', ydoc)
+    persistence.on('synced', (e) => { console.log(e) })
+    
+    ydoc.on('subdocs', (e) => {
+      console.log(e)
+      e.added.forEach(subdoc => {
+        subdoc.load()
+        const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
+      })
+    })
+
+    documentList.observe( ( event => myList = Object.entries(documentList.toJSON() ) ) ) 
   }
 
   const createDoc = () => {
+
+    const id = uuidv1()
+    const newDoc = new Y.Doc()
+    const fields = newDoc.getMap('fields')
+    fields.set('title', `Doc ${Math.floor(Math.random() * 100)}`)
     
-    const newDoc = new Y.Text()
-    
-    documentList.set('prop-name', newDoc)
+    documentList.set(id, newDoc)
   } 
 
 
 </script>
 
+<div>
 <button on:click={ ()=> createDoc() }>New Doc!</button>
+
+{#if myList}
+  <h1>Test</h1>
+  <ul>
+    {#each myList as [key, value]}
+      <li>
+        <button on:click={ ()=> console.log(documentList.get(key).toJSON() ) }>{key}</button>
+      </li>
+    {/each}
+  </ul>
+{/if}
+</div>

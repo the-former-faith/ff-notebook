@@ -1,20 +1,28 @@
 <script>
 	import { browser } from '$app/env'
+  import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
 
-  // A Yjs document holds the shared data
-  const ydoc = new Y.Doc()
-  // This Y.Array contains a list of documents represented as Y.Text
-  const documentList = ydoc.getMap('doc-list')
+  let documentList
+  let ydoc
 
-  documentList.observe( ( event => console.log(event) ) )
+  if(browser) {
+    // A Yjs document holds the shared data
+    ydoc = new Y.Doc()
+    // This Y.Array contains a list of documents represented as Y.Text
+
+    const persistence = new IndexeddbPersistence('database', ydoc)
+    persistence.once('synced', () => { console.log('initial content loaded') })
+    documentList = ydoc.getMap('doc-list')
+
+    documentList.observe( ( event => console.log(event) ) )
+  }
 
   const createDoc = () => {
     
     const newDoc = new Y.Text()
-    console.log(newDoc)
     
-    //documentList.push([newDoc])
+    documentList.set('prop-name', newDoc)
   } 
 
 

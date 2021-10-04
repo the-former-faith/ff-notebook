@@ -57,5 +57,5 @@ const mainMachine = createMachine({
   }
 })
 
-export const mainService = interpret(mainMachine).onTransition((state) => console.log(state.children)).start()
-
+//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state.children)).start()
+export const mainService = interpret(mainMachine).start()

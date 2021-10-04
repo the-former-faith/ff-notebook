@@ -1,5 +1,6 @@
 import { createMachine, interpret, assign, spawn } from 'xstate'
 import editorMachine from '$lib/scripts/editorMachine'
+import rxdbMachine from '$lib/scripts/rxdbMachine'
 import { browser } from '$app/env'
 
 //Set online state
@@ -33,6 +34,10 @@ const mainMachine = createMachine({
       initial: 'loggedIn',
       states: {
         loggedIn: {
+          // invoke: {
+          //   src: rxdbMachine,
+          //   autoForward: true
+          // },
           on: {
             'NEW_EDITOR.ADD': {
               actions: assign({
@@ -52,5 +57,5 @@ const mainMachine = createMachine({
   }
 })
 
-export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
+export const mainService = interpret(mainMachine).onTransition((state) => console.log(state.children)).start()
 

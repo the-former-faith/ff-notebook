@@ -85,6 +85,9 @@ const pullQueryBuilder = doc => {
   }
 }
 
+//Delete later
+export const db = writable(undefined)
+
 
 /**
  * Svelte Writables ============================================================

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte'
   import { db, currentDoc, name, body } from '$lib/stores'
-  import CreateDocButton from './CreateDocButton.svelte'
+  //import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
 
   let db$
@@ -9,14 +9,14 @@
 
   //@TODO: Move this to rxdbMachine
   onMount(() => {
-    const getNoteList = async () => {
-      db$ = await db()
-      db$.notes
-        .find()
-        .sort({ updatedAt: 'desc' })
-        .$.subscribe((notes) => (noteList = notes))
-    }
-    getNoteList()
+    // const getNoteList = async () => {
+    //   db$ = await db()
+    //   db$.notes
+    //     .find()
+    //     .sort({ updatedAt: 'desc' })
+    //     .$.subscribe((notes) => (noteList = notes))
+    // }
+    // getNoteList()
   })
 
   const handleEditNote = (note) => {
@@ -36,7 +36,7 @@
 
 <aside>
   <h2>All Docs</h2>
-  <CreateDocButton />
+  <!--<CreateDocButton />-->
   <ul id="note-list" class="nostyle">
     {#await noteList}
       Loading Notes...

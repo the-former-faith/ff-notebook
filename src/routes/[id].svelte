@@ -25,8 +25,8 @@
 
     //I should be able to pass this before page tansition,
     //And then only load it this way if server side loading
-    const db$ = await db()
-    $currentDoc = await db$.notes.findOne(id).exec()
+    //const db$ = await db()
+    //$currentDoc = await db$.notes.findOne(id).exec()
   })
 </script>
 

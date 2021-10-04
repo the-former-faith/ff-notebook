@@ -10,7 +10,7 @@
 	}
 </script>
 
-<p>Online status: {$mainService.value.connectionStatus}</p>
+<!--<p>Online status: {$mainService.value.connectionStatus}</p>-->
 <main>
 	<DocList />
 	<slot />

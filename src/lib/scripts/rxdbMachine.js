@@ -1,69 +1,81 @@
-import { createMachine } from 'xstate'
+import { createMachine, assign } from 'xstate'
 import { createRxDatabase, addRxPlugin } from 'rxdb/plugins/core'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
-import { addPouchPlugin, getRxStoragePouch } from 'rxdb/plugins/pouchdb'
+import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
 import { RxDBReplicationGraphQLPlugin } from 'rxdb/plugins/replication-graphql'
-import * as idb from 'pouchdb-adapter-idb'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
+import * as idb from 'pouchdb-adapter-idb'
+
+
 import noteSchema from '$lib/schema'
 
 //Add plugins
-
+addPouchPlugin(idb)
 addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBReplicationGraphQLPlugin)
-addPouchPlugin(idb)
 
-const rxdbMachine = createMachine({
-  id: 'rxdb machine',
-  type: 'parallel',
-  context: {
-    db: undefined,
-    error: undefined
-  },
-  states: {
-    dbStatus: {
-      initial: 'initiating',
-      states: {
-        loading: {
-          invoke: {
-            id: 'initiateDb',
-            src: () => createRxDatabase({
-              name: 'rxdbdemo',
-              storage: getRxStoragePouch('idb'),
-              ignoreDuplicate: true
-            }),
-            onDone: {
-              target: 'addCollection',
-              actions: [assign({ db: (context, event) => event.data }), console.log('db initiated')]
-            },
-            onError: {
-              target: 'failure',
-              actions: assign({ error: (context, event) => event.data })
-            }
-          }
-        },
-        addCollection: {
-          invoke: {
-            id: 'addCollection',
-            src: (context, event) => context.db.addCollections({ notes: { schema: noteSchema } }),
-            onDone: {
-              target: 'initiated',
-            },
-            onError: {
-              target: 'failure',
-              actions: assign({ error: (context, event) => event.data })
-            }
-          }
-        },
-        failure: {},
-        initiated: {}
-      }
+const test = () => {
+  console.log('test')
+}
+
+const rxdbMachine = () => {
+
+  return createMachine({
+    id: 'rxdb machine',
+    type: 'parallel',
+    context: {
+      db: undefined,
+      docsList: undefined,
+      error: undefined
     },
-  }
-})
+    states: {
+      dbStatus: {
+        initial: 'initiating',
+        states: {
+          initiating: {
+            invoke: {
+              id: 'initiateDb',
+              src: () => createRxDatabase({
+                name: 'rxdbdemo',
+                storage: getRxStoragePouch('idb'),
+                ignoreDuplicate: true
+              }),
+              onDone: {
+                target: 'initiated',
+                //target: 'addCollection',
+                actions: assign({ db: (context, event) => event.data })
+              },
+              onError: {
+                target: 'failure',
+                actions: assign({ error: (context, event) => event.data })
+              }
+            }
+          },
+          // addCollection: {
+          //   invoke: {
+          //     id: 'addCollection',
+          //     src: (context, event) => context.db.addCollections({ notes: { schema: noteSchema } }),
+          //     onDone: {
+          //       target: 'initiated',
+          //     },
+          //     onError: {
+          //       target: 'failure',
+          //       actions: assign({ error: (context, event) => event.data })
+          //     }
+          //   }
+          // },
+          failure: {},
+          initiated: {
+            actions: [test]
+          }
+        }
+      },
+    }
+  })
+}
 
 export default rxdbMachine
 

@@ -15,13 +15,17 @@
     documentList = ydoc.getMap('doc-list')
 
     const persistence = new IndexeddbPersistence('database', ydoc)
-    persistence.on('synced', (e) => { console.log(e) })
+    //persistence.on('synced', (e) => { console.log(e) })
     
     ydoc.on('subdocs', (e) => {
       console.log(e)
       e.added.forEach(subdoc => {
-        subdoc.load()
+         subdoc.load()
+      })
+
+      e.loaded.forEach(subdoc => {
         const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
+        persistence.on('synced', e => console.log(e))
       })
     })
 
@@ -34,6 +38,7 @@
     const newDoc = new Y.Doc()
     const fields = newDoc.getMap('fields')
     fields.set('title', `Doc ${Math.floor(Math.random() * 100)}`)
+    const persistence = new IndexeddbPersistence(id, newDoc)
     
     documentList.set(id, newDoc)
   } 
@@ -49,7 +54,7 @@
   <ul>
     {#each myList as [key, value]}
       <li>
-        <button on:click={ ()=> console.log(documentList.get(key).toJSON() ) }>{key}</button>
+        <button on:click={ ()=> console.log(documentList.get(key).getMap('fields').toJSON().title ) }>{key}</button>
       </li>
     {/each}
   </ul>

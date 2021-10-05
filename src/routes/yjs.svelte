@@ -25,7 +25,7 @@
 
       e.loaded.forEach(subdoc => {
         const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
-        persistence.on('synced', e => console.log(e))
+        persistence.on('synced', ()=> myList = Object.entries(documentList.toJSON() ) )
       })
     })
 
@@ -54,7 +54,7 @@
   <ul>
     {#each myList as [key, value]}
       <li>
-        <button on:click={ ()=> console.log(documentList.get(key).getMap('fields').toJSON().title ) }>{key}</button>
+        <button on:click={ ()=> console.log(documentList.get(key).getMap('fields').toJSON().title ) }>{documentList.get(key).getMap('fields').toJSON().title}</button>
       </li>
     {/each}
   </ul>

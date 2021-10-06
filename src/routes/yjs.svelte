@@ -14,7 +14,7 @@
       id: 'testMachine',
       initial: 'loggedIn',
       context: {
-        docList: undefined,
+        docList: new Map(),
       },
       states: {
         loggedIn: {
@@ -25,6 +25,9 @@
           on: {
             CREATE: {
               actions: [send({ type: 'CREATE' }, { to: 'db' })],
+            },
+            NEWDOC: {
+              actions: [(context, event) => context.docList.set(event.data.id, event.data.title)],
             },
           },
         },
@@ -43,12 +46,12 @@
 <button on:click={ ()=> testService.send({ type: 'CREATE' }) }>New Doc</button>
 <button on:click={ ()=> console.log($testService) }>Log Machine</button>
 
-{#if $testService?.context.docList}
+{#if $testService?.context.docList.size > 0}
   <h1>Test</h1>
   <ul>
-    {#each $testService.context.docList as [key, value]}
+    {#each [...$testService.context.docList] as [key, value]}
       <li>
-        <button>{key}</button>
+        <button>{value}</button>
       </li>
     {/each}
   </ul>

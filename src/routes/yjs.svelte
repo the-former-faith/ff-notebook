@@ -1,14 +1,43 @@
 <script>
+  import { createMachine, interpret, send } from 'xstate'
 	import { browser } from '$app/env'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import * as Y from 'yjs'
   import { v1 as uuidv1 } from 'uuid'
 
+  import DbWorker from '$lib/scripts/db-worker.js?worker'
+  import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
+
   let documentList
   let myList
   let ydoc
+  let testService
 
   if(browser) {
+
+    const testMachine = createMachine({
+      id: 'testMachine',
+      initial: 'loggedIn',
+      context: {
+        db: undefined,
+      },
+      states: {
+        loggedIn: {
+          invoke: {
+            id: 'db',
+            src: fromWebWorker(() => new DbWorker() ),
+          },
+          on: {
+            CREATE: {
+              actions: [send({ type: 'CREATE' }, { to: 'db' })],
+            },
+          },
+        },
+        loggedOut: {}
+      }
+    })
+
+    testService = interpret(testMachine).start()
 
     ydoc = new Y.Doc()
 
@@ -48,6 +77,7 @@
 
 <div>
 <button on:click={ ()=> createDoc() }>New Doc!</button>
+<button on:click={ ()=> testService.send({ type: 'CREATE' }) }>Tell Machine New Doc!</button>
 
 {#if myList}
   <h1>Test</h1>

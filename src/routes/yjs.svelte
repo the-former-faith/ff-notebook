@@ -1,16 +1,11 @@
 <script>
   import { createMachine, interpret, send } from 'xstate'
 	import { browser } from '$app/env'
-  import { IndexeddbPersistence } from 'y-indexeddb'
-  import * as Y from 'yjs'
-  import { v1 as uuidv1 } from 'uuid'
 
   import DbWorker from '$lib/scripts/db-worker.js?worker'
   import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 
-  let documentList
   let myList
-  let ydoc
   let testService
 
   if(browser) {
@@ -19,7 +14,7 @@
       id: 'testMachine',
       initial: 'loggedIn',
       context: {
-        db: undefined,
+        docList: undefined,
       },
       states: {
         loggedIn: {
@@ -39,52 +34,21 @@
 
     testService = interpret(testMachine).start()
 
-    ydoc = new Y.Doc()
-
-    documentList = ydoc.getMap('doc-list')
-
-    const persistence = new IndexeddbPersistence('database', ydoc)
-    //persistence.on('synced', (e) => { console.log(e) })
-    
-    ydoc.on('subdocs', (e) => {
-      console.log(e)
-      e.added.forEach(subdoc => {
-         subdoc.load()
-      })
-
-      e.loaded.forEach(subdoc => {
-        const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
-        persistence.on('synced', ()=> myList = Object.entries(documentList.toJSON() ) )
-      })
-    })
-
-    documentList.observe( ( event => myList = Object.entries(documentList.toJSON() ) ) ) 
   }
-
-  const createDoc = () => {
-
-    const id = uuidv1()
-    const newDoc = new Y.Doc()
-    const fields = newDoc.getMap('fields')
-    fields.set('title', `Doc ${Math.floor(Math.random() * 100)}`)
-    const persistence = new IndexeddbPersistence(id, newDoc)
-    
-    documentList.set(id, newDoc)
-  } 
-
 
 </script>
 
 <div>
-<button on:click={ ()=> createDoc() }>New Doc!</button>
-<button on:click={ ()=> testService.send({ type: 'CREATE' }) }>Tell Machine New Doc!</button>
 
-{#if myList}
+<button on:click={ ()=> testService.send({ type: 'CREATE' }) }>New Doc</button>
+<button on:click={ ()=> console.log($testService) }>Log Machine</button>
+
+{#if $testService?.context.docList}
   <h1>Test</h1>
   <ul>
-    {#each myList as [key, value]}
+    {#each $testService.context.docList as [key, value]}
       <li>
-        <button on:click={ ()=> console.log(documentList.get(key).getMap('fields').toJSON().title ) }>{documentList.get(key).getMap('fields').toJSON().title}</button>
+        <button>{key}</button>
       </li>
     {/each}
   </ul>

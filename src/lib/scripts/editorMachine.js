@@ -6,7 +6,6 @@ import Lang from '$lib/marks/lang'
 import Link from '@tiptap/extension-link'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
-import { onMount } from 'svelte'
 
 let ywebsocket
 

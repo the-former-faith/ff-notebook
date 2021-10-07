@@ -9,6 +9,8 @@
       }
 		}
 	}
+
+	export const prerender = false
 </script>
 
 <script>

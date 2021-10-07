@@ -1,14 +1,7 @@
 <script>
-    import { name } from '$lib/stores'
     import Tiptap from '$lib/Tiptap.svelte'
 
     export let id
-    
-    const resetForm = () => {
-      name.set('')
-      body.set(undefined)
-      currentDoc.set(undefined)
-    }
   
     const saveNote = async () => {
     //   await $currentDoc
@@ -25,7 +18,7 @@
   
   <h2>NoteEditor</h2>
   {#if id}
-    <input bind:value={$name} placeholder="Note Title" />
+    <!--<input bind:value={$name} placeholder="Note Title" />-->
     <Tiptap {id} />
     <button on:click={saveNote}>Save Note</button>
   {/if}

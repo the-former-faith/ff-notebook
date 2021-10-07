@@ -28,7 +28,7 @@
     "svelt-yjs": "^1.1.0",
     "svelte": "^3.34.0",
     "y-indexeddb": "^9.0.6",
-    "y-websocket": "^1.3.16",
+    "y-websocket": "https://github.com/the-former-faith/y-websocket.git",
     "yjs": "^13.5.13"
   },
   "dependencies": {

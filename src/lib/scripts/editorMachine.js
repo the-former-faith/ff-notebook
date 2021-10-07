@@ -1,6 +1,6 @@
 import { createMachine, assign, interpret, send } from 'xstate'
 import * as Y from 'yjs'
-import * as ywebsocket from 'y-websocket'
+import { WebsocketProvider } from 'y-websocket'
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Lang from '$lib/marks/lang'
@@ -68,11 +68,11 @@ const createEditorMachine = ({id, doc}) => {
           initiatingProvider: {
             entry: [
               assign({
-                //provider: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
+                provider: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
               }),
               (context, event) => {
                 if(context.networkStatus === 'offline') {
-                  //context.provider.disconnect()
+                  context.provider.disconnect()
                 }
               },
               send('CREATE_EDITOR')

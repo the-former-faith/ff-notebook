@@ -1,12 +1,18 @@
 import { createMachine, assign, interpret, send } from 'xstate'
 import * as Y from 'yjs'
-import * as ywebsocket from 'y-websocket'
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Lang from '$lib/marks/lang'
 import Link from '@tiptap/extension-link'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
+import { onMount } from 'svelte'
+
+let ywebsocket
+
+onMount(async()=> {
+  ywebsocket = await import ('y-websocket')
+})
 
 //const provider = 
 //const awareness = provider.awareness

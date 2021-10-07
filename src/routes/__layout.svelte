@@ -5,6 +5,7 @@
 	import DocList from '$lib/DocList.svelte'
 
 	$: if (browser) {
+		mainService.send('BROWSER_LOADED')
 		window.addEventListener('offline', () => mainService.send('TOGGLE'))
 		window.addEventListener('online', () => mainService.send('TOGGLE'))
 	}

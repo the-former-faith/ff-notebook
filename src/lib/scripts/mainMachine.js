@@ -60,16 +60,20 @@ const mainMachine = createMachine({
         loggedOut: {}
       }
     },
-    environment: {
-      initial: 'idle',
+    in_browser: {
+      initial: 'false',
       states: {
-        browser: {
+        true: {
           invoke: {
             id: 'db',
             src: fromWebWorker(() => new DbWorker() ),
           },
         },
-        idle: {}
+        false: {
+          on: {
+            'BROWSER_LOADED': {target: 'true'}
+          }
+        }
       }
     }
   }

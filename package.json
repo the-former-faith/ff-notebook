@@ -30,9 +30,10 @@
     "svelte": "^3.34.0",
     "y-indexeddb": "^9.0.6",
     "y-websocket": "^1.3.16",
-    "yjs": "^13.5.12"
+    "yjs": "^13.5.13"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^1.0.0-alpha.18",
     "xstate": "^4.25.0"
   }
 }

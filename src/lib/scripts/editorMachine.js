@@ -8,8 +8,6 @@ import Link from '@tiptap/extension-link'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 
-const { WebsocketProvider } = ywebsocket;
-
 //const provider = 
 //const awareness = provider.awareness
 
@@ -70,13 +68,13 @@ const createEditorMachine = ({id, doc}) => {
           initiatingProvider: {
             entry: [
               assign({
-                provider: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
+                provider: (context, event) =>  new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
               }),
-              // (context, event) => {
-              //   if(context.networkStatus === 'offline') {
-              //     context.provider.disconnect()
-              //   }
-              // },
+              (context, event) => {
+                if(context.networkStatus === 'offline') {
+                  context.provider.disconnect()
+                }
+              },
               send('CREATE_EDITOR')
             ],
             on: {
@@ -84,7 +82,7 @@ const createEditorMachine = ({id, doc}) => {
             }
           },
           creatingEditor: {
-            actions: (context, event) => console.log("contextkjkjlk;")
+            entry: [(context, event) => console.log("contextkjkjlk;")]
           }
         },
       },

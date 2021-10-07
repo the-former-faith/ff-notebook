@@ -1,5 +1,6 @@
 import { createMachine, assign, interpret, send } from 'xstate'
 import * as Y from 'yjs'
+import * as ywebsocket from 'y-websocket'
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Lang from '$lib/marks/lang'
@@ -7,9 +8,7 @@ import Link from '@tiptap/extension-link'
 import Collaboration from '@tiptap/extension-collaboration'
 import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 
-let ywebsocket
-
-ywebsocket = import ('y-websocket')
+const { WebsocketProvider } = ywebsocket;
 
 //const provider = 
 //const awareness = provider.awareness
@@ -71,20 +70,21 @@ const createEditorMachine = ({id, doc}) => {
           initiatingProvider: {
             entry: [
               assign({
-                provider: (context, event) =>  new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
+                provider: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc)
               }),
-              (context, event) => {
-                if(context.networkStatus === 'offline') {
-                  context.provider.disconnect()
-                }
-              }
+              // (context, event) => {
+              //   if(context.networkStatus === 'offline') {
+              //     context.provider.disconnect()
+              //   }
+              // },
+              send('CREATE_EDITOR')
             ],
             on: {
               'CREATE_EDITOR': { target: 'creatingEditor' }
             }
           },
           creatingEditor: {
-            actions: (context, event) => console.log(context)
+            actions: (context, event) => console.log("contextkjkjlk;")
           }
         },
       },

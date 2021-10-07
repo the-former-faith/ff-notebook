@@ -8,12 +8,12 @@ const config = {
 		files: {
 			serviceWorker: 'src/service-worker',
 		},
-	},
-	vite: {
-		optimizeDeps: {
-			include: ['y-websocket']
+		vite: {
+			optimizeDeps: {
+				exclude: ['y-websocket']
+			}
 		}
-	}
+	},
 };
 
 export default config;

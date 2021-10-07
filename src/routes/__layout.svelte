@@ -1,7 +1,7 @@
 <script>
 	import '../app.css'
 	import { browser } from '$app/env'
-	import { mainService } from '$lib/scripts/service'
+	import { mainService } from '$lib/scripts/mainMachine'
 	import DocList from '$lib/DocList.svelte'
 
 	$: if (browser) {

@@ -17,7 +17,7 @@
   import DocEditor from '$lib/DocEditor.svelte'
   import { onMount } from 'svelte'
   import { db, currentDoc } from '$lib/stores'
-  import { mainService } from '$lib/scripts/service'
+  import { mainService } from '$lib/scripts/mainMachine'
 
   export let id
   

@@ -1,29 +1,7 @@
 <script>
-  import { onMount } from 'svelte'
-  import { db, currentDoc, name, body } from '$lib/stores'
+  import { mainService } from '$lib/scripts/mainMachine'
   //import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
-
-  let db$
-  let noteList = []
-
-  //@TODO: Move this to rxdbMachine
-  onMount(() => {
-    // const getNoteList = async () => {
-    //   db$ = await db()
-    //   db$.notes
-    //     .find()
-    //     .sort({ updatedAt: 'desc' })
-    //     .$.subscribe((notes) => (noteList = notes))
-    // }
-    // getNoteList()
-  })
-
-  const handleEditNote = (note) => {
-    currentDoc.set(note)
-    name.set(note.name)
-    body.set(note.body)
-  }
 
   const deleteNote = async (doc) => {
     // if ($currentDoc.get('id') === doc.id) {
@@ -36,21 +14,17 @@
 
 <aside>
   <h2>All Docs</h2>
+  <button on:click={ ()=> mainService.send({ type: 'CREATE' }) }>New Doc</button>
   <!--<CreateDocButton />-->
   <ul id="note-list" class="nostyle">
-    {#await noteList}
-      Loading Notes...
-    {:then results}
-      {#each results as doc}
-        <li>
-          <DocLink {doc} />
+    {#if $mainService?.context.docList.size > 0}
 
-          <span class="meta">
-            {new Date(doc.updatedAt).toLocaleDateString('en-US')}
-            <button on:click={() => deleteNote(doc)} class="btn btn-delete">delete</button>
-          </span>
+      {#each [...$mainService.context.docList] as [id, doc]}
+        <li>
+          <DocLink {id} {doc} />
         </li>
       {/each}
-    {/await}
+
+    {/if}
   </ul>
 </aside>

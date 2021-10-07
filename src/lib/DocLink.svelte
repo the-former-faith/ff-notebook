@@ -1,11 +1,12 @@
 <script>
-  import { mainService } from '$lib/scripts/service'
+  import { mainService } from '$lib/scripts/mainMachine'
 
+  export let id
   export let doc
 </script>
 
 <a 
-  href={doc.id} 
-  on:mouseover={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: doc.id})}
-  on:focus={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: doc.id})}
->{doc.name}</a>
+  href={id} 
+  on:mouseover={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: id})}
+  on:focus={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: id})}
+>{doc.title}</a>

@@ -1,8 +1,7 @@
 import * as Y from 'yjs'
 import { IndexeddbPersistence } from 'y-indexeddb'
-import { createMachine, sendParent, send } from 'xstate'
+import { createMachine } from 'xstate'
 import { interpretInWebWorker } from '$lib/scripts/from-web-worker.js'
-import { v1 as uuidv1 } from 'uuid'
 
 const ydoc = new Y.Doc()
 
@@ -53,7 +52,7 @@ ydoc.on('subdocs', (e) => {
 
   e.loaded.forEach(subdoc => {
     const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
-    persistence.on('synced', (e) => service.parent.send({type: 'NEWDOC', data: {
+    persistence.on('synced', (e) => service.parent.send({type: 'LOAD_DOC', data: {
       id: subdoc.guid,
       title: documentList.get( subdoc.guid ).getText('title').toString() 
     }}))

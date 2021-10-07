@@ -25,9 +25,6 @@
     "events": "^3.3.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "rxdb": "^10.1.0",
-    "rxjs": "^7.3.0",
-    "stream": "^0.0.2",
     "svelt-yjs": "^1.1.0",
     "svelte": "^3.34.0",
     "y-indexeddb": "^9.0.6",
@@ -35,10 +32,6 @@
     "yjs": "^13.5.12"
   },
   "dependencies": {
-    "@lukeed/uuid": "^2.0.0",
-    "pouchdb-adapter-idb": "^7.2.2",
-    "pouchdb-adapter-indexeddb": "^7.2.2",
-    "uuid": "^8.3.2",
     "xstate": "^4.25.0"
   }
 }

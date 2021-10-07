@@ -10,9 +10,7 @@ import { onMount } from 'svelte'
 
 let ywebsocket
 
-onMount(async()=> {
-  ywebsocket = await import ('y-websocket')
-})
+ywebsocket = import ('y-websocket')
 
 //const provider = 
 //const awareness = provider.awareness

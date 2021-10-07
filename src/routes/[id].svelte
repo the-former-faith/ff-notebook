@@ -15,27 +15,17 @@
 
 <script>
   import DocEditor from '$lib/DocEditor.svelte'
-  import { onMount } from 'svelte'
-  import { db, currentDoc } from '$lib/stores'
   import { mainService } from '$lib/scripts/mainMachine'
 
   export let id
-  
-  onMount(async() => {
-
-    //I should be able to pass this before page tansition,
-    //And then only load it this way if server side loading
-    //const db$ = await db()
-    //$currentDoc = await db$.notes.findOne(id).exec()
-  })
 </script>
 
 <svelte:head>
-	<title>{$currentDoc ? $currentDoc.toJSON().name : ''}</title>
+	<!--<title>{$currentDoc ? $currentDoc.toJSON().name : ''}</title>-->
 </svelte:head>
 
 <article>
-  <h2>{$currentDoc ? $currentDoc.toJSON().name : ''}</h2>
+  <!--<h2>{$currentDoc ? $currentDoc.toJSON().name : ''}</h2>-->
   <DocEditor {id} />
 </article>
 

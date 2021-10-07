@@ -3,17 +3,7 @@
 
     export let id
   
-    const saveNote = async () => {
-    //   await $currentDoc
-    //     .update({
-    //       $set: {
-    //         name: $name,
-    //         body: $body,
-    //         updatedAt: new Date().getTime(),
-    //       },
-    //     })
-    //   resetForm()
-    }
+    const saveNote = async () => {}
   </script>
   
   <h2>NoteEditor</h2>

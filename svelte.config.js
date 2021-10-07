@@ -8,7 +8,6 @@ const config = {
 		files: {
 			serviceWorker: 'src/service-worker',
 		},
-		ssr: false,
 	}
 };
 

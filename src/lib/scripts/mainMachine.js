@@ -4,8 +4,6 @@ import DbWorker from '$lib/scripts/db-worker.js?worker'
 import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 import { browser } from '$app/env'
 
-const worker = new DbWorker()
-
 //Set online state
 
 let initialOnlineStatus = 'online'
@@ -37,10 +35,6 @@ const mainMachine = createMachine({
       initial: 'loggedIn',
       states: {
         loggedIn: {
-          invoke: {
-            id: 'db',
-            src: fromWebWorker(() => worker ),
-          },
           on: {
             'CREATE': {
               actions: [send({ type: 'CREATE' }, { to: 'db' })],
@@ -64,6 +58,18 @@ const mainMachine = createMachine({
           },
         },
         loggedOut: {}
+      }
+    },
+    environment: {
+      initial: 'idle',
+      states: {
+        browser: {
+          invoke: {
+            id: 'db',
+            src: fromWebWorker(() => new DbWorker() ),
+          },
+        },
+        idle: {}
       }
     }
   }

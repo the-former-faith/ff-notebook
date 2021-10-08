@@ -5,8 +5,9 @@
   export let doc
 </script>
 
-<a 
+<!--<a 
   href={id} 
   on:mouseover={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: id})}
   on:focus={() => mainService.send('NEW_EDITOR.ADD', {doc: doc, id: id})}
->{doc.title}</a>
+>{doc.title}</a>-->
+<a href={id} >{doc.title}</a>

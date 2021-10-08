@@ -17,7 +17,6 @@ import CollaborationCursor from '@tiptap/extension-collaboration-cursor'
 
 const createEditor = (context, event) => {
   return new Editor({
-    element: event.element,
     extensions: [
       StarterKit.configure({
         history: false,
@@ -42,10 +41,11 @@ const createEditor = (context, event) => {
     //   const json = this.getJSON()
     //   body.set(json.content)
     // },
-    // onTransaction: () => {
-    //   // force re-render so `editor.isActive` works as expected
-    //   context.editor = context.editor
-    // },
+    onTransaction: (e) => {
+      // force re-render so `editor.isActive` works as expected
+      //context.editor = context.editor
+      console.log(e)
+    },
   })
 }
 
@@ -107,10 +107,6 @@ const createEditorMachine = ({id}) => {
   })
 
   const service = interpret(editorMachine).start()
-
-  service.onTransition((state) => {
-    requestAnimationFrame(() => service.execute(state));
-  });
 
   return service
 }

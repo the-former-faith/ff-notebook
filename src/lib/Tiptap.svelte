@@ -1,10 +1,20 @@
 <script>
   import { onMount, onDestroy } from 'svelte'
+  import { browser } from '$app/env'
   import { mainService } from '$lib/scripts/mainMachine'
-import { log } from 'xstate/lib/actions';
 
-  let element = null
+  let element
   let actorService
+
+  //2b0f54fa-a473-439b-bfdc-5a2be570ef4b - doc 75
+  //6db09fe2-c583-4801-ab25-c303c6f36283 - doc 73
+
+
+  $: console.log(element)
+
+  $: if ($actorService && browser && element) {
+    element.append($actorService.context.editor.options.element)
+  }
 
   export let id
 
@@ -57,10 +67,10 @@ import { log } from 'xstate/lib/actions';
   // }
 
   onDestroy(() => {
-    console.log('destroying')
-    if(actorService) {
-      actorService.send('DESTROY_EDITOR')
-    }
+    // console.log('destroying')
+    // if(actorService) {
+    //   actorService.send('DESTROY_EDITOR')
+    // }
     // if (editor) {
     //   editor.destroy()
     // }
@@ -78,12 +88,13 @@ import { log } from 'xstate/lib/actions';
       if(actorService) {
         actorService.send('DESTROY_EDITOR')
       }
-    }}
-/>-->
+    }}-->
 
 <div class="editor">
   <p>{id}</p>
-  <div bind:this={element} class="body" />
+  {#if actorService}
+    <div id={id} bind:this={element} class="body" />
+  {/if}
 </div>
   
 <style>

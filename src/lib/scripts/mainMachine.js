@@ -49,7 +49,8 @@ const mainMachine = createMachine({
                   editors: (context, event) => [
                     ...context.editors,
                     {
-                      ref: spawn(editorMachine({id: event.id, doc: event.doc}), event.id)
+                      id: event.id,
+                      ref: spawn(editorMachine({id: event.id}), event.id)
                     }
                   ]
                 })

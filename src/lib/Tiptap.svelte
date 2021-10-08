@@ -1,12 +1,39 @@
 <script>
   import { onMount, onDestroy } from 'svelte'
+  import { mainService } from '$lib/scripts/mainMachine'
+import { log } from 'xstate/lib/actions';
 
-  let ywebsocket
-  let element
-  let editor
-  let provider
+  let element = null
+  let actorService
 
   export let id
+
+  onMount(()=> {
+    console.log('mounting')
+    const actors = $mainService.context.editors
+    const actorExists = actors.find(o => o.id === id)
+    if (actorExists) {
+      actorService = actorExists.ref
+      actorService.send({ type: 'CREATE_EDITOR', element: element})
+    } else {
+      mainService.send('NEW_EDITOR.ADD', {id: id})
+    }
+  })
+
+  mainService.onTransition((state) => {
+    if(state.changed) {
+      if(state.event.type == 'NEW_EDITOR.ADD') {
+        const actors = state.context.editors
+        const actorExists = actors.find(o => o.id === id)
+        if (actorExists) {
+          actorService = actorExists.ref
+          actorExists.ref.send({ type: 'CREATE_EDITOR', element: element})
+        }
+      }
+    }
+  })
+  
+  //$:console.log($actorService)
 
   //$: if(ywebsocket) loadDoc(id)
 
@@ -18,73 +45,45 @@
   //   provider = new ywebsocket.WebsocketProvider('wss://ff-server.onrender.com', id, ydoc)
   // }
 
-  onMount(async() => {
-    ywebsocket = await import ('y-websocket')
-  })
+  // const loadDoc = async(id) => {
+  //     console.log('page id: ', id)
+  //     if (editor) {
+  //       await editor.destroy()
+  //     }
 
-  const loadDoc = async(id) => {
-      console.log('page id: ', id)
-      if (editor) {
-        await editor.destroy()
-      }
-
-      if (provider) {
-        await provider.destroy()
-      }
-  }
-
-
-  const setLink = () => {
-    const previousUrl = editor.getAttributes('link').href
-    const url = window.prompt('URL', previousUrl)
-
-    // cancelled
-    if (url === null) {
-      return
-    }
-
-    // empty
-    if (url === '') {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .unsetLink()
-        .run()
-
-      return
-    }
-
-    // update link
-    editor
-      .chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: url })
-      .run()
-  }
+  //     if (provider) {
+  //       await provider.destroy()
+  //     }
+  // }
 
   onDestroy(() => {
-    if (editor) {
-      editor.destroy()
+    console.log('destroying')
+    if(actorService) {
+      actorService.send('DESTROY_EDITOR')
     }
+    // if (editor) {
+    //   editor.destroy()
+    // }
 
-    if (provider) {
-      provider.destroy()
-    }
+    // if (provider) {
+    //   provider.destroy()
+    // }
   })
 </script>
 
+<!--This successfully destroys the editor, but it does not recreate an editor.
+  <svelte:window
+    on:sveltekit:navigation-start={() => {
+      console.log('navigating!')
+      if(actorService) {
+        actorService.send('DESTROY_EDITOR')
+      }
+    }}
+/>-->
+
 <div class="editor">
-
-  {#if editor}
-    <!--<input type="text" value={$fields.get('title') ? $fields.get('title') : ''} on:keyup={(e) => fields.y.set('title', e.target.value)}/>-->
-
-
-  {/if}
-    
+  <p>{id}</p>
   <div bind:this={element} class="body" />
-
 </div>
   
 <style>

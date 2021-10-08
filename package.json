@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^1.0.0-alpha.18",
+    "prosemirror-state": "^1.3.4",
     "xstate": "^4.25.0"
   }
 }

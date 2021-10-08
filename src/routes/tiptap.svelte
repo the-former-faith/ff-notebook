@@ -8,14 +8,14 @@
 
   let element
   let editor
-  let title = 'Doc73'
+  let title
 
   const doc73 = new Y.Doc()
   const provider73 = new IndexeddbPersistence('6db09fe2-c583-4801-ab25-c303c6f36283', doc73)
   const doc75 = new Y.Doc()
   const provider75 = new IndexeddbPersistence('2b0f54fa-a473-439b-bfdc-5a2be570ef4b', doc75)
 
-  onMount(() => {
+  const createEditor = (doc) => {
     editor = new Editor({
       element: element,
       extensions: [
@@ -23,17 +23,16 @@
           history: false,
         }),
         Collaboration.configure({
-          document: doc73,
+          document: doc,
           field: 'content',
         })
       ],
       onTransaction: (e) => {
-        console.log(e)
         // force re-render so `editor.isActive` works as expected
         editor = editor
       },
     })
-  })
+  }
   
   onDestroy(() => {
     if (editor) {
@@ -41,22 +40,14 @@
     }
   })
 
-  // Collaboration.configure({
-  //   document: context.ydoc,
-  //   field: 'content',
-  // }),
-
-  //editor.commands.clearContent(true)
-  //providerIDB: (context, event) => new IndexeddbPersistence(context.id, context.ydoc)
-
-
-  const loadDoc = (id, doctitle) => {
+  const loadDoc = (doc, doctitle) => {
+    if (editor) editor.destroy() 
     title = doctitle
-    editor.unregisterPlugin('collaboration')
+    createEditor(doc)
   }
 </script>
 
-<h1>{title}</h1>
+<h1>{title ? title : 'Select Doc'}</h1>
 
 <nav>
   <button on:click={()=> loadDoc(doc73, 'Doc73')}>Load Doc 73</button>
@@ -64,8 +55,6 @@
 </nav>
   
 <div class="editor" bind:this={element} />
-
-<button on:click={()=> console.log(editor)}>Log editor</button>
 
 <style>
   button {

@@ -14,7 +14,7 @@
 
   $: if(id && browser && element) {
     console.log('hi')
-    loadDoc(id)
+    
   }
 
   const loadDoc = async (id) => {
@@ -60,11 +60,15 @@
         editor.destroy()
       }
     }}
+
+    on:sveltekit:navigation-end={() => {
+      loadDoc(id)
+    }}
   />
   
 </script>
 
-<p>{id}</p>
+<p>Doc {id}</p>
 <div bind:this={element} class="editor" />
 <button on:click={()=> editor.destroy()}>destroy</button>
   

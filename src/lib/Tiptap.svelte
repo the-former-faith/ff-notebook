@@ -53,6 +53,14 @@
       editor.destroy()
     }
   })
+
+  <svelte:window
+    on:sveltekit:navigation-start={() => {
+      if(editor) {
+        editor.destroy()
+      }
+    }}
+  />
   
 </script>
 

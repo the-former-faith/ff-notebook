@@ -1,8 +1,12 @@
-import { createMachine, interpret, assign, spawn, send } from 'xstate'
-import editorMachine from '$lib/scripts/editorMachine'
+import { createMachine, interpret, send, assign } from 'xstate'
 import DbWorker from '$lib/scripts/db-worker.js?worker'
 import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 import { browser } from '$app/env'
+import * as Y from 'yjs'
+import { IndexeddbPersistence } from 'y-indexeddb'
+import { Editor } from '@tiptap/core'
+import StarterKit from '@tiptap/starter-kit'
+import Collaboration from '@tiptap/extension-collaboration'
 
 //Set online state
 
@@ -12,73 +16,86 @@ if (browser) {
   initialOnlineStatus = navigator.onLine ? 'online' : 'offline'
 }
 
-const mainMachine = createMachine({
-  id: 'main machine',
-  type: 'parallel',
-  context: {
-    docList: new Map(),
-    editors: []
-  },
-  states: {
-    connectionStatus: {
-      initial: initialOnlineStatus,
-      states: {
-        online: {
-          on: { TOGGLE: 'offline' }
-        },
-        offline: {
-          on: { TOGGLE: 'online' }
+const createEditor = (doc) => {
+  return new Editor({
+    extensions: [
+      StarterKit.configure({
+        history: false,
+      }),
+      Collaboration.configure({
+        document: doc,
+        field: 'content',
+      })
+    ]
+  })
+}
+
+const mainMachine = createMachine(
+  {
+    id: 'main machine',
+    type: 'parallel',
+    context: {
+      docList: new Map(),
+      currentDoc: undefined,
+      currentDocProvider: undefined,
+      ydoc: undefined
+    },
+    states: {
+      connectionStatus: {
+        initial: initialOnlineStatus,
+        states: {
+          online: {
+            on: { TOGGLE: 'offline' }
+          },
+          offline: {
+            on: { TOGGLE: 'online' }
+          }
         }
-      }
-    },
-    user: {
-      initial: 'loggedIn',
-      states: {
-        loggedIn: {
-          on: {
-            'CREATE': {
-              actions: [send({ type: 'CREATE' }, { to: 'db' })],
+      },
+      user: {
+        initial: 'loggedIn',
+        states: {
+          loggedIn: {
+            on: {
+              'CREATE': {
+                actions: [send({ type: 'CREATE' }, { to: 'db' })],
+              },
+              'LOAD_DOC': {
+                actions: [(context, event) => context.docList.set(event.data.id, {title: event.data.title})],
+              },
+              'SELECT_DOC': {
+                actions: [
+                  assign({ ydoc: new Y.Doc() }),
+                  assign({ 
+                    currentDocProvider: (context, event) =>  new IndexeddbPersistence(event.id, context.ydoc),
+                    currentDoc: (context, event) => createEditor(context.ydoc)
+                  })
+                ],
+              },
             },
-            'LOAD_DOC': {
-              actions: [(context, event) => context.docList.set(event.data.id, {title: event.data.title})],
+          },
+          loggedOut: {}
+        }
+      },
+      in_browser: {
+        initial: 'false',
+        states: {
+          true: {
+            invoke: {
+              id: 'db',
+              src: fromWebWorker(() => new DbWorker() ),
             },
-            'NEW_EDITOR.ADD': {
-              actions: [
-                //(context, event)=> console.log(event.id),
-                assign({
-                  editors: (context, event) => [
-                    ...context.editors,
-                    {
-                      id: event.id,
-                      ref: spawn(editorMachine({id: event.id}), event.id)
-                    }
-                  ]
-                })
-              ]
+          },
+          false: {
+            on: {
+              'BROWSER_LOADED': {target: 'true'}
             }
-          },
-        },
-        loggedOut: {}
-      }
-    },
-    in_browser: {
-      initial: 'false',
-      states: {
-        true: {
-          invoke: {
-            id: 'db',
-            src: fromWebWorker(() => new DbWorker() ),
-          },
-        },
-        false: {
-          on: {
-            'BROWSER_LOADED': {target: 'true'}
           }
         }
       }
-    }
+    },
   }
-})
+)
 
-//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state.children)).start()
+//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
 export const mainService = interpret(mainMachine).start()

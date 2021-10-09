@@ -1,5 +1,4 @@
 <script context="module">
-
   export async function load({ page }) {
     const id = page.params.id
 
@@ -15,9 +14,9 @@
 
 <script>
   import DocEditor from '$lib/DocEditor.svelte'
-  import { mainService } from '$lib/scripts/mainMachine'
 
   export let id
+
 </script>
 
 <svelte:head>

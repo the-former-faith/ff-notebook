@@ -53,6 +53,7 @@ const createEditorMachine = ({id}) => {
   
   const editorMachine = createMachine({
     id: 'editorMachine',
+    initial: 'initiatingProvider',
     context: {
       id: id,
       ydoc: new Y.Doc(),
@@ -61,49 +62,41 @@ const createEditorMachine = ({id}) => {
       providerIDB: undefined,
       networkStatus: 'offline'
     },
-    type: 'parallel',
     states: {
-      editor: {
-        initial: 'initiatingProvider',
-        states: {
-          initiatingProvider: {
-            entry: [
-              assign({
-                providerWS: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc),
-                providerIDB: (context, event) => new IndexeddbPersistence(context.id, context.ydoc)
-              }),
-              (context, event) => {
-                if(context.networkStatus === 'offline') {
-                  context.providerWS.disconnect()
-                }
-              },
-              //send('CREATE_EDITOR')
-            ],
-            on: {
-              'CREATE_EDITOR': { target: 'creatingEditor' }
+      initiatingProvider: {
+        entry: [
+          assign({
+            providerWS: (context, event) =>  new WebsocketProvider('wss://ff-server.onrender.com', context.id, context.ydoc),
+            providerIDB: (context, event) => new IndexeddbPersistence(context.id, context.ydoc)
+          }),
+          (context, event) => {
+            if(context.networkStatus === 'offline') {
+              context.providerWS.disconnect()
             }
           },
-          creatingEditor: {
-            entry: [
-              assign({
-                editor: (context, event) =>  createEditor(context, event)
-              }),
-            ],
-            on: {
-              'DESTROY_EDITOR': { 
-                actions: (context, event) => context.editor.destroy() 
-              }
-            }
-          }
-        },
+          //send('CREATE_EDITOR')
+        ],
+        on: {
+          'CREATE_EDITOR': { target: 'creatingEditor' }
+        }
       },
-      userInput: {
-        initial: 'idle',
-        states: {
-          idle: {}
+      creatingEditor: {
+        entry: [
+          assign({
+            editor: (context, event) =>  createEditor(context, event)
+          }),
+        ],
+        on: {
+          'DESTROY_EDITOR': { 
+            actions: [
+              (context, event) => context.editor.destroy(),
+              (context, event) => context.providerIDB.destroy(),
+            ] 
+          }
         }
       }
     }
+    
   })
 
   const service = interpret(editorMachine).start()

@@ -1,6 +1,5 @@
 <script>
-  const createDoc = async () => {
-  }
+  import { mainService } from '$lib/scripts/mainMachine'
 </script>
 
-<button on:click={()=> createDoc()}>Create New Doc</button>
+<button on:click={ ()=> mainService.send({ type: 'CREATE' }) }>New Doc</button>

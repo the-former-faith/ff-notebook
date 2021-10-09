@@ -54,7 +54,7 @@ ydoc.on('subdocs', (e) => {
     const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
     persistence.on('synced', (e) => service.parent.send({type: 'LOAD_DOC', data: {
       id: subdoc.guid,
-      title: documentList.get( subdoc.guid ).getText('title').toString() 
+      title: documentList.get( subdoc.guid ).getText('title').toString()
     }}))
   })
 

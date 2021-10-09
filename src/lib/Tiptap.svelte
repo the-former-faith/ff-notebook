@@ -1,25 +1,64 @@
 <script>
   import { onDestroy } from 'svelte'
   import { browser } from '$app/env'
-  import { mainService } from '$lib/scripts/mainMachine'
-
-  let element
+  import { Editor } from '@tiptap/core'
+  import StarterKit from '@tiptap/starter-kit'
+  import * as Y from 'yjs'
+  import { IndexeddbPersistence } from 'y-indexeddb'
+  import Collaboration from '@tiptap/extension-collaboration'
 
   export let id
 
-  $: if(element && $mainService?.context.currentDoc) {
-    element.append($mainService?.context.currentDoc.options.element)
+  let element
+  let editor
+
+  $: if(id && browser && element) {
+    console.log('hi')
+    loadDoc(id)
+  }
+
+  const loadDoc = async (id) => {
+    console.log('hil')
+    if (editor) {
+      console.log('destroying')
+      await editor.destroy()
+      console.log('destroyed')
+    }
+    const ydoc = new Y.Doc()
+    const persistence = new IndexeddbPersistence(id, ydoc)
+    createEditor(ydoc)
+  }
+
+  const createEditor = (doc) => {
+    editor = new Editor({
+      element: element,
+      extensions: [
+        StarterKit.configure({
+          history: false,
+        }),
+        Collaboration.configure({
+          document: doc,
+          field: 'content',
+        })
+      ],
+      onTransaction: (e) => {
+        // force re-render so `editor.isActive` works as expected
+        editor = editor
+      },
+    })
   }
 
   onDestroy(() => {
-    //Send message to destroy editor
+    if (editor) {
+      editor.destroy()
+    }
   })
-
   
 </script>
 
 <p>{id}</p>
 <div bind:this={element} class="editor" />
+<button on:click={()=> editor.destroy()}>destroy</button>
   
 <style>
 

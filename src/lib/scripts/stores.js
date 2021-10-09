@@ -1,3 +1,4 @@
 import { writable } from 'svelte/store'
 
-export const currentDoc = writable(true)
+export const editor = writable(undefined)
+export const ydoc = writable(undefined)

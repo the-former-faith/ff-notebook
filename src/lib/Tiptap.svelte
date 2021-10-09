@@ -53,8 +53,10 @@
       editor.destroy()
     }
   })
+  
+</script>
 
-  <svelte:window
+<svelte:window
     on:sveltekit:navigation-start={() => {
       if(editor) {
         editor.destroy()
@@ -64,9 +66,7 @@
     on:sveltekit:navigation-end={() => {
       loadDoc(id)
     }}
-  />
-  
-</script>
+/>
 
 <p>Doc {id}</p>
 <div bind:this={element} class="editor" />

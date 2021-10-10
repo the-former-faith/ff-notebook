@@ -16,10 +16,8 @@ const idbPersistence = new IndexeddbPersistence('database', ydoc)
 
 const createDoc = (context, event) => {
   const newDoc = new Y.Doc()
-  const title = newDoc.getText('title')
-  const docTitle = `Doc ${Math.floor(Math.random() * 100)}`
-  title.insert(0, docTitle)
-  
+  const fields = newDoc.getMap('fields')
+  fields.set('title', '')
   documentList.set(newDoc.guid, newDoc)
 }
 
@@ -54,7 +52,7 @@ ydoc.on('subdocs', (e) => {
     const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
     persistence.on('synced', (e) => service.parent.send({type: 'LOAD_DOC', data: {
       id: subdoc.guid,
-      title: documentList.get( subdoc.guid ).getText('title').toString()
+      fields: documentList.get( subdoc.guid ).getMap('fields').toJSON()
     }}))
   })
 

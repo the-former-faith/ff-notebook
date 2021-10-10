@@ -9,9 +9,6 @@
   import { onMount } from 'svelte'
   import { currentID, currentDoc } from '$lib/scripts/stores'
 
-  let value
-  const ydoc = new Y.Doc()
-  let provider
   let fields
   let ymap
   let loadedEditor = 'empty'
@@ -35,18 +32,19 @@
   }
 
   const loadDoc = async (doc, doctitle) => {
+    //Lift ydoc to store so it can be destroyed
     const ydoc = new Y.Doc()
     if ($currentDoc.providerIDB) {
       await $currentDoc.providerIDB.destroy()
-      console.log('destroying provider')
     }
     $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
     if ($currentDoc.editor) {
       await $currentDoc.editor.destroy()
-      console.log('destroying editor')
     }
-    console.log('creating editor')
     createEditor(ydoc)
+    ymap = ydoc.getMap('fields')
+    //Lift fields to store
+    fields = readableMap(ymap)
     $currentDoc.element.append($currentDoc.editor.options.element)
   }
 
@@ -57,15 +55,13 @@
 	})
 
   // onMount(()=> {
-  //   ymap = ydoc.getMap('fields')
-  //   fields = readableMap(ymap)
   //   provider = new IndexeddbPersistence('9e6b8fac-e059-419b-91fe-4fb31b928d6a', ydoc)
   //   fields.y.set('title', '')
   // })
 </script>
   
 <div class="editor">
-  <!-- {#if $fields}
+  {#if $fields}
     <label for="title">Title
       <input 
         name="title"
@@ -75,9 +71,8 @@
         on:keyup={(e) => fields.y.set('title', e.target.value)}
       />
     </label>
-  {/if} -->
+  {/if}
   <Tiptap />
-  <button on:click={console.log(ydoc)}>Log Y Doc</button>
 </div>
 
 <style>

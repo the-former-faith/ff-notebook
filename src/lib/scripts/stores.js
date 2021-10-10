@@ -5,5 +5,6 @@ export const currentDoc = writable({
   providerIDB: undefined,
   ydoc: undefined,
   editor: undefined,
-  element: undefined
+  element: undefined,
+  fields: undefined
 })

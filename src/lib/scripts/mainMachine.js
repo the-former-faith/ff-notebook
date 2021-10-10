@@ -61,7 +61,7 @@ const mainMachine = createMachine(
                 actions: [send({ type: 'CREATE' }, { to: 'db' })],
               },
               'LOAD_DOC': {
-                actions: [(context, event) => context.docList.set(event.data.id, {title: event.data.title})],
+                actions: [(context, event) => context.docList.set(event.data.id, event.data.fields)],
               },
               'SELECT_DOC': {
                 actions: [
@@ -97,5 +97,5 @@ const mainMachine = createMachine(
   }
 )
 
-export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
-//export const mainService = interpret(mainMachine).start()
+//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
+export const mainService = interpret(mainMachine).start()

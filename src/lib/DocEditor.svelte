@@ -38,6 +38,9 @@
       await $currentDoc.providerIDB.destroy()
     }
     $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
+    $currentDoc.providerIDB.on('synced', (e) => {
+      console.log(e)
+    })
     if ($currentDoc.editor) {
       await $currentDoc.editor.destroy()
     }

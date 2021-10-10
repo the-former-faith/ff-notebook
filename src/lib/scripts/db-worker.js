@@ -18,6 +18,8 @@ const createDoc = (context, event) => {
   const newDoc = new Y.Doc()
   const fields = newDoc.getMap('fields')
   fields.set('title', '')
+  fields.set('createdAt', Date.now() )
+  fields.set('updatedAt', Date.now() )
   documentList.set(newDoc.guid, newDoc)
 }
 
@@ -44,16 +46,19 @@ service.start();
 //Could put this logic into the machine.
 //Just have these sends events.
 ydoc.on('subdocs', (e) => {
+  console.log(e)
   e.added.forEach(subdoc => {
     subdoc.load()
   })
 
   e.loaded.forEach(subdoc => {
     const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
-    persistence.on('synced', (e) => service.parent.send({type: 'LOAD_DOC', data: {
+    persistence.on('synced', (e) => {
+      console.log(e)
+      service.parent.send({type: 'LOAD_DOC', data: {
       id: subdoc.guid,
       fields: documentList.get( subdoc.guid ).getMap('fields').toJSON()
-    }}))
+    }})})
   })
 
 })

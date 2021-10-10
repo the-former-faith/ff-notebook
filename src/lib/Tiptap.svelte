@@ -44,7 +44,6 @@
   }
 
   currentDoc.subscribe(value => {
-    console.log(value)
 		if(typeof value !== 'undefined' && value !== loadedEditor) {
       loadDoc(value)
     }
@@ -57,7 +56,7 @@
 <style>
 
   .editor {
-    border: 1px solid;
+    border: 1px solid var(--accent-color);
     padding: 0.5rem;
     margin: 1rem 0.5rem;
   }
@@ -67,6 +66,6 @@
   }
 
   .editor:focus-within {
-    outline: 2px solid var(--accent-color);
+    outline: 2px solid var(--action-color);
   }
 </style>

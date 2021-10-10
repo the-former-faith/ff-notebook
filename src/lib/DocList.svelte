@@ -19,7 +19,7 @@
             <DocLink 
               {id} 
               {doc} 
-              --text-color={$currentDoc == id ? 'var(--accent-color)' : 'currentColor'} 
+              --text-color={$currentDoc == id ? 'var(--action-color)' : 'currentColor'} 
               disabled={$currentDoc == id}
             />
           </li>
@@ -32,13 +32,13 @@
 
 <style>
   summary {
-    padding: 0.5rem;
+    padding: 1rem 0.5rem;
     font-weight: bold;
     font-family: monospace, monospace;
   }
 
   details {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid var(--accent-color);
   }
 
   ul {
@@ -48,6 +48,6 @@
   }
 
   li:not(:last-of-type):not(:first-of-type) {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid var(--accent-color);
   }
 </style>

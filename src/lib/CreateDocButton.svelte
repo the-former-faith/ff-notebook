@@ -6,6 +6,8 @@
 
 <style>
   button {
-    background-color: var(--accent-color);
+    background-color: var(--action-color);
+    color: var(--background-color);
+    font-weight: 700;
   }
 </style>

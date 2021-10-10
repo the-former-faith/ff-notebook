@@ -6,20 +6,24 @@
 :root {
   --foreground-color: #1a1a1a;
   --background-color: #fff;
-  --accent-color: hsl(313, 100%, 26%);
-  accent-color: var(--accent-color);
+  --accent-color: #bababa;
+  --action-color-brightness: 26%;
+  --action-color: hsl(313, 100%, var(--action-color-brightness) );
+  accent-color: var(--action-color);
 }
 
 @media screen and (prefers-color-scheme: dark) {
   :root {
-    --foreground-color: #fff;
+    --foreground-color: #bababa;
     --background-color: #1a1a1a;
-    --accent-color: hsl(313, 100%, 70%);
+    --accent-color: #4d4d4d;
+    --action-color-brightness: 40%;
+    --action-color: hsl(313, 81%, var(--action-color-brightness));
   }
 }
 
 :link {
-  color: var(--accent-color);
+  color: var(--action-color);
 }
 
 body {
@@ -41,7 +45,7 @@ button {
 input {
   background: inherit;
   color: inherit;
-  border: 2px solid;
+  border: 1px solid var(--accent-color);
   min-height: 44px;
   padding: 8px;
   width: 100%;

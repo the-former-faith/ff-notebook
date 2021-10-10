@@ -1,13 +1,10 @@
 <script>
-  import { onDestroy, onMount } from 'svelte'
-  import { browser } from '$app/env'
   import { Editor } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import Collaboration from '@tiptap/extension-collaboration'
   import { currentDoc } from '$lib/scripts/stores'
-  import Tiptap from '$lib/Tiptap.svelte'
 
   let element
   let editor
@@ -51,21 +48,23 @@
   
 </script>
 
-<div bind:this={element} class="editor" />
+<div>
+  <p>Content</p>
+  <div bind:this={element} class="tiptap" />
+</div>
   
 <style>
 
-  .editor {
+  .tiptap {
     border: 1px solid var(--accent-color);
     padding: 0.5rem;
-    margin: 1rem 0.5rem;
   }
 
-  .editor:empty {
+  .tiptap:empty {
     display: none;
   }
 
-  .editor:focus-within {
+  .tiptap:focus-within {
     outline: 2px solid var(--action-color);
   }
 </style>

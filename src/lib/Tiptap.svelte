@@ -1,33 +1,17 @@
 <script>
-  import { onDestroy } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { browser } from '$app/env'
   import { Editor } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import Collaboration from '@tiptap/extension-collaboration'
-
-  export let id
+  import { currentDoc } from '$lib/scripts/stores'
+  import Tiptap from '$lib/Tiptap.svelte'
 
   let element
   let editor
-
-  $: if(id && browser && element) {
-    console.log('hi')
-    
-  }
-
-  const loadDoc = async (id) => {
-    console.log('hil')
-    if (editor) {
-      console.log('destroying')
-      await editor.destroy()
-      console.log('destroyed')
-    }
-    const ydoc = new Y.Doc()
-    const persistence = new IndexeddbPersistence(id, ydoc)
-    createEditor(ydoc)
-  }
+  let loadedEditor = 'empty'
 
   const createEditor = (doc) => {
     editor = new Editor({
@@ -43,34 +27,32 @@
       ],
       onTransaction: (e) => {
         // force re-render so `editor.isActive` works as expected
-        editor = editor
+        //editor = editor
       },
     })
   }
 
-  onDestroy(() => {
+  const loadDoc = async (doc, doctitle) => {
+    const ydoc = new Y.Doc()
+    const provider = new IndexeddbPersistence(doc, ydoc)
     if (editor) {
-      editor.destroy()
+      await editor.destroy()
+      console.log('destroying editor')
     }
-  })
+    console.log('creating editor')
+    createEditor(ydoc)
+  }
+
+  currentDoc.subscribe(value => {
+    console.log(value)
+		if(typeof value !== 'undefined' && value !== loadedEditor) {
+      loadDoc(value)
+    }
+	})
   
 </script>
 
-<svelte:window
-    on:sveltekit:navigation-start={() => {
-      if(editor) {
-        editor.destroy()
-      }
-    }}
-
-    on:sveltekit:navigation-end={() => {
-      loadDoc(id)
-    }}
-/>
-
-<p>Doc {id}</p>
 <div bind:this={element} class="editor" />
-<button on:click={()=> editor.destroy()}>destroy</button>
   
 <style>
 

@@ -57,8 +57,13 @@
 <style>
 
   .editor {
-    border: 2px solid;
+    border: 1px solid;
     padding: 0.5rem;
+    margin: 1rem 0.5rem;
+  }
+
+  .editor:empty {
+    display: none;
   }
 
   .editor:focus-within {

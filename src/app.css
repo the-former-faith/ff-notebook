@@ -27,16 +27,15 @@ body {
   background-color: var(--background-color);
   font-family: sans-serif;
   min-height: 100vh;
-  padding: 2rem;
 }
 
 button {
-  background-color: var(--accent-color);
   border: none;
   min-height: 44px;
   display: flex;
   align-items: center;
   padding: 1rem;
+  width: 100%;
 }
 
 input {

@@ -30,14 +30,10 @@
 	})
   
 </script>
-
-<div>
-  <p>Content</p>
   {#if $currentDoc.editor}
     <Toolbar editor={$currentDoc.editor} />
   {/if}
   <div bind:this={$currentDoc.element} class="tiptap" />
-</div>
   
 <style>
 

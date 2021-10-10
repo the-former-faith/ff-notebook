@@ -80,9 +80,13 @@
 
 <style>
   .editor {
-    padding: 0.5rem;
     display: grid;
+    grid-template-columns: 0 1fr 0;
     gap: 1rem;
+  }
+
+  .editor > :global(*){
+    grid-column: 2;
   }
 </style>
 

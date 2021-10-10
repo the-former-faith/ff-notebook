@@ -81,8 +81,9 @@
     gap: 0.5rem;
     position: sticky;
     top: 0;
-    background-color: var(--background-color);
+    background-color: var(--accent-color);
     z-index: 1;
-    padding: 0.5rem 0;
+    padding: 0.5rem;
+    grid-column: 1 / -1 !important;
   }
 </style>

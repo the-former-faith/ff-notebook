@@ -2,7 +2,7 @@
   import { mainService } from '$lib/scripts/mainMachine'
   import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
-  import { currentDoc } from '$lib/scripts/stores'
+  import { currentID } from '$lib/scripts/stores'
 </script>
 
 <aside>
@@ -19,8 +19,8 @@
             <DocLink 
               {id} 
               {doc} 
-              --text-color={$currentDoc == id ? 'var(--action-color)' : 'currentColor'} 
-              disabled={$currentDoc == id}
+              --text-color={$currentID == id ? 'var(--action-color)' : 'currentColor'} 
+              disabled={$currentID == id}
             />
           </li>
         {/each}

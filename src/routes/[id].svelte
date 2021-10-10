@@ -20,11 +20,11 @@
 </script>
 
 <svelte:head>
-	<!--<title>{$currentDoc ? $currentDoc.toJSON().name : ''}</title>-->
+	<!--<title>{$currentID ? $currentID.toJSON().name : ''}</title>-->
 </svelte:head>
 
 <article>
-  <!--<h2>{$currentDoc ? $currentDoc.toJSON().name : ''}</h2>-->
+  <!--<h2>{$currentID ? $currentID.toJSON().name : ''}</h2>-->
   <DocEditor {id} />
 </article>
 

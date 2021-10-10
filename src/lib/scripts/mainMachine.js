@@ -36,8 +36,8 @@ const mainMachine = createMachine(
     type: 'parallel',
     context: {
       docList: new Map(),
-      currentDoc: undefined,
-      currentDocProvider: undefined,
+      currentID: undefined,
+      currentIDProvider: undefined,
       ydoc: undefined
     },
     states: {
@@ -67,8 +67,8 @@ const mainMachine = createMachine(
                 actions: [
                   assign({ ydoc: new Y.Doc() }),
                   assign({ 
-                    currentDocProvider: (context, event) =>  new IndexeddbPersistence(event.id, context.ydoc),
-                    currentDoc: (context, event) => createEditor(context.ydoc)
+                    currentIDProvider: (context, event) =>  new IndexeddbPersistence(event.id, context.ydoc),
+                    currentID: (context, event) => createEditor(context.ydoc)
                   })
                 ],
               },
@@ -97,5 +97,5 @@ const mainMachine = createMachine(
   }
 )
 
-//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
-export const mainService = interpret(mainMachine).start()
+export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
+//export const mainService = interpret(mainMachine).start()

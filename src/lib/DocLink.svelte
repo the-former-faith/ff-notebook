@@ -1,11 +1,11 @@
 <script>
-  import { currentDoc } from '$lib/scripts/stores'
+  import { currentID } from '$lib/scripts/stores'
   export let id
   export let doc
   export let disabled
 </script>
 <button 
-  on:click={currentDoc.set(id)}
+  on:click={currentID.set(id)}
   disabled={disabled}
 >{doc.title}</button>
 

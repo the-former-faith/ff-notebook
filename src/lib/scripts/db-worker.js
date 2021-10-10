@@ -9,8 +9,6 @@ const documentList = ydoc.getMap('doc-list')
 
 const idbPersistence = new IndexeddbPersistence('database', ydoc)
 
-//idbPersistence.on('synced', (e) => { console.log(e) })
-
 //documentList.observe( ( event => myList = Object.entries(documentList.toJSON() ) ) )
 
 
@@ -22,9 +20,6 @@ const createDoc = (context, event) => {
   fields.set('updatedAt', Date.now() )
   documentList.set(newDoc.guid, newDoc)
 }
-
-//documentList.get(key).getMap('fields').toJSON().title
-
 
 const dbMachine = createMachine({
   id: 'db',
@@ -46,7 +41,6 @@ service.start();
 //Could put this logic into the machine.
 //Just have these sends events.
 ydoc.on('subdocs', (e) => {
-  console.log(e)
   e.added.forEach(subdoc => {
     subdoc.load()
   })
@@ -54,7 +48,6 @@ ydoc.on('subdocs', (e) => {
   e.loaded.forEach(subdoc => {
     const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
     persistence.on('synced', (e) => {
-      console.log(e)
       service.parent.send({type: 'LOAD_DOC', data: {
       id: subdoc.guid,
       fields: documentList.get( subdoc.guid ).getMap('fields').toJSON()

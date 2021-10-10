@@ -9,5 +9,6 @@
     background-color: var(--action-color);
     color: var(--background-color);
     font-weight: 700;
+    grid-column: 2;
   }
 </style>

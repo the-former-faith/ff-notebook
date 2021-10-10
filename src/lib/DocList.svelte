@@ -2,16 +2,14 @@
   import { mainService } from '$lib/scripts/mainMachine'
   import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
-  import { currentID } from '$lib/scripts/stores'
+  import { currentID, allDocsOpened } from '$lib/scripts/stores'
 </script>
 
 <aside>
-  <details>
+  <CreateDocButton />
+  <details bind:open={$allDocsOpened}>
     <summary>All Docs</summary>
     <ul id="note-list" class="nostyle">
-      <li>
-        <CreateDocButton />
-      </li>
       {#if $mainService?.context.docList.size > 0}
   
         {#each [...$mainService.context.docList] as [id, doc]}
@@ -35,19 +33,28 @@
     padding: 1rem 0.5rem;
     font-weight: bold;
     font-family: monospace, monospace;
+    grid-row: 1;
+    cursor: pointer;
+  }
+
+  aside {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    border-bottom: 1px solid var(--accent-color);
   }
 
   details {
-    border-bottom: 1px solid var(--accent-color);
+    display: contents;
   }
 
   ul {
     padding: 0%;
     list-style: none;
     display: grid;
+    grid-column: 1 / -1;
   }
 
-  li:not(:last-of-type):not(:first-of-type) {
-    border-bottom: 1px solid var(--accent-color);
+  li {
+    border-top: 1px solid var(--accent-color);
   }
 </style>

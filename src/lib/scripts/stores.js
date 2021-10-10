@@ -8,3 +8,5 @@ export const currentDoc = writable({
   element: undefined,
   fields: undefined
 })
+
+export const allDocsOpened = writable(true)

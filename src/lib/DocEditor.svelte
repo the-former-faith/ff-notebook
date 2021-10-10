@@ -26,7 +26,7 @@
       ],
       onTransaction: (e) => {
         // force re-render so `editor.isActive` works as expected
-        //editor = editor
+        $currentDoc.editor = $currentDoc.editor
       },
     })
   }
@@ -82,7 +82,7 @@
   .editor {
     padding: 0.5rem;
     display: grid;
-    gap: 0.5rem;
+    gap: 1rem;
   }
 </style>
 

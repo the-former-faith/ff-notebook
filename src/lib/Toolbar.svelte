@@ -48,32 +48,41 @@
     bold
   </button>
   <button
-    on:click={() => editor.chain().focus().toggleHeading({ level: 1}).run()}
-    class:active={editor.isActive('heading', { level: 1 })}
-  >
-    H1
-  </button>
-  <button
     on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
     class:active={editor.isActive('heading', { level: 2 })}
   >
     H2
   </button>
-  <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
-    P
+  <button
+    on:click={() => editor.chain().focus().toggleHeading({ level: 3}).run()}
+    class:active={editor.isActive('heading', { level: 3 })}
+  >
+    H3
   </button>
-  <button on:click={() => console.log(editor.getJSON())}>
-    Log content
+  <button on:click={() => editor.chain().focus().setParagraph().run()} class:active={editor.isActive('paragraph')}>
+    ¶
   </button>
 </div>
 
 <style>
+  button {
+    text-align: center;
+    justify-content: center;
+  }
+
   button.active {
-    background: black;
+    background: var(--action-color);
     color: white;
   }
 
   .toolbar {
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 0.5rem;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+    z-index: 1;
+    padding: 0.5rem 0;
   }
 </style>

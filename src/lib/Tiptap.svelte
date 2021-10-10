@@ -2,6 +2,7 @@
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import { currentID, currentDoc } from '$lib/scripts/stores'
+  import Toolbar from '$lib/Toolbar.svelte'
 
   let editor
   let loadedEditor = 'empty'
@@ -32,6 +33,9 @@
 
 <div>
   <p>Content</p>
+  {#if $currentDoc.editor}
+    <Toolbar editor={$currentDoc.editor} />
+  {/if}
   <div bind:this={$currentDoc.element} class="tiptap" />
 </div>
   

@@ -2,6 +2,7 @@
   import { Editor } from '@tiptap/core'
   import StarterKit from '@tiptap/starter-kit'
   import Collaboration from '@tiptap/extension-collaboration'
+  import Link from '@tiptap/extension-link'
   import Toolbar from '$lib/Toolbar.svelte'
 
   let editor
@@ -20,7 +21,8 @@
           Collaboration.configure({
             document: doc,
             field: 'content',
-          })
+          }),
+          Link
         ],
         onTransaction: (e) => {
           // force re-render so `editor.isActive` works as expected

@@ -3,7 +3,7 @@
   import StarterKit from '@tiptap/starter-kit'
   import Collaboration from '@tiptap/extension-collaboration'
   import Link from '@tiptap/extension-link'
-  import Toolbar from '$lib/Toolbar.svelte'
+  import Toolbar from '$lib/components/molecules/Toolbar.svelte'
 
   let editor
   export let ydoc

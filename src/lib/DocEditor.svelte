@@ -1,9 +1,10 @@
 <script>
-  import Tiptap from '$lib/Tiptap.svelte'
+  import Tiptap from '$lib/components/organisms/Tiptap.svelte'
   import { readableMap } from 'svelt-yjs'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import { currentDoc } from '$lib/scripts/stores'
+  import { browser } from '$app/env'
 
   let fields
   let ymap
@@ -19,7 +20,7 @@
     fields = readableMap(ymap)
   }
 
-  $: loadDoc(id)
+  $: if(browser) loadDoc(id)
 
 </script>
   

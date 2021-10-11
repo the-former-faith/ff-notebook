@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "svelt-yjs": "^1.1.0",
+    "svelte-accessible-dialog": "^2.1.3",
     "xstate": "^4.25.0"
   }
 }

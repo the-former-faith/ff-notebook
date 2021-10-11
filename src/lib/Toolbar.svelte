@@ -36,7 +36,7 @@
   <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
     lang
   </button>
-  <button on:click={() => setLink()} class:active={editor.isActive('link')}>
+  <button on:click={() => setLink(editor)} class:active={editor.isActive('link')}>
     link
   </button>
   {#if editor.isActive('link')}

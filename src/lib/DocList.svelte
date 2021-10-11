@@ -18,7 +18,7 @@
               {id} 
               {doc} 
               --text-color={$currentID == id ? 'var(--action-color)' : 'currentColor'} 
-              disabled={$currentID == id}
+              current={$currentID == id}
             />
           </li>
         {/each}

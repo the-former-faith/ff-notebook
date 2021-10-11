@@ -1,28 +1,31 @@
 <script>
-  import { currentID, allDocsOpened } from '$lib/scripts/stores'
+  import { allDocsOpened } from '$lib/scripts/stores'
   export let id
   export let doc
-  export let disabled
+  export let current
   const updated = new Date(doc.updatedAt);
 </script>
-<button 
+<a 
+  href={id}
   on:click={()=> {
     $allDocsOpened = false
-    currentID.set(id)
   }}
 
-  disabled={disabled}
-><span>{doc.title ? doc.title : 'Untitled Note'}</span> <small>{updated.toLocaleDateString()}</small></button>
+aria-current={current}
+><span>{doc.title ? doc.title : 'Untitled'}</span> <small>{updated.toLocaleDateString()}</small></a>
 
 <style>
-  button {
+  a {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: transparent;
     color: var(--text-color);
+    padding: 0.5rem;
+    min-height: 44px;
   }
 
-  button:disabled {
+  a[aria-current='true'] {
     background-color: rgba(0, 0, 0, 0.1);
   }
 </style>

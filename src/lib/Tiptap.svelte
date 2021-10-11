@@ -29,6 +29,8 @@
       })
     }
 
+    create(node, doc)
+
     return {
       update(newDoc) {
         if(editor) {
@@ -47,7 +49,7 @@
   
 </script>
   {#if editor}
-    <Toolbar editor={editor} />
+    <Toolbar {editor} />
   {/if}
   <div use:createTiptap={ydoc} class="tiptap" />
 <style>

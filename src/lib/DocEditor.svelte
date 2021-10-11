@@ -3,37 +3,24 @@
   import { readableMap } from 'svelt-yjs'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
-  import { currentID, currentDoc } from '$lib/scripts/stores'
+  import { currentDoc } from '$lib/scripts/stores'
 
   let fields
   let ymap
-  let loadedEditor = 'empty'
-  let ydoc = new Y.Doc()
-
-  $: console.log($currentDoc.providerIDB)
+  let ydoc
+  export let id
 
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()
-    if ($currentDoc.providerIDB) {
-      await $currentDoc.providerIDB.destroy()
-    }
     $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
     ymap = ydoc.getMap('fields')
     //Lift fields to store
     fields = readableMap(ymap)
   }
 
-  currentID.subscribe(value => {
-		if(typeof value !== 'undefined' && value !== loadedEditor) {
-      loadDoc(value)
-    }
-	})
+  $: loadDoc(id)
 
-  // onMount(()=> {
-  //   provider = new IndexeddbPersistence('9e6b8fac-e059-419b-91fe-4fb31b928d6a', ydoc)
-  //   fields.y.set('title', '')
-  // })
 </script>
   
 <div class="editor">

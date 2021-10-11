@@ -35,5 +35,6 @@
   article {
     display: grid;
     gap: 1rem;
+    flex: 1;
   }
 </style>

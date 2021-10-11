@@ -26,6 +26,10 @@
   color: var(--action-color);
 }
 
+:focus {
+  outline: 2px solid var(--action-color);
+}
+
 body {
   color: var(--foreground-color);
   background-color: var(--background-color);
@@ -51,7 +55,16 @@ input {
   width: 100%;
 }
 
+.screen-reader-text {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+}
 
+/* Move out of here*/
 .collaboration-cursor__caret {
 	position: relative;
 	margin-left: -1px;

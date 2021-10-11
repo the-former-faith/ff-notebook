@@ -50,9 +50,10 @@
   }
 </script>
 
-<DialogOverlay {isOpen} onDismiss={close} style="z-index: 100;">
-  <DialogContent aria-label="Set link" style="background-color: var(--background-color)">
-    <input type="text" bind:value={url} />
+<DialogOverlay {isOpen} onDismiss={close} class="overlay">
+  <DialogContent aria-label="Set link" class="content">
+    <label for="url">Link Address</label>
+    <input id="url" type="url" bind:value={url} />
     <div class="dialog-footer">
       <button on:click={close}>Cancel</button>
     <button on:click={()=> saveChanges(url, previousUrl)}>Save</button>
@@ -71,9 +72,22 @@
 
 <style>
   .dialog-footer {
-    margin-top: 1rem;
-    display: grid;
+    margin: 1rem 0 0 auto;
+    display: inline-grid;
     gap: 1rem;
     grid-auto-flow: column;
+  }
+
+  :global([data-svelte-dialog-overlay].overlay) {
+    z-index: 100;
+  }
+
+  :global([data-svelte-dialog-content].content) {
+    background-color: var(--background-color);
+    width: calc(100% - 2rem);
+    max-width: 800px;
+  }
+
+  :global([data-svelte-dialog-content] button) {
   }
 </style>

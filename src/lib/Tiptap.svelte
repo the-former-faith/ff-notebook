@@ -1,40 +1,55 @@
 <script>
-  import * as Y from 'yjs'
-  import { IndexeddbPersistence } from 'y-indexeddb'
-  import { currentID, currentDoc } from '$lib/scripts/stores'
+  import { Editor } from '@tiptap/core'
+  import StarterKit from '@tiptap/starter-kit'
+  import Collaboration from '@tiptap/extension-collaboration'
   import Toolbar from '$lib/Toolbar.svelte'
 
   let editor
-  let loadedEditor = 'empty'
+  export let ydoc
 
-  const loadDoc = async (doc, doctitle) => {
-    const ydoc = new Y.Doc()
-    if ($currentDoc.providerIDB) {
-      await $currentDoc.providerIDB.destroy()
-      console.log('destroying provider')
+  //let loadedEditor = 'empty'
+
+  const createTiptap = (node, doc) => {
+    const create = (node, doc) => {
+      editor = new Editor({
+        element: node,
+        extensions: [
+          StarterKit.configure({
+            history: false,
+          }),
+          // Collaboration.configure({
+          //   document: doc,
+          //   field: 'content',
+          // })
+        ],
+        onTransaction: (e) => {
+          // force re-render so `editor.isActive` works as expected
+          editor = editor
+        },
+      })
     }
-    $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
-    if (editor) {
-      await editor.destroy()
-      console.log('destroying editor')
-    }
-    console.log('creating editor')
-    createEditor(ydoc)
-    element.append(editor.options.element)
+
+    return {
+      update(newDoc) {
+        if(editor) {
+          editor.destroy()
+        }
+    
+        create(node, newDoc)
+      },
+      destroy() {
+        if(editor) {
+          editor.destroy()
+        }
+      }
+    };
   }
-
-  currentID.subscribe(value => {
-		if(typeof value !== 'undefined' && value !== loadedEditor) {
-      //loadDoc(value)
-    }
-	})
   
 </script>
-  {#if $currentDoc.editor}
-    <Toolbar editor={$currentDoc.editor} />
+  {#if editor}
+    <Toolbar editor={editor} />
   {/if}
-  <div bind:this={$currentDoc.element} class="tiptap" />
-  
+  <div use:createTiptap={ydoc} class="tiptap" />
 <style>
 
   .tiptap:empty {

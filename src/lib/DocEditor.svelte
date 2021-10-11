@@ -12,43 +12,18 @@
   let fields
   let ymap
   let loadedEditor = 'empty'
+  let ydoc = new Y.Doc()
 
-  const createEditor = (doc) => {
-    $currentDoc.editor = new Editor({
-      extensions: [
-        StarterKit.configure({
-          history: false,
-        }),
-        Collaboration.configure({
-          document: doc,
-          field: 'content',
-        })
-      ],
-      onTransaction: (e) => {
-        // force re-render so `editor.isActive` works as expected
-        $currentDoc.editor = $currentDoc.editor
-      },
-    })
-  }
-
-  const loadDoc = async (doc, doctitle) => {
+  const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
-    const ydoc = new Y.Doc()
-    if ($currentDoc.providerIDB) {
-      await $currentDoc.providerIDB.destroy()
-    }
+    ydoc = new Y.Doc()
+    // if ($currentDoc.providerIDB) {
+    //   await $currentDoc.providerIDB.destroy()
+    // }
     $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
-    $currentDoc.providerIDB.on('synced', (e) => {
-      console.log(e)
-    })
-    if ($currentDoc.editor) {
-      await $currentDoc.editor.destroy()
-    }
-    createEditor(ydoc)
     ymap = ydoc.getMap('fields')
     //Lift fields to store
     fields = readableMap(ymap)
-    $currentDoc.element.append($currentDoc.editor.options.element)
   }
 
   currentID.subscribe(value => {
@@ -75,7 +50,9 @@
       />
     </label>
   {/if}
-  <Tiptap />
+  {#if $currentDoc.providerIDB}
+    <Tiptap {ydoc} />
+  {/if}
 </div>
 
 <style>

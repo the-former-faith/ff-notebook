@@ -1,12 +1,8 @@
 <script>
-  import { Editor } from '@tiptap/core'
-  import StarterKit from '@tiptap/starter-kit'
-  import Collaboration from '@tiptap/extension-collaboration'
   import Tiptap from '$lib/Tiptap.svelte'
   import { readableMap } from 'svelt-yjs'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
-  import { onMount } from 'svelte'
   import { currentID, currentDoc } from '$lib/scripts/stores'
 
   let fields
@@ -14,12 +10,14 @@
   let loadedEditor = 'empty'
   let ydoc = new Y.Doc()
 
+  $: console.log($currentDoc.providerIDB)
+
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()
-    // if ($currentDoc.providerIDB) {
-    //   await $currentDoc.providerIDB.destroy()
-    // }
+    if ($currentDoc.providerIDB) {
+      await $currentDoc.providerIDB.destroy()
+    }
     $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
     ymap = ydoc.getMap('fields')
     //Lift fields to store
@@ -60,6 +58,7 @@
     display: grid;
     grid-template-columns: 0 1fr 0;
     gap: 1rem;
+    margin-top: 1rem;
   }
 
   .editor > :global(*){

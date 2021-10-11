@@ -17,10 +17,10 @@
           StarterKit.configure({
             history: false,
           }),
-          // Collaboration.configure({
-          //   document: doc,
-          //   field: 'content',
-          // })
+          Collaboration.configure({
+            document: doc,
+            field: 'content',
+          })
         ],
         onTransaction: (e) => {
           // force re-render so `editor.isActive` works as expected

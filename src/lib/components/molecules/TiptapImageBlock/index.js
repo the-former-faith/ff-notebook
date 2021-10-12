@@ -3,7 +3,7 @@ import { SvelteNodeViewRenderer } from 'svelte-tiptap'
 import View from './View.svelte'
 
 const ImageBlock = Node.create({
-  name: 'imageBlock',
+  name: 'image-block',
   group: 'block',
   content: 'inline*',
 
@@ -17,6 +17,14 @@ const ImageBlock = Node.create({
 
   addNodeView() {
     return SvelteNodeViewRenderer(View)
+  },
+
+  addCommands() {
+    return {
+      setImage: () => ({ commands }) => {
+        return commands.setNode('image-block')
+      },
+    }
   },
 })
 

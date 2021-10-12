@@ -18,20 +18,15 @@
           StarterKit.configure({
             history: false,
           }),
-          // Collaboration.configure({
-          //   document: doc,
-          //   field: 'content',
-          // }),
+          Collaboration.configure({
+            document: doc,
+            field: 'content',
+          }),
           Link.configure({
             openOnClick: false,
           }),
           ImageBlock,
         ],
-        content: `
-        <p>This is still the text editor you’re used to, but enriched with node views.</p>
-        <image-block count="0"></image-block>
-        <p>Did you see that? That’s a Svelte component. We are really living in the future.</p>
-      `,
         onTransaction: (e) => {
           // force re-render so `editor.isActive` works as expected
           editor = editor

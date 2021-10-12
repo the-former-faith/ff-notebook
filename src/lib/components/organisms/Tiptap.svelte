@@ -1,9 +1,10 @@
 <script>
-  import { Editor } from '@tiptap/core'
+  import { Editor, EditorContent } from 'svelte-tiptap';
   import StarterKit from '@tiptap/starter-kit'
   import Collaboration from '@tiptap/extension-collaboration'
   import Link from '@tiptap/extension-link'
   import Toolbar from '$lib/components/molecules/TiptapToolbar.svelte'
+  import ImageBlock from '$lib/components/molecules/TiptapImageBlock'
 
   let editor
   export let ydoc
@@ -13,19 +14,24 @@
   const createTiptap = (node, doc) => {
     const create = (node, doc) => {
       editor = new Editor({
-        element: node,
         extensions: [
           StarterKit.configure({
             history: false,
           }),
-          Collaboration.configure({
-            document: doc,
-            field: 'content',
-          }),
+          // Collaboration.configure({
+          //   document: doc,
+          //   field: 'content',
+          // }),
           Link.configure({
             openOnClick: false,
-          })
+          }),
+          ImageBlock,
         ],
+        content: `
+        <p>This is still the text editor you’re used to, but enriched with node views.</p>
+        <image-block count="0"></image-block>
+        <p>Did you see that? That’s a Svelte component. We are really living in the future.</p>
+      `,
         onTransaction: (e) => {
           // force re-render so `editor.isActive` works as expected
           editor = editor
@@ -63,6 +69,7 @@
   {#if editor}
     <Toolbar {editor} />
   {/if}
+  <EditorContent editor={editor} />
   <div class="tiptap">
     <div use:createTiptap={ydoc} />
     <button class="focus-filler" on:click={addParagraphToEnd}>

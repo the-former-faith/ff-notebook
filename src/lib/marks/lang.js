@@ -5,7 +5,7 @@ const Lang = Mark.create({
 
   defaultOptions: {
     HTMLAttributes: {
-        lang: 'en'
+      lang: 'en'
     },
   },
 

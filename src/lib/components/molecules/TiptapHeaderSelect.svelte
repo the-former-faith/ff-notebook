@@ -1,10 +1,13 @@
 <script>
+  import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
   export let editor
   export let levels = [2, 3, 4, 5, 6]
 </script>
 
-<details>
-  <summary>H<span class="screen-reader-text">eading</span></summary>
+<DetailsSummary 
+  title='H<span class="screen-reader-text">eading</span>'
+  styleOverlay={true}
+>
   <ul>
     {#each levels as i }
       <li>
@@ -17,17 +20,11 @@
       </li>
     {/each}
   </ul>
-</details>
+</DetailsSummary>
 
 <style>
-  details {
-    position: relative;
-  }
   ul {
     list-style: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
+    padding: 0;
   }
 </style>

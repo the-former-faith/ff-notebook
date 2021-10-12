@@ -1,67 +1,67 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
+	box-sizing: border-box;
+	margin: 0;
 }
 
 :root {
-  --foreground-color: #1a1a1a;
-  --background-color: #fff;
-  --accent-color: #bababa;
-  --action-color-brightness: 26%;
-  --action-color: hsl(313, 100%, var(--action-color-brightness) );
-  accent-color: var(--action-color);
+	--foreground-color: #1a1a1a;
+	--background-color: #fff;
+	--accent-color: #bababa;
+	--action-color-brightness: 26%;
+	--action-color: hsl(313, 100%, var(--action-color-brightness));
+	accent-color: var(--action-color);
 }
 
 @media screen and (prefers-color-scheme: dark) {
-  :root {
-    --foreground-color: #bababa;
-    --background-color: #1a1a1a;
-    --accent-color: #4d4d4d;
-    --action-color-brightness: 40%;
-    --action-color: hsl(313, 81%, var(--action-color-brightness));
-  }
+	:root {
+		--foreground-color: #bababa;
+		--background-color: #1a1a1a;
+		--accent-color: #4d4d4d;
+		--action-color-brightness: 40%;
+		--action-color: hsl(313, 81%, var(--action-color-brightness));
+	}
 }
 
 :link {
-  color: var(--action-color);
+	color: var(--action-color);
 }
 
 :focus {
-  outline: 2px solid var(--action-color);
+	outline: 2px solid var(--action-color);
 }
 
 body {
-  color: var(--foreground-color);
-  background-color: var(--background-color);
-  font-family: sans-serif;
-  min-height: 100vh;
+	color: var(--foreground-color);
+	background-color: var(--background-color);
+	font-family: sans-serif;
+	min-height: 100vh;
 }
 
 button {
-  border: none;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  width: 100%;
+	border: none;
+	min-height: 44px;
+	display: flex;
+	align-items: center;
+	padding: 0.5rem;
+	width: 100%;
 }
 
 input {
-  background: inherit;
-  color: inherit;
-  border: 1px solid var(--accent-color);
-  min-height: 44px;
-  padding: 8px;
-  width: 100%;
+	background: inherit;
+	color: inherit;
+	border: 1px solid var(--accent-color);
+	min-height: 44px;
+	padding: 8px;
+	width: 100%;
 }
 
 .screen-reader-text {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: 0;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
 }
 
 /* Move out of here*/
@@ -73,9 +73,9 @@ input {
 	border-right: 1px solid black;
 	word-break: normal;
 	pointer-events: none;
-  }
+}
 
-  .collaboration-cursor__label {
+.collaboration-cursor__label {
 	position: absolute;
 	top: -1.4em;
 	left: -1px;
@@ -88,4 +88,4 @@ input {
 	padding: 0.1rem 0.3rem;
 	border-radius: 3px 3px 3px 0;
 	white-space: nowrap;
-  }
+}

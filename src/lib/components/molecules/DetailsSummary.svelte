@@ -2,9 +2,40 @@
   export let title
   export let isOpen = false
   export let styleOverlay = false
+
+  //@TODO: add way for details to close when child is clicked.
+  //@TODO: make close when clicked outside optional
+  const handleClickOutside = (node) => {  
+    
+    const handleDetailsOutsideClick = (event) => {
+      let targetElement = event.target; // clicked element
+
+      do {
+          if (targetElement == node) {
+            // This is a click inside. Do nothing, just return.
+            return;
+          }
+          // Go up the DOM
+          targetElement = targetElement.parentNode
+      } while (targetElement)
+
+      isOpen = false
+      document.removeEventListener('click', handleDetailsOutsideClick, true)
+    }
+
+    node.addEventListener('focusin', () => {
+      document.addEventListener('click', handleDetailsOutsideClick, true)
+    })
+    
+    return {
+      destroy() {
+        document.removeEventListener('click', handleDetailsOutsideClick, true);
+      }
+    }
+  }
 </script>
 
-<details bind:open={isOpen} class={styleOverlay ? 'overlay' : undefined}>
+<details bind:open={isOpen} class={styleOverlay ? 'overlay' : undefined} use:handleClickOutside>
   <summary><span>{@html title}</span></summary>
   <div class="contents">
     <slot />

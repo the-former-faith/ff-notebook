@@ -80,7 +80,7 @@
   }
 
   .tiptap {
-    border: 1px solid var(--accent-color);
+    outline: 1px solid var(--accent-color);
     padding: 0.5rem;
     display: flex;
     flex-direction: column;

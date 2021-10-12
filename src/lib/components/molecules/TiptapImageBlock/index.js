@@ -5,9 +5,7 @@ import View from './View.svelte'
 const ImageBlock = Node.create({
   name: 'imageBlock',
   group: 'block',
-  atom: true,
-  draggable: false, // Optional: to make the node draggable
-  inline: false,
+  content: 'inline*',
 
   parseHTML() {
     return [{ tag: 'image-block' }]

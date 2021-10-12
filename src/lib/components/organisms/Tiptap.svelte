@@ -64,9 +64,11 @@
   {#if editor}
     <Toolbar {editor} />
   {/if}
-  <EditorContent editor={editor} />
   <div class="tiptap">
+    <!--@TODO: see if I can get rid of this div now that I am
+    using Svelte Tiptap-->
     <div use:createTiptap={ydoc} />
+    <EditorContent editor={editor} />
     <button class="focus-filler" on:click={addParagraphToEnd}>
       <span class="screen-reader-text">Focus to end of doc</span>
     </button>

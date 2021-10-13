@@ -7,6 +7,7 @@
 <DetailsSummary 
   title='H<span class="screen-reader-text">eading</span>'
   styleOverlay={true}
+  active={editor.isActive('heading')}
 >
   <ul>
     {#each levels as i }
@@ -14,6 +15,8 @@
         <button
           on:click={() => editor.chain().focus().toggleHeading({ level: i }).run()}
           class:active={editor.isActive('heading', { level: i })}
+          disabled={!editor.can().toggleHeading({ level: i })}
+          aria-disabled={!editor.can().toggleHeading({ level: i })}
         >
           H{i}
         </button>

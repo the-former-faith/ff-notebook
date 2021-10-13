@@ -1,11 +1,22 @@
 <script>
   export let title
   export let isOpen = false
+  export let disabled
+  export let active
   export let styleOverlay = false
 
   //@TODO: add way for details to close when child is clicked.
   //@TODO: make close when clicked outside optional
-  const handleClickOutside = (node) => {  
+  const handleClickOutside = (node) => {
+    //@TODO: test this with dynamic disabled.
+    //Might have to remove the event listener.
+    if( node.attributes['aria-disabled']?.value ) {
+      node.addEventListener('keydown', (e)=> {
+        if(e.key === 'Enter') {
+          e.preventDefault()
+        }
+      })
+    }
     
     const handleDetailsOutsideClick = (event) => {
       let targetElement = event.target; // clicked element
@@ -35,14 +46,23 @@
   }
 </script>
 
-<details bind:open={isOpen} class={styleOverlay ? 'overlay' : undefined} use:handleClickOutside>
-  <summary><span>{@html title}</span></summary>
+<details 
+  bind:open={isOpen} 
+  class={styleOverlay ? 'overlay' : undefined} 
+  use:handleClickOutside
+  aria-disabled={disabled}
+>
+  <summary class={active ? 'active' : undefined}><span>{@html title}</span></summary>
   <div class="contents">
     <slot />
   </div>
 </details>
 
 <style>
+  details[open] {
+    outline: 2px solid var(--action-color);
+  }
+
   summary {
     padding: 0.5rem;
     font-weight: bold;
@@ -67,8 +87,19 @@
     font-size: 1.2rem;
   }
 
+  summary.active {
+    background-color: var(--action-color);
+    color: var(--background-color);
+  }
+
   [open] summary::before {
     transform: rotate(90deg);
+  }
+
+  .contents {
+    border: 2px solid var(--action-color);
+    border-top: 0;
+    background-color: var(--background-color);
   }
 
   .overlay {
@@ -78,7 +109,7 @@
   .overlay .contents {
     position: absolute;
     top: 100%;
-    left: 0;
-    width: 100%;
+    left: -2px;
+    width: calc(100% + 4px);
   }
 </style>

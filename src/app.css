@@ -30,6 +30,11 @@
 	outline: 2px solid var(--action-color);
 }
 
+[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 body {
 	color: var(--foreground-color);
 	background-color: var(--background-color);

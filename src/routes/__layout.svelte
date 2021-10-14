@@ -13,7 +13,9 @@
 
 <!--<p>Online status: {$mainService.value.connectionStatus}</p>-->
 <main>
-	<DocList />
+  <aside>
+    <DocList />
+  </aside>
 	<slot />
 </main>
 

@@ -9,9 +9,6 @@ const documentList = ydoc.getMap('doc-list')
 
 const idbPersistence = new IndexeddbPersistence('database', ydoc)
 
-//documentList.observe( ( event => myList = Object.entries(documentList.toJSON() ) ) )
-
-
 const createDoc = (context, event) => {
   const newDoc = new Y.Doc()
   const fields = newDoc.getMap('fields')
@@ -36,11 +33,14 @@ const dbMachine = createMachine({
 })
 
 const service = interpretInWebWorker(dbMachine)
-service.start();
+service.start()
 
 //Could put this logic into the machine.
 //Just have these sends events.
 ydoc.on('subdocs', (e) => {
+  //const test = Array.from(ydoc.subdocs).find( ({ guid }) => guid === '47aefa4a-48d5-4692-900c-35853fc5e4e7' )
+  //test.load()
+
   e.added.forEach(subdoc => {
     subdoc.load()
   })

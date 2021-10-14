@@ -1,12 +1,7 @@
-import { createMachine, interpret, send, assign } from 'xstate'
+import { createMachine, interpret, send } from 'xstate'
 import DbWorker from '$lib/scripts/db-worker.js?worker'
 import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 import { browser } from '$app/env'
-import * as Y from 'yjs'
-import { IndexeddbPersistence } from 'y-indexeddb'
-import { Editor } from '@tiptap/core'
-import StarterKit from '@tiptap/starter-kit'
-import Collaboration from '@tiptap/extension-collaboration'
 
 //Set online state
 
@@ -14,20 +9,6 @@ let initialOnlineStatus = 'online'
 
 if (browser) {
   initialOnlineStatus = navigator.onLine ? 'online' : 'offline'
-}
-
-const createEditor = (doc) => {
-  return new Editor({
-    extensions: [
-      StarterKit.configure({
-        history: false,
-      }),
-      Collaboration.configure({
-        document: doc,
-        field: 'content',
-      })
-    ]
-  })
 }
 
 const mainMachine = createMachine(
@@ -63,15 +44,6 @@ const mainMachine = createMachine(
               'LOAD_DOC': {
                 actions: [(context, event) => context.docList.set(event.data.id, event.data.fields)],
               },
-              'SELECT_DOC': {
-                actions: [
-                  assign({ ydoc: new Y.Doc() }),
-                  assign({ 
-                    currentIDProvider: (context, event) =>  new IndexeddbPersistence(event.id, context.ydoc),
-                    currentID: (context, event) => createEditor(context.ydoc)
-                  })
-                ],
-              },
             },
           },
           loggedOut: {}
@@ -94,6 +66,18 @@ const mainMachine = createMachine(
         }
       }
     },
+  },
+  {
+    // actions: {
+    //   createDoc: (context, event) => {
+    //     const newDoc = new Y.Doc()
+    //     const fields = newDoc.getMap('fields')
+    //     fields.set('title', '')
+    //     fields.set('createdAt', Date.now() )
+    //     fields.set('updatedAt', Date.now() )
+    //     imageList.y.push(newDoc)
+    //   }
+    // }
   }
 )
 

@@ -2,18 +2,25 @@
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import { readableMap } from 'svelt-yjs'
+  import { onMount } from 'svelte';
 
-  const ydoc = new Y.Doc()
+  const ydoc = new Y.Doc({ autoLoad: true })
   const documentList = ydoc.getMap('doc-list')
-  let documentList$ = readableMap(documentList)
+  let readableDocumentList = readableMap(documentList)
   let list = {}
+  let idbPersistence
+  let currentDoc
 
-  $: console.log($documentList$)
+  $: if(currentDoc) {
+    console.log(currentDoc.fields)
+  }
 
-  const idbPersistence = new IndexeddbPersistence('database', ydoc)
+  onMount(()=> {
+    idbPersistence = new IndexeddbPersistence('database', ydoc)
+  })
 
-  const createDoc = (context, event) => {
-    const newDoc = new Y.Doc()
+  const createDoc = () => {
+    const newDoc = new Y.Doc({ autoLoad: true })
     const fields = newDoc.getMap('fields')
     fields.set('title', '')
     fields.set('createdAt', Date.now() )
@@ -31,7 +38,13 @@
     e.loaded.forEach(subdoc => {
       const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
       persistence.on('synced', (e) => {
-        list[subdoc.guid] = documentList.get( subdoc.guid ).getMap('fields').toJSON()
+        const ymap = subdoc.getMap('fields')
+        const fields = readableMap(ymap)
+        list[subdoc.guid] = {
+          fields: fields,
+          persistence: persistence,
+          doc: subdoc
+        }
       })
     })
 
@@ -39,15 +52,34 @@
 </script>
 
 <ul id="note-list" class="nostyle">
-    {#each Object.entries(list) as [id, doc]}
+  {#each [...$readableDocumentList] as [id, doc]}
       <li>
-        <a href={id}>{doc.title}</a>
-        <button on:click={()=> {
-          list[id] = documentList.get( id ).getMap('fields').toJSON()
-        }}>Refresh</button>
+        <button on:click={()=> console.log(doc.getMap('fields').get('title'))}>Doc: {doc.getMap('fields').get('title')}</button>
       </li>
     {/each}
+    <!--{#each Object.entries(list) as [id, doc]}
+      <li>
+        <button on:click={()=> currentDoc = doc}>Doc: {doc.doc.getMap('fields').title}</button>
+        <button on:click={()=> {
+          const doc = documentList.get( id )
+          console.log(doc)
+          //list[id] = documentList.get( id ).getMap('fields').toJSON()
+        }}>Refresh</button>
+      </li>
+    {/each}-->
 </ul>
+<button on:click={()=> createDoc()}>Create Doc</button>
+{#if currentDoc}
+    <label for="title">Title
+      <input 
+        name="title"
+        id="title"
+        type="text" 
+        value={currentDoc.doc.getMap('fields').get('title') ? currentDoc.doc.getMap('fields').get('title') : ''} 
+        on:keyup={(e) => currentDoc.doc.getMap('fields').set('title', e.target.value)}
+      />
+    </label>
+  {/if}
 
 
 <!--<script>

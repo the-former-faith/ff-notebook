@@ -17,7 +17,8 @@
     }
     const db$ = await db()
     const newDoc = await db$.notes.insert(blankDoc)
-    //goto(`/${newDoc.id}`)
+    $currentDoc = newDoc
+    goto(`/${newDoc.id}`)
     $allDocsOpened = false
   }
 
@@ -46,8 +47,8 @@
         <li>
           <DocLink 
             {doc} 
-            --text-color={$currentDoc.id == doc.id ? 'var(--action-color)' : 'currentColor'} 
-            current={$currentDoc.id == doc.id}
+            --text-color={$currentDoc?.id == doc.id ? 'var(--action-color)' : 'currentColor'} 
+            current={$currentDoc?.id == doc.id}
           />
         </li>
       {/each}
@@ -64,5 +65,15 @@
   
   li {
     border-top: 1px solid var(--accent-color);
+  }
+
+  button {
+    background-color: var(--action-color);
+    color: var(--background-color);
+    font-weight: 700;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: auto;
   }
 </style>

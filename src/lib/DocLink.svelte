@@ -11,13 +11,12 @@
   }
 
   const deleteNote = async (doc) => {
-    if ($currentDoc.id === doc.id) {
-      console.log("don't delete me!")
+    if ($currentDoc?.id === doc.id) {
       goto('/')
-      //currentDoc.set(undefined)
+      currentDoc.set(undefined)
     }
 
-    //await doc.remove()
+    await doc.remove()
   }
 </script>
 

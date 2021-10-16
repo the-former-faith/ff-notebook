@@ -31,13 +31,12 @@
   
 <div class="editor">
   {#if $currentDoc}
-    <p>{$currentDoc.name}</p>
     <label for="title">Title
       <input 
         name="title"
         id="title"
         type="text" 
-        value={$currentDoc.name ? $currentDoc.name : ''} 
+        value={$currentDoc.get('name') ? $currentDoc.get('name') : ''} 
         on:keyup={(e) => $currentDoc.update(
           {$set: {name: e.target.value}})
         }

@@ -1,19 +1,24 @@
 <script>
   import { onMount } from 'svelte'
-  import { db, currentDoc } from '$lib/scripts/stores'
+  import { db, currentDoc, allDocsOpened, currentID } from '$lib/scripts/stores'
+  import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
+
   import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
   import { v1 as uuidv1 } from 'uuid'
+  import { goto } from '$app/navigation'
 
   const createDoc = async () => {
     const blankDoc = {
       id: uuidv1(),
-      name: 'new note',
+      name: '',
       createdAt: new Date().getTime(),
       updatedAt: new Date().getTime(),
     }
     const db$ = await db()
     const newDoc = await db$.notes.insert(blankDoc)
+    //goto(`/${newDoc.id}`)
+    $allDocsOpened = false
   }
 
   let db$
@@ -29,40 +34,38 @@
     }
     getNoteList()
   })
-
-  const handleEditNote = (note) => {
-    //console.log(note)
-    $currentDoc = note
-    //name.set(note.name)
-    //body.set(note.body)
-  }
-
-  const deleteNote = async (doc) => {
-    // if ($currentDoc.get('id') === doc.id) {
-    //   currentDoc.set(undefined)
-    // }
-
-    await doc.remove()
-  }
 </script>
 
-  <h2>All Docs</h2>
-  <button on:click={()=> createDoc()}>Create New Doc</button>
+<button on:click={()=> createDoc()}>Create New Doc</button>
+<DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
   <ul id="note-list" class="nostyle">
     {#await noteList}
       Loading Notes...
     {:then results}
       {#each results as doc}
         <li>
-          <a href={doc.id} on:click={() => handleEditNote(doc)}>{doc.name ? doc.name : 'untitled note'}</a>
-          <span class="meta">
-            {new Date(doc.updatedAt).toLocaleDateString('en-US')}
-            <button on:click={() => deleteNote(doc)} class="btn btn-delete">delete</button>
-          </span>
+          <DocLink 
+            {doc} 
+            --text-color={$currentID == doc.id ? 'var(--action-color)' : 'currentColor'} 
+            current={$currentID == doc.id}
+          />
         </li>
       {/each}
     {/await}
   </ul>
+</DetailsSummary>
+
+<style>
+  ul {
+    padding: 0;
+    list-style: none;
+    display: grid;
+  }
+  
+  li {
+    border-top: 1px solid var(--accent-color);
+  }
+</style>
 
 
 <!--<script>
@@ -92,16 +95,4 @@
       {/if}
     </ul>
   </DetailsSummary>
-
-<style>
-  
-  ul {
-    padding: 0;
-    list-style: none;
-    display: grid;
-  }
-
-  li {
-    border-top: 1px solid var(--accent-color);
-  }
-</style>-->
+-->

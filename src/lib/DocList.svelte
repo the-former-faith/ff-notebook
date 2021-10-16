@@ -1,53 +1,68 @@
 <script>
-  import * as Y from 'yjs'
-  import { IndexeddbPersistence } from 'y-indexeddb'
-  import { readableMap } from 'svelt-yjs'
+  import { onMount } from 'svelte'
+  import { db, currentDoc } from '$lib/scripts/stores'
+  import CreateDocButton from './CreateDocButton.svelte'
+  import DocLink from '$lib/DocLink.svelte'
+  import { v1 as uuidv1 } from 'uuid'
 
-  const ydoc = new Y.Doc()
-  const documentList = ydoc.getMap('doc-list')
-  let documentList$ = readableMap(documentList)
-  let list = {}
-
-  $: console.log($documentList$)
-
-  const idbPersistence = new IndexeddbPersistence('database', ydoc)
-
-  const createDoc = (context, event) => {
-    const newDoc = new Y.Doc()
-    const fields = newDoc.getMap('fields')
-    fields.set('title', '')
-    fields.set('createdAt', Date.now() )
-    fields.set('updatedAt', Date.now() )
-    documentList.set(newDoc.guid, newDoc)
+  const createDoc = async () => {
+    const blankDoc = {
+      id: uuidv1(),
+      name: 'new note',
+      createdAt: new Date().getTime(),
+      updatedAt: new Date().getTime(),
+    }
+    const db$ = await db()
+    const newDoc = await db$.notes.insert(blankDoc)
   }
 
-  ydoc.on('subdocs', (e) => {
-    console.log(e)
+  let db$
+  let noteList = []
 
-    e.added.forEach(subdoc => {
-      subdoc.load()
-    })
-
-    e.loaded.forEach(subdoc => {
-      const persistence = new IndexeddbPersistence(subdoc.guid, subdoc)
-      persistence.on('synced', (e) => {
-        list[subdoc.guid] = documentList.get( subdoc.guid ).getMap('fields').toJSON()
-      })
-    })
-
+  onMount(() => {
+    const getNoteList = async () => {
+      db$ = await db()
+      db$.notes
+        .find()
+        .sort({ updatedAt: 'desc' })
+        .$.subscribe((notes) => (noteList = notes))
+    }
+    getNoteList()
   })
+
+  const handleEditNote = (note) => {
+    //console.log(note)
+    $currentDoc = note
+    //name.set(note.name)
+    //body.set(note.body)
+  }
+
+  const deleteNote = async (doc) => {
+    // if ($currentDoc.get('id') === doc.id) {
+    //   currentDoc.set(undefined)
+    // }
+
+    await doc.remove()
+  }
 </script>
 
-<ul id="note-list" class="nostyle">
-    {#each Object.entries(list) as [id, doc]}
-      <li>
-        <a href={id}>{doc.title}</a>
-        <button on:click={()=> {
-          list[id] = documentList.get( id ).getMap('fields').toJSON()
-        }}>Refresh</button>
-      </li>
-    {/each}
-</ul>
+  <h2>All Docs</h2>
+  <button on:click={()=> createDoc()}>Create New Doc</button>
+  <ul id="note-list" class="nostyle">
+    {#await noteList}
+      Loading Notes...
+    {:then results}
+      {#each results as doc}
+        <li>
+          <a href={doc.id} on:click={() => handleEditNote(doc)}>{doc.name ? doc.name : 'untitled note'}</a>
+          <span class="meta">
+            {new Date(doc.updatedAt).toLocaleDateString('en-US')}
+            <button on:click={() => deleteNote(doc)} class="btn btn-delete">delete</button>
+          </span>
+        </li>
+      {/each}
+    {/await}
+  </ul>
 
 
 <!--<script>

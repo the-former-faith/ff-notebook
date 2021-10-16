@@ -3,21 +3,16 @@
   import { readableMap } from 'svelt-yjs'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
-  import { currentDoc } from '$lib/scripts/stores'
+  import { db, currentDoc, providerIDB } from '$lib/scripts/stores'
   import { browser } from '$app/env'
 
-  let fields
-  let ymap
   let ydoc
   export let id
 
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()
-    $currentDoc.providerIDB = new IndexeddbPersistence(doc, ydoc)
-    ymap = ydoc.getMap('fields')
-    //Lift fields to store
-    fields = readableMap(ymap)
+    $providerIDB = new IndexeddbPersistence(doc, ydoc)
   }
 
   $: if(browser) loadDoc(id)
@@ -25,18 +20,21 @@
 </script>
   
 <div class="editor">
-  {#if $fields}
+  {#if $currentDoc}
+    <p>{$currentDoc.name}</p>
     <label for="title">Title
       <input 
         name="title"
         id="title"
         type="text" 
-        value={$fields.get('title') ? $fields.get('title') : ''} 
-        on:keyup={(e) => fields.y.set('title', e.target.value)}
+        value={$currentDoc.name ? $currentDoc.name : ''} 
+        on:keyup={(e) => $currentDoc.update(
+          {$set: {name: e.target.value}})
+        }
       />
     </label>
   {/if}
-  {#if $currentDoc.providerIDB}
+  {#if $providerIDB}
     <Tiptap {ydoc} />
   {/if}
 </div>

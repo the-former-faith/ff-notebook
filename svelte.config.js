@@ -9,10 +9,13 @@ const config = {
 			serviceWorker: 'src/service-worker',
 		},
 		vite: {
-			optimizeDeps: {
-				exclude: ['y-websocket']
+			ssr: {
+				noExternal: ['pouchdb-browser', 'pouchdb-utils']
+			},
+			define: {
+				'process.env': {}
 			}
-		}
+    }
 	},
 };
 

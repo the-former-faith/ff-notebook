@@ -10,6 +10,8 @@
   let db$
   export let id
 
+  $: console.log($currentDoc)
+
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()
@@ -27,6 +29,15 @@
 
   $: if(browser) loadDoc(id)
 
+  //@TODO: make this work with any field
+  const clearField = (node, currentDoc) => {
+    return {
+			update(currentDoc) {
+        node.value = currentDoc.name
+			},
+    } 
+  }
+
 </script>
   
 <div class="editor">
@@ -38,6 +49,7 @@
         type="text" 
         value={$currentDoc.get('name') ? $currentDoc.get('name') : ''} 
         on:keyup={(e) => $currentDoc.atomicPatch({name: e.target.value})}
+        use:clearField={$currentDoc}
       />
     </label>
   {/if}

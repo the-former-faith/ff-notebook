@@ -5,8 +5,6 @@
   import Link from '@tiptap/extension-link'
   import Toolbar from '$lib/components/molecules/TiptapToolbar.svelte'
   import ImageBlock from '$lib/components/molecules/TiptapImageBlock'
-import { log } from 'xstate/lib/actions';
-import { getDebugJSON } from '@tiptap/core';
 
   let editor
   export let ydoc

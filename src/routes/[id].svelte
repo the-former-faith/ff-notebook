@@ -1,4 +1,5 @@
 <script context="module">
+  export const prerender = false
   export async function load({ page }) {
     const id = page.params.id
 
@@ -8,15 +9,12 @@
       }
 		}
 	}
-
-	export const prerender = false
 </script>
 
 <script>
   import DocEditor from '$lib/DocEditor.svelte'
 
-  export let id
-  
+  export let id  
 </script>
 
 <svelte:head>

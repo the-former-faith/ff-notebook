@@ -7,7 +7,6 @@
   import DocLink from '$lib/DocLink.svelte'
   import { v1 as uuidv1 } from 'uuid'
   import { goto } from '$app/navigation'
-
   //$: console.log($currentDoc)
 
   const createDoc = async () => {

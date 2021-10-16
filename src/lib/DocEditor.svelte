@@ -37,9 +37,7 @@
         id="title"
         type="text" 
         value={$currentDoc.get('name') ? $currentDoc.get('name') : ''} 
-        on:keyup={(e) => $currentDoc.update(
-          {$set: {name: e.target.value}})
-        }
+        on:keyup={(e) => $currentDoc.atomicPatch({name: e.target.value})}
       />
     </label>
   {/if}

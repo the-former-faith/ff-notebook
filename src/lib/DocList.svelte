@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte'
-  import { db, currentDoc, allDocsOpened, currentID } from '$lib/scripts/stores'
+  import { db, currentDoc, allDocsOpened } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
 
   import CreateDocButton from './CreateDocButton.svelte'
@@ -46,8 +46,8 @@
         <li>
           <DocLink 
             {doc} 
-            --text-color={$currentID == doc.id ? 'var(--action-color)' : 'currentColor'} 
-            current={$currentID == doc.id}
+            --text-color={$currentDoc.id == doc.id ? 'var(--action-color)' : 'currentColor'} 
+            current={$currentDoc.id == doc.id}
           />
         </li>
       {/each}
@@ -66,33 +66,3 @@
     border-top: 1px solid var(--accent-color);
   }
 </style>
-
-
-<!--<script>
-  import { mainService } from '$lib/scripts/mainMachine'
-  import CreateDocButton from './CreateDocButton.svelte'
-  import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
-  import DocLink from '$lib/DocLink.svelte'
-  import { currentID, allDocsOpened } from '$lib/scripts/stores'
-</script>
-
-  <CreateDocButton />
-  <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
-    <ul id="note-list" class="nostyle">
-      {#if $mainService?.context.docList.size > 0}
-
-        {#each [...$mainService.context.docList] as [id, doc]}
-          <li>
-            <DocLink 
-              {id} 
-              {doc} 
-              --text-color={$currentID == id ? 'var(--action-color)' : 'currentColor'} 
-              current={$currentID == id}
-            />
-          </li>
-        {/each}
-  
-      {/if}
-    </ul>
-  </DetailsSummary>
--->

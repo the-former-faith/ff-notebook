@@ -81,7 +81,6 @@ export const db = () => dbPromise ? dbPromise : _create();
 // export const online = writable(true)
 // export const currentDoc = writable(undefined)
 
-export const currentID = writable(undefined)
 export const providerIDB = writable(undefined)
 export const currentDoc = writable(undefined)
 

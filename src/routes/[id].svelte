@@ -13,12 +13,9 @@
 </script>
 
 <script>
-  import { currentID } from '$lib/scripts/stores'
   import DocEditor from '$lib/DocEditor.svelte'
 
   export let id
-
-  $currentID = id
   
 </script>
 
@@ -27,7 +24,6 @@
 </svelte:head>
 
 <article>
-  <!--<h2>{$currentID ? $currentID.toJSON().name : ''}</h2>-->
   <DocEditor {id} />
 </article>
 

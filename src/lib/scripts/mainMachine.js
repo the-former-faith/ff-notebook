@@ -2,6 +2,7 @@ import { createMachine, interpret, send } from 'xstate'
 import DbWorker from '$lib/scripts/db-worker.js?worker'
 import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 import { browser } from '$app/env'
+import rxdbMachine from '$lib/scripts/rxdb-machine'
 
 //Set online state
 
@@ -55,7 +56,7 @@ const mainMachine = createMachine(
           true: {
             invoke: {
               id: 'db',
-              src: fromWebWorker(() => new DbWorker() ),
+              src: rxdbMachine,
             },
           },
           false: {
@@ -81,5 +82,5 @@ const mainMachine = createMachine(
   }
 )
 
-//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
-export const mainService = interpret(mainMachine).start()
+export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
+//export const mainService = interpret(mainMachine).start()

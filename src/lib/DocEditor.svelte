@@ -1,12 +1,13 @@
 <script>
   import Tiptap from '$lib/components/organisms/Tiptap.svelte'
-  import { readableMap } from 'svelt-yjs'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
   import { db, currentDoc, providerIDB } from '$lib/scripts/stores'
   import { browser } from '$app/env'
+  import { onMount } from 'svelte';
 
   let ydoc
+  let db$
   export let id
 
   const loadDoc = async (doc) => {
@@ -14,6 +15,15 @@
     ydoc = new Y.Doc()
     $providerIDB = new IndexeddbPersistence(doc, ydoc)
   }
+
+  onMount(async()=> {
+    if(!$currentDoc) {
+      db$ = await db()
+      db$.notes.findOne(id)
+      .exec()
+      .then(doc => $currentDoc = doc)
+    }
+  })
 
   $: if(browser) loadDoc(id)
 

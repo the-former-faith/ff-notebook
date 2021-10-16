@@ -17,10 +17,8 @@ const mainMachine = createMachine(
     id: 'main machine',
     type: 'parallel',
     context: {
-      docList: new Map(),
-      currentID: undefined,
-      currentIDProvider: undefined,
-      ydoc: undefined
+      db: undefined,
+      currentDoc: undefined,
     },
     states: {
       connectionStatus: {
@@ -41,9 +39,6 @@ const mainMachine = createMachine(
             on: {
               'CREATE': {
                 actions: [send({ type: 'CREATE' }, { to: 'db' })],
-              },
-              'LOAD_DOC': {
-                actions: [(context, event) => context.docList.set(event.data.id, event.data.fields)],
               },
             },
           },

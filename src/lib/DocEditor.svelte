@@ -10,8 +10,6 @@
   let db$
   export let id
 
-  $: console.log($currentDoc)
-
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()

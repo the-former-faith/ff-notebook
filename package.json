@@ -1,5 +1,5 @@
 {
-  "name": "~TODO~",
+  "name": "ff-notebook",
   "version": "0.0.1",
   "scripts": {
     "dev": "svelte-kit dev --host",
@@ -34,6 +34,7 @@
     "yjs": "^13.5.13"
   },
   "dependencies": {
+    "@xstate/svelte": "^0.2.0",
     "pouchdb-adapter-idb": "^7.2.2",
     "svelt-yjs": "^1.1.0",
     "svelte-accessible-dialog": "^2.1.3",

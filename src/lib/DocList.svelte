@@ -38,7 +38,8 @@
   })
 </script>
 
-<button on:click={()=> createDoc()}>Create New Doc</button>
+<!--<button on:click={()=> createDoc()}>Create New Doc</button>-->
+<CreateDocButton />
 <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
   <ul id="note-list" class="nostyle">
     {#await noteList}

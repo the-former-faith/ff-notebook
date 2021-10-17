@@ -4,6 +4,8 @@
 	import { mainService } from '$lib/scripts/mainMachine'
 	import DocList from '$lib/DocList.svelte'
 
+  //$: console.log($mainMachineState)
+
 	$: if (browser) {
 		mainService.send('BROWSER_LOADED')
 		window.addEventListener('offline', () => mainService.send('TOGGLE'))
@@ -11,7 +13,8 @@
 	}
 </script>
 
-<!--<p>Online status: {$mainService.value.connectionStatus}</p>-->
+<button on:click={()=> console.log(mainService)}>Log me</button>
+<!--<p>Online status: {$mainMachineState.value.connectionStatus}</p>-->
 <main>
   <aside>
     <DocList />

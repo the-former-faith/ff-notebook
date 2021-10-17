@@ -1,8 +1,11 @@
 <script>
-  import { mainService } from '$lib/scripts/mainMachine'
+  import {mainService} from '$lib/scripts/mainMachine'
 </script>
 
-<button on:click={ ()=> mainService.send({ type: 'CREATE' }) }>New Doc</button>
+<button 
+  on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: 'posts'}) }
+  disabled={!$mainService.can('CREATE_DOC')}
+>New Doc</button>
 
 <style>
   button {

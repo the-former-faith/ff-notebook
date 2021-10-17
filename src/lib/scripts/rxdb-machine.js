@@ -17,7 +17,7 @@ const rxdbMachine = () => {
     initial: 'initiating',
     context: {
       db: undefined,
-      docsList: undefined,
+      collections: undefined,
       error: undefined
     },
     states: {
@@ -30,11 +30,10 @@ const rxdbMachine = () => {
             ignoreDuplicate: true
           }),
           onDone: {
-            //target: 'initiated',
-            target: 'addingCollection',
+            target: 'addingCollections',
             actions: [
               assign({ db: (context, event) => event.data }),
-              sendParent('DB_LOADED')
+              sendParent((context, event) => ({type: 'DB_LOADED', db: event.data}))
             ]
           },
           onError: {
@@ -43,29 +42,38 @@ const rxdbMachine = () => {
           }
         }
       },
-      addingCollection: {
+      addingCollections: {
         invoke: {
           id: 'addCollection',
-          src: (context, event) => context.db.addCollections({ notes: { schema: noteSchema } }),
+          src: (context, event) => Promise.all([
+            context.db.addCollections({ posts: { schema: noteSchema } }),
+            context.db.addCollections({ images: { schema: noteSchema } })
+          ]),
           onDone: {
             target: 'idle',
-            actions: [sendParent('COLLECTION_LOADED')]
+            actions: [
+              assign({ collections: (context, event) => event.data }),
+              sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: Object.assign({}, ...event.data)}))
+            ]
           },
           onError: {
             target: 'failure',
-            actions: assign({ error: (context, event) => event.data })
+            actions: [
+              (context, event) => console.log(event.data),
+              assign({ error: (context, event) => event.data })
+            ]
           }
         }
       },
       failure: {},
       idle: {
-        entry: sendParent((context, event) => ({type: 'READY_FREDDY', dog: context.db}))
+
       }
     }
   },
   {
     actions: {
-      test: (context, event) => console.log(context)
+      //test: (context, event) => console.log(context)
     }
   })
 }

@@ -2,9 +2,12 @@
   import {mainService} from '$lib/scripts/mainMachine'
 </script>
 
-<button 
+<!--<button 
   on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: 'posts'}) }
   disabled={!$mainService.can('CREATE_DOC')}
+>New Doc</button>-->
+<button 
+  on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: 'posts'}) }
 >New Doc</button>
 
 <style>
@@ -16,5 +19,9 @@
     top: 0;
     right: 0;
     width: auto;
+  }
+
+  [disabled] {
+    opacity: 0.2;
   }
 </style>

@@ -1,4 +1,4 @@
-import { createMachine, assign, interpret } from 'xstate'
+import { createMachine, assign, interpret, send, spawn } from 'xstate'
 import { useMachine } from '@xstate/svelte'
 //import DbWorker from '$lib/scripts/db-worker.js?worker'
 //import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
@@ -21,6 +21,7 @@ const mainMachine = createMachine(
       db: undefined,
       collections: undefined,
       currentDoc: undefined,
+      rxdb: null
     },
     states: {
       connectionStatus: {
@@ -57,20 +58,19 @@ const mainMachine = createMachine(
         initial: 'false',
         states: {
           true: {
-            invoke: {
-              id: 'db',
-              src: rxdbMachine,
-            },
+            entry: assign({
+              rxdb: () => spawn(rxdbMachine)
+            }),
             on: {
               'DB_LOADED': {
                 actions: [
+                  ()=>console.log('db loaded'),
                   assign({ db: (context, event) => event.db })
                 ]
               },
               'COLLECTIONS_LOADED': {
                 target: 'idle',
                 actions: [
-                  (context, event)=> console.log(event),
                   assign({ collections: (context, event) => event.collections })
                 ]
               },
@@ -82,10 +82,12 @@ const mainMachine = createMachine(
             }
           },
           idle: {
+            //entry: console.log('parent idle'),
             on: {
               'CREATE_DOC': {
                 actions: [
-                  (context, event)=> console.log(event)
+                  (context, event)=> console.log('parent received event'),
+                  send('CREATE', {to: (context, event) => context.rxdb}),
                 ]
               }
             }

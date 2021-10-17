@@ -10,10 +10,8 @@ import noteSchema from '$lib/schema'
 addRxPlugin(RxDBUpdatePlugin)
 addPouchPlugin(idb)
 
-const rxdbMachine = () => {
-
-  return createMachine({
-    id: 'rxdb machine',
+const rxdbMachine = createMachine({
+    id: 'rxdb',
     initial: 'initiating',
     context: {
       db: undefined,
@@ -22,6 +20,7 @@ const rxdbMachine = () => {
     },
     states: {
       initiating: {
+        entry: ()=> console.log('hello world'),
         invoke: {
           id: 'initiateDb',
           src: () => createRxDatabase({
@@ -32,6 +31,7 @@ const rxdbMachine = () => {
           onDone: {
             target: 'addingCollections',
             actions: [
+              ()=> console.log('child say db loaded'),
               assign({ db: (context, event) => event.data }),
               sendParent((context, event) => ({type: 'DB_LOADED', db: event.data}))
             ]
@@ -52,6 +52,7 @@ const rxdbMachine = () => {
           onDone: {
             target: 'idle',
             actions: [
+              ()=> console.log('child say collections added'),
               assign({ collections: (context, event) => event.data }),
               sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: Object.assign({}, ...event.data)}))
             ]
@@ -66,8 +67,19 @@ const rxdbMachine = () => {
         }
       },
       failure: {},
-      idle: {
-
+      'idle': {
+        entry: ()=> console.log('child say idle'),
+        on: {
+          // '*': {actions: [
+          //   ()=> console.log('child received event'),
+          // ]},
+          'CREATE': {
+            actions: [
+              ()=> console.log('child received event'),
+              (context, event)=> console.log('event: ',event)
+            ]
+          }
+        }
       }
     }
   },
@@ -76,7 +88,6 @@ const rxdbMachine = () => {
       //test: (context, event) => console.log(context)
     }
   })
-}
 
 export default rxdbMachine
 

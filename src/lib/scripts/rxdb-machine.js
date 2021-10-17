@@ -3,6 +3,7 @@ import { createRxDatabase, addRxPlugin } from 'rxdb/plugins/core'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
 import * as idb from 'pouchdb-adapter-idb'
+import { v1 as uuidv1 } from 'uuid'
 
 import noteSchema from '$lib/schema'
 
@@ -20,7 +21,6 @@ const rxdbMachine = createMachine({
     },
     states: {
       initiating: {
-        entry: ()=> console.log('hello world'),
         invoke: {
           id: 'initiateDb',
           src: () => createRxDatabase({
@@ -31,9 +31,7 @@ const rxdbMachine = createMachine({
           onDone: {
             target: 'addingCollections',
             actions: [
-              ()=> console.log('child say db loaded'),
               assign({ db: (context, event) => event.data }),
-              sendParent((context, event) => ({type: 'DB_LOADED', db: event.data}))
             ]
           },
           onError: {
@@ -52,15 +50,13 @@ const rxdbMachine = createMachine({
           onDone: {
             target: 'idle',
             actions: [
-              ()=> console.log('child say collections added'),
               assign({ collections: (context, event) => event.data }),
-              sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: Object.assign({}, ...event.data)}))
+              sendParent({type: 'COLLECTIONS_LOADED'})
             ]
           },
           onError: {
             target: 'failure',
             actions: [
-              (context, event) => console.log(event.data),
               assign({ error: (context, event) => event.data })
             ]
           }
@@ -68,15 +64,12 @@ const rxdbMachine = createMachine({
       },
       failure: {},
       'idle': {
-        entry: ()=> console.log('child say idle'),
         on: {
-          // '*': {actions: [
-          //   ()=> console.log('child received event'),
-          // ]},
-          'CREATE': {
+          'CREATE_DOC': {
             actions: [
               ()=> console.log('child received event'),
-              (context, event)=> console.log('event: ',event)
+              (context, event)=> console.log('event: ',event),
+              'createDoc'
             ]
           }
         }
@@ -85,7 +78,20 @@ const rxdbMachine = createMachine({
   },
   {
     actions: {
-      //test: (context, event) => console.log(context)
+      createDoc: async (context, event) => {
+        const blankDoc = {
+          id: uuidv1(),
+          name: '',
+          createdAt: new Date().getTime(),
+          updatedAt: new Date().getTime(),
+        }
+        //const db$ = await db()
+        const newDoc = await context.db[event.collection].insert(blankDoc)
+        //$currentDoc = newDoc
+        console.log(newDoc)
+        //goto(`/${newDoc.id}`)
+        //$allDocsOpened = false
+      }
     }
   })
 

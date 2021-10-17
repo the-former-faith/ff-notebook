@@ -85,3 +85,4 @@ export const providerIDB = writable(undefined)
 export const currentDoc = writable(undefined)
 
 export const allDocsOpened = writable(false)
+export const collections = writable([])

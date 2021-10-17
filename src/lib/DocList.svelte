@@ -1,13 +1,14 @@
 <script>
   import { onMount } from 'svelte'
-  import { db, currentDoc, allDocsOpened } from '$lib/scripts/stores'
+  import { db, currentDoc, allDocsOpened, collections } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
 
   import CreateDocButton from './CreateDocButton.svelte'
   import DocLink from '$lib/DocLink.svelte'
   import { v1 as uuidv1 } from 'uuid'
   import { goto } from '$app/navigation'
-  //$: console.log($currentDoc)
+  
+  $: console.log($collections)
 
   const createDoc = async () => {
     const blankDoc = {

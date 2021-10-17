@@ -1,7 +1,14 @@
-import { createMachine, assign, interpret, send, spawn } from 'xstate'
-import { useMachine } from '@xstate/svelte'
+import { 
+  createMachine, 
+  assign, 
+  interpret, 
+  send, 
+  spawn,
+  forwardTo 
+} from 'xstate'
 //import DbWorker from '$lib/scripts/db-worker.js?worker'
 //import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
+import { collections } from '$lib/scripts/stores'
 import { browser } from '$app/env'
 import rxdbMachine from '$lib/scripts/rxdb-machine'
 
@@ -18,8 +25,6 @@ const mainMachine = createMachine(
     id: 'main machine',
     type: 'parallel',
     context: {
-      db: undefined,
-      collections: undefined,
       currentDoc: undefined,
       rxdb: null
     },
@@ -59,7 +64,7 @@ const mainMachine = createMachine(
         states: {
           true: {
             entry: assign({
-              rxdb: () => spawn(rxdbMachine)
+              rxdb: () => spawn(rxdbMachine, { sync: true })
             }),
             on: {
               'DB_LOADED': {
@@ -70,9 +75,6 @@ const mainMachine = createMachine(
               },
               'COLLECTIONS_LOADED': {
                 target: 'idle',
-                actions: [
-                  assign({ collections: (context, event) => event.collections })
-                ]
               },
             }
           },
@@ -86,8 +88,7 @@ const mainMachine = createMachine(
             on: {
               'CREATE_DOC': {
                 actions: [
-                  (context, event)=> console.log('parent received event'),
-                  send('CREATE', {to: (context, event) => context.rxdb}),
+                  forwardTo( (context, event) => context.rxdb ),
                 ]
               }
             }
@@ -110,6 +111,12 @@ const mainMachine = createMachine(
   }
 )
 
-//export const mainService = interpret(mainMachine).onTransition((state) => console.log(state)).start()
-export const mainService = interpret(mainMachine).start()
+export const mainService = interpret(mainMachine)
+  .onTransition((state) => {
+    const { rxdb } = state.context
+
+    collections.set(rxdb?.state.context.collections)
+  })
+  .start()
+//export const mainService = interpret(mainMachine).start()
 //export const { state, send } = useMachine(mainMachine)

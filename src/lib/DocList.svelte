@@ -9,21 +9,6 @@
   import { goto } from '$app/navigation'
   import { mainService } from '$lib/scripts/mainMachine'
 
-  const createDoc = async () => {
-    const blankDoc = {
-      id: uuidv1(),
-      name: '',
-      createdAt: new Date().getTime(),
-      updatedAt: new Date().getTime(),
-    }
-    const db$ = await db()
-    const newDoc = await db$.notes.insert(blankDoc)
-    $currentDoc = newDoc
-    goto(`/${newDoc.id}`)
-    $allDocsOpened = false
-  }
-
-  let db$
   let noteList = []
 
   $: if($mainService?.context.collections) {
@@ -38,14 +23,8 @@
       getNoteList()
     }
   }
-
-  //Move this to a svelte store
-  onMount(() => {
-
-  })
 </script>
 
-<!--<button on:click={()=> createDoc()}>Create New Doc</button>-->
 <CreateDocButton />
 <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
   <ul id="note-list" class="nostyle">

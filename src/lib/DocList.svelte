@@ -7,8 +7,7 @@
   import DocLink from '$lib/DocLink.svelte'
   import { v1 as uuidv1 } from 'uuid'
   import { goto } from '$app/navigation'
-  
-  $: console.log($collections)
+  import { mainService } from '$lib/scripts/mainMachine'
 
   const createDoc = async () => {
     const blankDoc = {
@@ -27,15 +26,22 @@
   let db$
   let noteList = []
 
-  onMount(() => {
-    const getNoteList = async () => {
-      db$ = await db()
-      db$.notes
-        .find()
-        .sort({ updatedAt: 'desc' })
-        .$.subscribe((notes) => (noteList = notes))
+  $: if($mainService?.context.collections) {
+    if (noteList.length == 0) {
+      const getNoteList = async () => {
+        let posts = $mainService?.context.collections
+        posts
+          .find()
+          .sort({ updatedAt: 'desc' })
+          .$.subscribe((notes) => (noteList = notes))
+      }
+      getNoteList()
     }
-    getNoteList()
+  }
+
+  //Move this to a svelte store
+  onMount(() => {
+
   })
 </script>
 

@@ -26,7 +26,8 @@ const mainMachine = createMachine(
     type: 'parallel',
     context: {
       currentDoc: undefined,
-      rxdb: null
+      rxdb: null,
+      collections: undefined
     },
     states: {
       connectionStatus: {
@@ -75,6 +76,12 @@ const mainMachine = createMachine(
               },
               'COLLECTIONS_LOADED': {
                 target: 'idle',
+                actions: [
+                  (context, event)=>console.log(event),
+                  assign({ 
+                    collections: (context, event) => event.collections.posts
+                  }),
+                ]
               },
             }
           },
@@ -84,7 +91,6 @@ const mainMachine = createMachine(
             }
           },
           idle: {
-            //entry: console.log('parent idle'),
             on: {
               'CREATE_DOC': {
                 actions: [
@@ -114,8 +120,9 @@ const mainMachine = createMachine(
 export const mainService = interpret(mainMachine)
   .onTransition((state) => {
     const { rxdb } = state.context
-
-    collections.set(rxdb?.state.context.collections)
+    //console.log( rxdb?.state.context.db?.posts?.find().$ )
+    //console.log(collections)
+    //collections.set(rxdb?.state.context.db?.posts?.find().$)
   })
   .start()
 //export const mainService = interpret(mainMachine).start()

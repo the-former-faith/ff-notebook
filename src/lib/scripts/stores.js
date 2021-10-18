@@ -30,7 +30,7 @@ const _create = async () => {
     ignoreDuplicate: true
   })
 
-  await db.addCollections({ notes: { schema: noteSchema } })
+  await db.addCollections({ posts: { schema: noteSchema } })
 
   //Sync GraphQL
   //TODO - Only turn on replication when online.

@@ -43,15 +43,15 @@ const rxdbMachine = createMachine({
       addingCollections: {
         invoke: {
           id: 'addCollection',
-          src: (context, event) => Promise.all([
-            context.db.addCollections({ posts: { schema: noteSchema } }),
-            context.db.addCollections({ images: { schema: noteSchema } })
-          ]),
+          src: (context, event) => context.db.addCollections({ 
+            posts: { schema: noteSchema },
+            images: { schema: noteSchema }
+          }),
           onDone: {
             target: 'idle',
             actions: [
-              assign({ collections: (context, event) => event.data }),
-              sendParent({type: 'COLLECTIONS_LOADED'})
+              'subscribeToCollections',
+              sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: event.data}) )
             ]
           },
           onError: {
@@ -85,12 +85,20 @@ const rxdbMachine = createMachine({
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),
         }
-        //const db$ = await db()
         const newDoc = await context.db[event.collection].insert(blankDoc)
         //$currentDoc = newDoc
         console.log(newDoc)
         //goto(`/${newDoc.id}`)
         //$allDocsOpened = false
+      },
+      subscribeToCollections: async (context, event) => {
+        console.log(event.data)
+        //console.log('hello')
+        //let sub  = context.db.posts.find().sort({ updatedAt: 'desc' }).$.subscribe()
+        // for (const [key, value] of Object.entries(event.data)) {
+        //   console.log(sub)
+        // }
+        //assign({ collections: (context, event) => sub })
       }
     }
   })

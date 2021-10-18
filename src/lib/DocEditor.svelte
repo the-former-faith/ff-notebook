@@ -19,7 +19,7 @@
   onMount(async()=> {
     if(!$currentDoc) {
       db$ = await db()
-      db$.notes.findOne(id)
+      db$.posts.findOne(id)
       .exec()
       .then(doc => $currentDoc = doc)
     }

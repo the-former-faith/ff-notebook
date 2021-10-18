@@ -102,28 +102,9 @@ const mainMachine = createMachine(
         }
       }
     },
-  },
-  {
-    // actions: {
-    //   createDoc: (context, event) => {
-    //     const newDoc = new Y.Doc()
-    //     const fields = newDoc.getMap('fields')
-    //     fields.set('title', '')
-    //     fields.set('createdAt', Date.now() )
-    //     fields.set('updatedAt', Date.now() )
-    //     imageList.y.push(newDoc)
-    //   }
-    // }
   }
 )
 
-export const mainService = interpret(mainMachine)
-  .onTransition((state) => {
-    const { rxdb } = state.context
-    //console.log( rxdb?.state.context.db?.posts?.find().$ )
-    //console.log(collections)
-    //collections.set(rxdb?.state.context.db?.posts?.find().$)
-  })
-  .start()
-//export const mainService = interpret(mainMachine).start()
+//export const mainService = interpret(mainMachine).onTransition((state) => {console.log(state)}).start()
+export const mainService = interpret(mainMachine).start()
 //export const { state, send } = useMachine(mainMachine)

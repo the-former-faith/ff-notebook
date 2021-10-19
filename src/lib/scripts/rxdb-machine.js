@@ -49,9 +49,20 @@ const rxdbMachine = createMachine({
           }),
           onDone: {
             target: 'idle',
-            actions: [
-              'subscribeToCollections',
-            ]
+            actions: assign({
+              collections: (context, event) => {
+                let observers = {}
+                for (const [key, value] of Object.entries(event.data)) {
+                  const o = value
+                    .find()
+                    .sort({ updatedAt: 'desc' })
+                    .$
+                  observers[key] = o
+                }
+
+                return observers
+              }
+            })
           },
           onError: {
             target: 'failure',
@@ -90,17 +101,6 @@ const rxdbMachine = createMachine({
         //console.log(newDoc)
         //goto(`/${newDoc.id}`)
         //$allDocsOpened = false
-      },
-      subscribeToCollections: async (context, event) => {
-        let observers = {}
-        for (const [key, value] of Object.entries(event.data)) {
-          const o = value
-            .find()
-            .sort({ updatedAt: 'desc' })
-            .$.subscribe()
-          observers[key] = o
-        }
-        assign({ collections: 'observers' })
       }
     }
   })

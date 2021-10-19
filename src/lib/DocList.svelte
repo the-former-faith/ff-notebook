@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte'
-  import { db, currentDoc, allDocsOpened, collections } from '$lib/scripts/stores'
+  import { db, currentDoc, allDocsOpened } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
 
   import CreateDocButton from './CreateDocButton.svelte'
@@ -10,25 +10,25 @@
   import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
 
-  let noteList = []
-  let test
+  let collections
+  let posts
 
-  $: console.log($test)
+  $: console.log($posts)
 
   $: if($mainService?.context.rxdb) {
-    if (noteList.length == 0) {
-      test = useSelector($mainService.context.rxdb, (state) => state.context);
-    }
+    collections = useSelector($mainService.context.rxdb, (state) => state.context.collections);
+  }
+
+  $: if($collections) {
+    posts = $collections.posts
   }
 </script>
 
 <CreateDocButton />
 <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
   <ul id="note-list" class="nostyle">
-    {#await noteList}
-      Loading Notes...
-    {:then results}
-      {#each results as doc}
+    {#if $posts}
+      {#each $posts as doc}
         <li>
           <DocLink 
             {doc} 
@@ -37,10 +37,10 @@
           />
         </li>
       {/each}
-    {/await}
+    {/if}
   </ul>
 </DetailsSummary>
-<button on:click={()=> console.log($test)}>Log me</button>
+<button on:click={()=> console.log($posts)}>Log me</button>
 
 <style>
   ul {

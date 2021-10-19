@@ -8,7 +8,6 @@ import {
 } from 'xstate'
 //import DbWorker from '$lib/scripts/db-worker.js?worker'
 //import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
-import { collections } from '$lib/scripts/stores'
 import { browser } from '$app/env'
 import rxdbMachine from '$lib/scripts/rxdb-machine'
 
@@ -76,12 +75,12 @@ const mainMachine = createMachine(
               },
               'COLLECTIONS_LOADED': {
                 target: 'idle',
-                actions: [
-                  (context, event)=>console.log(event),
-                  assign({ 
-                    collections: (context, event) => event.collections.posts
-                  }),
-                ]
+                // actions: [
+                //   (context, event)=>console.log(event),
+                //   assign({ 
+                //     collections: (context, event) => event.collections.posts
+                //   }),
+                // ]
               },
             }
           },

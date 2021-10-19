@@ -8,19 +8,16 @@
   import { v1 as uuidv1 } from 'uuid'
   import { goto } from '$app/navigation'
   import { mainService } from '$lib/scripts/mainMachine'
+  import { useSelector } from '@xstate/svelte'
 
   let noteList = []
+  let test
 
-  $: if($mainService?.context.collections) {
+  $: console.log($test)
+
+  $: if($mainService?.context.rxdb) {
     if (noteList.length == 0) {
-      const getNoteList = async () => {
-        let posts = $mainService?.context.collections
-        posts
-          .find()
-          .sort({ updatedAt: 'desc' })
-          .$.subscribe((notes) => (noteList = notes))
-      }
-      getNoteList()
+      test = useSelector($mainService.context.rxdb, (state) => state.context);
     }
   }
 </script>
@@ -43,6 +40,7 @@
     {/await}
   </ul>
 </DetailsSummary>
+<button on:click={()=> console.log($test)}>Log me</button>
 
 <style>
   ul {
@@ -53,15 +51,5 @@
   
   li {
     border-top: 1px solid var(--accent-color);
-  }
-
-  button {
-    background-color: var(--action-color);
-    color: var(--background-color);
-    font-weight: 700;
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: auto;
   }
 </style>

@@ -3,9 +3,6 @@
 	import { browser } from '$app/env'
 	import { mainService } from '$lib/scripts/mainMachine'
 	import DocList from '$lib/DocList.svelte'
-import { children } from 'svelte/internal';
-
-  //$: console.log($mainMachineState)
 
 	$: if (browser) {
 		mainService.send('BROWSER_LOADED')
@@ -14,7 +11,6 @@ import { children } from 'svelte/internal';
 	}
 </script>
 
-<button on:click={()=> console.log(mainService.state)}>Log me</button>
 <!--<p>Online status: {$mainMachineState.value.connectionStatus}</p>-->
 <main>
   <aside>

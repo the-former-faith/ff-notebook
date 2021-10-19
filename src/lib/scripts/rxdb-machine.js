@@ -51,7 +51,6 @@ const rxdbMachine = createMachine({
             target: 'idle',
             actions: [
               'subscribeToCollections',
-              sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: event.data}) )
             ]
           },
           onError: {
@@ -64,6 +63,7 @@ const rxdbMachine = createMachine({
       },
       failure: {},
       'idle': {
+        entry: sendParent((context, event) => ({type: 'COLLECTIONS_LOADED', collections: event.data}) ),
         on: {
           'CREATE_DOC': {
             actions: [
@@ -87,18 +87,20 @@ const rxdbMachine = createMachine({
         }
         const newDoc = await context.db[event.collection].insert(blankDoc)
         //$currentDoc = newDoc
-        console.log(newDoc)
+        //console.log(newDoc)
         //goto(`/${newDoc.id}`)
         //$allDocsOpened = false
       },
       subscribeToCollections: async (context, event) => {
-        console.log(event.data)
-        //console.log('hello')
-        //let sub  = context.db.posts.find().sort({ updatedAt: 'desc' }).$.subscribe()
-        // for (const [key, value] of Object.entries(event.data)) {
-        //   console.log(sub)
-        // }
-        //assign({ collections: (context, event) => sub })
+        let observers = {}
+        for (const [key, value] of Object.entries(event.data)) {
+          const o = value
+            .find()
+            .sort({ updatedAt: 'desc' })
+            .$.subscribe()
+          observers[key] = o
+        }
+        assign({ collections: 'observers' })
       }
     }
   })

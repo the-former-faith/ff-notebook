@@ -1,14 +1,14 @@
 <script>
   import {mainService} from '$lib/scripts/mainMachine'
+  export let collection
+
+  const singular = collection.replace(/s$/, '')
 </script>
 
 <button 
-  on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: 'posts'}) }
+  on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: collection}) }
   disabled={!$mainService.can('CREATE_DOC')}
->New Doc</button>
-<!--<button 
-  on:click={ ()=> mainService.send({ type: 'CREATE_DOC', collection: 'posts'}) }
->New Doc</button>-->
+>New {singular}</button>
 
 <style>
   button {

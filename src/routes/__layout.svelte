@@ -2,7 +2,7 @@
 	import '../app.css'
 	import { browser } from '$app/env'
 	import { mainService } from '$lib/scripts/mainMachine'
-	import DocList from '$lib/DocList.svelte'
+	import Sidebar from '$lib/components/organisms/Sidebar.svelte'
 
 	$: if (browser) {
 		mainService.send('BROWSER_LOADED')
@@ -13,9 +13,7 @@
 
 <!--<p>Online status: {$mainMachineState.value.connectionStatus}</p>-->
 <main>
-  <aside>
-    <DocList />
-  </aside>
+  <Sidebar />
 	<slot />
 </main>
 

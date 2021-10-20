@@ -51,7 +51,7 @@ const rxdbMachine = createMachine({
             target: 'idle',
             actions: assign({
               collections: (context, event) => {
-                let observers = {}
+                let observers = []
                 for (const [key, value] of Object.entries(event.data)) {
                   const o = value
                     .find()

@@ -15,7 +15,6 @@
   }
 
   $: if($collections) {
-    console.log($collections)
     posts = $collections.posts
     images = $collections.images
   }

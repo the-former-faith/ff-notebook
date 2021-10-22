@@ -1,12 +1,9 @@
 <script context="module">
   export const prerender = false
   export async function load({ page }) {
-    const id = page.params.id
 
 		return {
-      props: {
-			  id: id
-      }
+      props: page.params
 		}
 	}
 </script>
@@ -14,7 +11,8 @@
 <script>
   import DocEditor from '$lib/DocEditor.svelte'
 
-  export let id  
+  export let id
+  export let collection
 </script>
 
 <svelte:head>
@@ -22,7 +20,7 @@
 </svelte:head>
 
 <article>
-  <DocEditor {id} />
+  <DocEditor {id} {collection} />
 </article>
 
 <style>

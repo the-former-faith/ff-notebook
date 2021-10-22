@@ -22,7 +22,7 @@
 
 <div>
   <a 
-    href={doc.id}
+    href="/{doc.collection.name}/{doc.id}"
     on:click={()=> {
       handleNoteSelect(doc)
       $allDocsOpened = false

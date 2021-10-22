@@ -59,10 +59,6 @@
 </details>
 
 <style>
-  details[open] {
-    outline: 2px solid var(--action-color);
-  }
-
   summary {
     padding: 0.5rem;
     font-weight: bold;
@@ -92,24 +88,16 @@
     color: var(--background-color);
   }
 
-  [open] summary::before {
+  [open] > summary::before {
     transform: rotate(90deg);
   }
 
   .contents {
-    border: 2px solid var(--action-color);
     border-top: 0;
     background-color: var(--background-color);
   }
 
   .overlay {
     position: relative;
-  }
-
-  .overlay .contents {
-    position: absolute;
-    top: 100%;
-    left: -2px;
-    width: calc(100% + 4px);
   }
 </style>

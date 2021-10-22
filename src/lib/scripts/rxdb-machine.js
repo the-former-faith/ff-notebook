@@ -1,14 +1,18 @@
 import { createMachine, assign, sendParent } from 'xstate'
 import { createRxDatabase, addRxPlugin } from 'rxdb/plugins/core'
 import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
+import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
+import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
-import noteSchema from '$lib/schema'
+import { noteSchema } from '$lib/schema'
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)
+addRxPlugin(RxDBQueryBuilderPlugin)
+addRxPlugin(RxDBValidatePlugin)
 addPouchPlugin(idb)
 
 const rxdbMachine = createMachine({

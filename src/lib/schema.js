@@ -1,4 +1,4 @@
-const noteSchema = {
+export const noteSchema = {
     title: 'note',
     description: 'an individual note',
     version: 0,
@@ -62,5 +62,3 @@ const noteSchema = {
     },
     required: ['name'],
   };
-  
-  export default noteSchema;

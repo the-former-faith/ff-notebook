@@ -2,28 +2,33 @@
   import Tiptap from '$lib/components/organisms/Tiptap.svelte'
   import * as Y from 'yjs'
   import { IndexeddbPersistence } from 'y-indexeddb'
-  import { db, currentDoc, providerIDB } from '$lib/scripts/stores'
+  import { currentDoc, providerIDB } from '$lib/scripts/stores'
+  import { mainService } from '$lib/scripts/mainMachine'
+  import { useSelector } from '@xstate/svelte'
   import { browser } from '$app/env'
   import { onMount } from 'svelte';
 
   let ydoc
-  let db$
+  let collections
   export let id
+  export let collection
+
+  $: if($mainService?.context.rxdb) {
+
+    collections = useSelector($mainService.context.rxdb, (state) => state.context.db)
+    if(!$currentDoc && $collections && $collections[collection]) {
+      console.log($collections)
+      $collections[collection].findOne(id)
+      .exec()
+      .then(doc => $currentDoc = doc)
+    }
+  }
 
   const loadDoc = async (doc) => {
     //Lift ydoc to store so it can be destroyed
     ydoc = new Y.Doc()
     $providerIDB = new IndexeddbPersistence(doc, ydoc)
   }
-
-  onMount(async()=> {
-    if(!$currentDoc) {
-      db$ = await db()
-      db$.posts.findOne(id)
-      .exec()
-      .then(doc => $currentDoc = doc)
-    }
-  })
 
   $: if(browser) loadDoc(id)
 
@@ -37,7 +42,7 @@
   }
 
 </script>
-  
+
 <div class="editor">
   {#if $currentDoc}
     <label for="title">Title

@@ -16,11 +16,12 @@
   $: if($mainService?.context.rxdb) {
 
     collections = useSelector($mainService.context.rxdb, (state) => state.context.db)
+    
+    //@TODO: find a way so this crummy code can be cleaned up
     if(!$currentDoc && $collections && $collections[collection]) {
-      console.log($collections)
       $collections[collection].findOne(id)
-      .exec()
-      .then(doc => $currentDoc = doc)
+        .exec()
+        .then(doc => $currentDoc = doc)
     }
   }
 

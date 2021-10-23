@@ -7,6 +7,13 @@ const ImageBlock = Node.create({
   group: 'block',
   content: 'inline*',
 
+  addAttributes() {
+    // Return an object with attribute configuration
+    return {
+      dog: {}
+    }
+  },
+
   parseHTML() {
     return [{ tag: 'image-block' }]
   },

@@ -18,7 +18,6 @@
     previousUrl = editor.getAttributes('link').href
     url = previousUrl
     open()
-    //const url = window.prompt('URL', previousUrl)
   }
 
   const saveChanges = (url, previousUrl) => {

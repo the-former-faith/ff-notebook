@@ -11,7 +11,8 @@
   <CreateDocButton collection={title} />
   <DetailsSummary {title} isOpen={true}>
     <ul id="note-list" class="nostyle">
-        {#each collection as doc}
+      {#if $collection}
+        {#each $collection as doc}
           <li>
             <DocLink 
               {doc} 
@@ -20,6 +21,7 @@
             />
           </li>
         {/each}
+      {/if}
     </ul>
   </DetailsSummary>
 </div>

@@ -6,7 +6,6 @@
   import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
   import { browser } from '$app/env'
-  import { onMount } from 'svelte';
 
   let ydoc
   let collections

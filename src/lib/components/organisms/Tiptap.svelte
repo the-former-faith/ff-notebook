@@ -9,8 +9,6 @@
   let editor
   export let ydoc
 
-  //let loadedEditor = 'empty'
-
   const createTiptap = (node, doc) => {
     const create = (node, doc) => {
       editor = new Editor({
@@ -61,20 +59,20 @@
   }
   
 </script>
-  {#if editor}
-    <Toolbar {editor} />
-  {/if}
-  <div class="tiptap">
-    <!--@TODO: see if I can get rid of this div now that I am
-    using Svelte Tiptap-->
-    <div use:createTiptap={ydoc} />
-    <EditorContent editor={editor} />
-    <button class="focus-filler" on:click={addParagraphToEnd}>
-      <span class="screen-reader-text">Focus to end of doc</span>
-    </button>
-  </div>
 
-  <button on:click={()=>console.log(editor.getJSON())}>Log editor</button>
+{#if editor}
+  <Toolbar {editor} />
+{/if}
+<div class="tiptap">
+  <!--@TODO: see if I can get rid of this div now that I am
+  using Svelte Tiptap-->
+  <div use:createTiptap={ydoc} />
+  <EditorContent editor={editor} />
+  <button class="focus-filler" on:click={addParagraphToEnd}>
+    <span class="screen-reader-text">Focus to end of doc</span>
+  </button>
+</div>
+
 <style>
 
   .tiptap:empty {

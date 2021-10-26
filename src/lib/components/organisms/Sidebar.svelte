@@ -7,26 +7,17 @@
 
   let collections
 
-  let images
-  let posts
-
   $: if($mainService?.context.rxdb) {
     collections = useSelector($mainService.context.rxdb, (state) => state.context.collections)
-  }
-
-  $: if($collections) {
-    posts = $collections.posts
-    images = $collections.images
   }
 </script>
 
 <aside>
   <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
-    {#if $posts}
-        <DocList title="posts" collection={$posts}/>
-    {/if}
-    {#if $images}
-        <DocList title="images" collection={$images}/>
+    {#if $collections}
+      {#each Object.entries($collections) as [title, collection] }
+        <DocList {title} {collection} />
+      {/each}
     {/if}
   </DetailsSummary>
 </aside>

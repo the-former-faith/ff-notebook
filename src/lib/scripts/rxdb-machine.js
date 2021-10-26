@@ -7,7 +7,7 @@ import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
-import { noteSchema } from '$lib/schema'
+import { postSchema, imageSchema } from '$lib/schema'
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)
@@ -48,8 +48,8 @@ const rxdbMachine = createMachine({
         invoke: {
           id: 'addCollection',
           src: (context, event) => context.db.addCollections({ 
-            posts: { schema: noteSchema },
-            images: { schema: noteSchema }
+            posts: { schema: postSchema },
+            images: { schema: imageSchema }
           }),
           onDone: {
             target: 'idle',
@@ -101,10 +101,9 @@ const rxdbMachine = createMachine({
           updatedAt: new Date().getTime(),
         }
         const newDoc = await context.db[event.collection].insert(blankDoc)
-        //$currentDoc = newDoc
-        //console.log(newDoc)
-        //goto(`/${newDoc.id}`)
-        //$allDocsOpened = false
+        // $currentDoc = newDoc
+        // goto(`/${newDoc.id}`)
+        // $allDocsOpened = false
       }
     }
   })

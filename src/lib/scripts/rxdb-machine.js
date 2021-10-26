@@ -96,7 +96,7 @@ const rxdbMachine = createMachine({
       createDoc: async (context, event) => {
         const blankDoc = {
           id: uuidv1(),
-          name: '',
+          title: '',
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),
         }

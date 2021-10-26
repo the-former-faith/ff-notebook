@@ -32,11 +32,10 @@
 
   $: if(browser) loadDoc(id)
 
-  //@TODO: make this work with any field
   const clearField = (node, currentDoc) => {
     return {
 			update(currentDoc) {
-        node.value = currentDoc.name
+        node.value = currentDoc[node.name]
 			},
     } 
   }
@@ -50,8 +49,8 @@
         name="title"
         id="title"
         type="text" 
-        value={$currentDoc.get('name') ? $currentDoc.get('name') : ''} 
-        on:keyup={(e) => $currentDoc.atomicPatch({name: e.target.value})}
+        value={$currentDoc.get('title') ? $currentDoc.get('title') : ''} 
+        on:keyup={(e) => $currentDoc.atomicPatch({title: e.target.value})}
         use:clearField={$currentDoc}
       />
     </label>

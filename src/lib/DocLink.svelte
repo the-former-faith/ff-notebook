@@ -30,7 +30,7 @@
 
     aria-current={current}
   >
-    <span>{doc.name ? doc.name : 'Untitled'}</span> 
+    <span>{doc.title ? doc.title : 'Untitled'}</span> 
     <small>{updated.toLocaleDateString()}</small>
   </a>
   <button on:click={() => deleteNote(doc)} class="btn btn-delete">delete</button>

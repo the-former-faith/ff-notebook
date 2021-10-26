@@ -2,7 +2,7 @@ const meta = {
   id: {
     type: 'string',
   },
-  name: {
+  title: {
     type: 'string',
   },
   body: {
@@ -64,7 +64,7 @@ export const postSchema = {
   properties: {
     ...meta
   },
-  required: ['name'],
+  required: ['title'],
 };
 
 export const imageSchema = {
@@ -84,5 +84,5 @@ export const imageSchema = {
       "format": "uri"
     }
   },
-  required: ['name'],
+  required: ['title'],
 };

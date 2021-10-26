@@ -6,6 +6,7 @@
   import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
   import { browser } from '$app/env'
+  import ImageInput from '$lib/components/molecules/ImageInput.svelte'
 
   let ydoc
   let collections
@@ -44,16 +45,22 @@
 
 <div class="editor">
   {#if $currentDoc}
-    <label for="title">Title
-      <input 
-        name="title"
-        id="title"
-        type="text" 
-        value={$currentDoc.get('title') ? $currentDoc.get('title') : ''} 
-        on:keyup={(e) => $currentDoc.atomicPatch({title: e.target.value})}
-        use:clearField={$currentDoc}
-      />
-    </label>
+    <div>
+      <label for="title">Title
+        <input 
+          name="title"
+          id="title"
+          type="text" 
+          value={$currentDoc.get('title') ? $currentDoc.get('title') : ''} 
+          on:keyup={(e) => $currentDoc.atomicPatch({title: e.target.value})}
+          use:clearField={$currentDoc}
+        />
+      </label>
+  
+      {#if $currentDoc.collection.name === 'images'}
+        <ImageInput />
+      {/if}
+    </div>
   {/if}
   {#if $providerIDB}
     <Tiptap {ydoc} />

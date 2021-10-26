@@ -96,6 +96,7 @@
 
   .tiptap:focus-within {
     outline: 2px solid var(--action-color);
+    outline-offset: -2px;
   }
 
   .focus-filler {

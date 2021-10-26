@@ -22,21 +22,12 @@
     justify-content: center;
   }
 
-  button.active {
-    background: var(--action-color);
-    color: white;
-  }
-
   .toolbar {
     display: grid;
     grid-auto-flow: column;
-    gap: 0.5rem;
     position: sticky;
     top: 0;
-    background-color: var(--accent-color);
+    background-color: var(--background-color);
     z-index: 1;
-    padding: 0.5rem;
-    grid-column: 1 / -1 !important;
-    /*overflow-x: auto;*/
   }
 </style>

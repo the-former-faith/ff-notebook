@@ -3,7 +3,7 @@
 	let files
   let blob
   export let src
-  export let id = 'dudes-in-y-front'
+  export let id = 'g'
 
   $: if(files) blob = URL.createObjectURL(files[0])
 
@@ -43,7 +43,7 @@
         },
         on: {
           SUCCESS: {
-            target: 'idle',
+            target: 'checking_for_existing_file',
             actions: [
               assign({
                 db: (ctx, evt) => evt.db,
@@ -52,7 +52,37 @@
           }
         }
       },
-      //@TODO: add check to see if image is in indexedDB??
+      checking_for_existing_file: {
+        invoke: {
+          id: 'checkForExisting',
+          src: (ctx, evt) => (send)=> {
+            let transaction = ctx.db.transaction("files")
+
+            let files = transaction.objectStore("files")
+
+            var request = files.get(ctx.id)
+
+            request.onerror = function(event) {
+              console.log('no file')
+            }
+
+            request.onsuccess = function(event) {
+              console.log(request.result);
+            }
+
+          },
+        },
+        on: {
+          SUCCESS: {
+            target: 'checking_for_existing_file',
+            actions: [
+              assign({
+                db: (ctx, evt) => evt.db,
+              })
+            ]
+          }
+        }
+      },
       idle: {
         on: {
           NEW_UPLOAD: {

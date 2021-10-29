@@ -3,6 +3,7 @@
 	let files
   let blob
   export let src
+  export let id = '8c8fe3c0-3670-11ec-b3ce-bf7d358eddae'
 
   $: if(files) blob = URL.createObjectURL(files[0])
 
@@ -12,8 +13,10 @@
     id: 'fileMachine',
     initial: 'loading',
     context: {
+      id: id,
       db: undefined,
-      error: undefined
+      error: undefined,
+      blob: undefined
     },
     states: { 
       loading: {
@@ -26,8 +29,6 @@
               const db = event.target.result
 
               db.createObjectStore('files', {keyPath: 'id'})
-
-              console.log("I'm gonna take the upgrade")
             }
 
             request.onsuccess = function(event) {
@@ -41,7 +42,7 @@
         },
         on: {
           SUCCESS: {
-            target: 'success',
+            target: 'idle',
             actions: [
               assign({
                 db: (ctx, evt) => evt.db,
@@ -50,15 +51,52 @@
           }
         }
       },
-      success: {
+      //@TODO: add check to see if image is in indexedDB??
+      idle: {
         on: {
-          'NEW_UPLOAD': {
+          NEW_UPLOAD: {
+            target: 'storing',
             actions: [
-              ()=> console.log('uploading')
+              assign({
+                blob: (ctx, evt) => URL.createObjectURL(evt.file)
+              })
             ]
           }
         }
       },
+      storing: {
+        invoke: {
+          id: 'loadIndexedDB',
+          src: (ctx, evt) => (send)=> {
+            let transaction = ctx.db.transaction("files", "readwrite")
+
+            // get an object store to operate on it
+            let files = transaction.objectStore("files")
+
+            let file = {
+              id: ctx.id,
+              blob: ctx.blob
+            }
+
+            let request = files.add(file)
+
+            //Send updates to parent
+            request.onsuccess = function() {
+              send({ type: 'SUCCESS' })
+            }
+
+            //Send update to parent
+            request.onerror = function() {
+              console.log("Error", request.error)
+            }
+          },
+        },
+        on: {
+          SUCCESS: {
+            target: 'idle',
+          }
+        }
+      }
     }
   })
 
@@ -66,34 +104,6 @@
     //Store blob.
     //Clear URL from RxDB, if exists.
     //If old blob is waiting to be uploaded, delete from indexedDB
-  }
-
-  const storeBlob = () => {
-    //TODO: move this to an xstate invoked callback,
-    //so it can access db in context
-    //and return error or success to the machine
-    let transaction = db.transaction("files", "readwrite")
-
-    // get an object store to operate on it
-    let files = transaction.objectStore("files")
-
-    let file = {
-      id: '', //Pass ID into component as prop
-      blob: '' //Add blob
-    }
-
-    let request = files.add(file)
-
-    //Send updates to parent
-    request.onsuccess = function() {
-      console.log("Book added to the store", request.result)
-    }
-
-    //Send update to parent
-    request.onerror = function() {
-      console.log("Error", request.error)
-    }
-
   }
 
   const service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
@@ -109,8 +119,8 @@
   id="image"
   name="image"
   accept="image/*"
-  disabled={!$service.can('NEW_UPLOAD')}
   bind:files
+  on:change={ (e)=> service.send({type: 'NEW_UPLOAD', file: e.target.files[0]}) }
 />
 
 <style>

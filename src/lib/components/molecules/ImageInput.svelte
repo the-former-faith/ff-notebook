@@ -1,13 +1,9 @@
 <script>
   import { createMachine, assign, interpret } from 'xstate'
 	let files
-  let blob
+  let base64URI
   export let src
-  export let id = 'g'
-
-  $: if(files) blob = URL.createObjectURL(files[0])
-
-  //$: console.log(blob)
+  export let id = 'a'
 
   const fileMachine = createMachine({
     id: 'fileMachine',
@@ -17,7 +13,7 @@
       db: undefined,
       error: undefined,
       file: undefined,
-      binaryFile: undefined
+      base64URI: undefined
     },
     states: { 
       loading: {
@@ -63,23 +59,28 @@
             var request = files.get(ctx.id)
 
             request.onerror = function(event) {
-              console.log('no file')
             }
 
             request.onsuccess = function(event) {
-              console.log(request.result);
+              if (request.result) {
+                send({ type: 'FILE_FOUND', base64URI: request.result.file })
+              } else {
+                send({ type: 'FILE_NOT_FOUND' })
+              }
             }
-
           },
         },
         on: {
-          SUCCESS: {
-            target: 'checking_for_existing_file',
+          FILE_FOUND: {
+            target: 'idle',
             actions: [
               assign({
-                db: (ctx, evt) => evt.db,
+                base64URI: (ctx, evt) => evt.base64URI
               })
             ]
+          },
+          FILE_NOT_FOUND: {
+            target: 'idle',
           }
         }
       },
@@ -102,10 +103,10 @@
 
             const reader = new FileReader()
 
-            reader.readAsBinaryString(ctx.file)
+            reader.readAsDataURL(ctx.file)
 
             reader.onload = function(e) {
-              send({ type: 'SUCCESS', binaryFile: e.target.result })
+              send({ type: 'SUCCESS', base64URI: e.target.result })
             }
 
           },
@@ -115,7 +116,7 @@
             target: 'storing',
             actions: [
               assign({
-                binaryFile: (ctx, evt) => evt.binaryFile
+                base64URI: (ctx, evt) => evt.base64URI
               })
             ]
           }
@@ -132,7 +133,7 @@
 
             let file = {
               id: ctx.id,
-              file: ctx.binaryFile
+              file: ctx.base64URI
             }
 
             let request = files.add(file)
@@ -165,9 +166,14 @@
 
   const service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
 
+  $: if($service?.context?.base64URI) {
+    console.log('here')
+    base64URI = $service.context.base64URI
+  }
+
 </script>
 
-<img src={src ? scr : blob} />
+<img src={src ? scr : base64URI} />
 
 <label for="image">Choose a profile picture:</label>
 

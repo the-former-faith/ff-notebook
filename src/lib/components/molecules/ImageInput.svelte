@@ -3,7 +3,7 @@
 	let files
   let blob
   export let src
-  export let id = '8c8fe3c0-3670-11ec-b3ce-bf7d358eddae'
+  export let id = 'dudes-in-y-front'
 
   $: if(files) blob = URL.createObjectURL(files[0])
 
@@ -16,7 +16,8 @@
       id: id,
       db: undefined,
       error: undefined,
-      blob: undefined
+      file: undefined,
+      binaryFile: undefined
     },
     states: { 
       loading: {
@@ -55,10 +56,36 @@
       idle: {
         on: {
           NEW_UPLOAD: {
+            target: 'converting_to_binary',
+            actions: [
+              assign({
+                file: (ctx, evt) => evt.file
+              })
+            ]
+          }
+        }
+      },
+      converting_to_binary: {
+        invoke: {
+          id: 'convertToBinary',
+          src: (ctx, evt) => (send)=> {
+
+            const reader = new FileReader()
+
+            reader.readAsBinaryString(ctx.file)
+
+            reader.onload = function(e) {
+              send({ type: 'SUCCESS', binaryFile: e.target.result })
+            }
+
+          },
+        },
+        on: {
+          SUCCESS: {
             target: 'storing',
             actions: [
               assign({
-                blob: (ctx, evt) => URL.createObjectURL(evt.file)
+                binaryFile: (ctx, evt) => evt.binaryFile
               })
             ]
           }
@@ -75,7 +102,7 @@
 
             let file = {
               id: ctx.id,
-              blob: ctx.blob
+              file: ctx.binaryFile
             }
 
             let request = files.add(file)

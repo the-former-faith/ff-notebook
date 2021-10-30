@@ -116,7 +116,7 @@
         invoke: {
           id: 'deleteFile',
           src: (ctx, evt) => (send)=> {
-            
+
           },
         },
         on: {
@@ -170,7 +170,7 @@
               file: ctx.base64URI
             }
 
-            let request = files.add(file)
+            let request = files.put(file)
 
             //Send updates to parent
             request.onsuccess = function() {

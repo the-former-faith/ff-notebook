@@ -10,13 +10,11 @@
   export let src
   export let id
 
-  console.log($currentDoc.id)
-
   const fileMachine = createMachine({
     id: 'fileMachine',
     initial: 'loading',
     context: {
-      id: $currentDoc.id,
+      id: id, //Not using at the moment because it wasn't updating
       db: undefined,
       error: undefined,
       file: undefined,
@@ -63,7 +61,6 @@
 
             let files = transaction.objectStore("files")
 
-            console.log($currentDoc.id)
             var request = files.get($currentDoc.id)
 
             request.onerror = function(event) {
@@ -92,6 +89,9 @@
           }
         }
       },
+      //Can change to 2 diffent 'idle' states:
+      //1. Has image
+      //2. Doesn't have image
       idle: {
         on: {
           NEW_UPLOAD: {
@@ -99,6 +99,32 @@
             actions: [
               assign({
                 file: (ctx, evt) => evt.file
+              })
+            ]
+          },
+          DELETE_FILE: {
+            target: 'converting_to_binary',
+            actions: [
+              assign({
+                file: (ctx, evt) => evt.file
+              })
+            ]
+          },
+        }
+      },
+      deleting_file: {
+        invoke: {
+          id: 'deleteFile',
+          src: (ctx, evt) => (send)=> {
+            
+          },
+        },
+        on: {
+          SUCCESS: {
+            target: 'idle',
+            actions: [
+              assign({
+                base64URI: (ctx, evt) => undefined
               })
             ]
           }
@@ -179,12 +205,16 @@
 
   beforeUpdate(() => {
     if (previousId !== id) {
-      service = interpret(fileMachine).onTransition((state) => {console.log(state.context.id)}).start()
+      service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
       previousId = id
     }
   })
 
-  onDestroy(() => console.log('bye'))
+  onDestroy(() => {
+    if (service) {
+      service.stop()
+    }
+  })
 
 </script>
 
@@ -192,7 +222,7 @@
   <img src={base64URI} />
 {/if}
 
-<button on:click={()=> base64URI = undefined}>Clear image</button>
+<button on:click={(e)=> service.send({type: 'DELETE_FILE'})}>Delete Image</button>
 
 <label for="image">Choose a profile picture:</label>
 

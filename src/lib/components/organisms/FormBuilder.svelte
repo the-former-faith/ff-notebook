@@ -5,6 +5,7 @@
   import Field from '$lib/components/atoms/Field.svelte'
   export let customFields = {}
   export let schema
+  export let data
 
   const fields = {
     string: string,
@@ -15,19 +16,20 @@
 
 <div>
 	<form>
-    {#each Object.entries(schema.properties) as [key, value] }
+    {#each Object.entries(schema.properties) as [key, field] }
       <Field 
         {key} 
-        description={value.description} 
+        description={field.description} 
         required={schema.required ? schema.required.includes(key) : false} 
         let:descriptionKey={descriptionKey}
       >
         <svelte:component
-          this={value.component ? fields[value.component] : fields[value.type]} 
+          this={field.component ? fields[field.component] : fields[field.type]} 
           {key} 
           required={schema.required ? schema.required.includes(key) : false} 
-          {...value}
+          {...field}
           descriptionKey={descriptionKey}
+          {data}
         />
       </Field>
     {/each}

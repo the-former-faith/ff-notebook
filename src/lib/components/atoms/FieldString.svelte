@@ -7,6 +7,7 @@
   export let maxLength = undefined
   export let format
   export let descriptionKey
+  export let data
 </script>
 
 <input 
@@ -17,4 +18,5 @@
   minlength={minLength}
   maxlength={maxLength}
   aria-describedby={descriptionKey}
+  value={data[key]}
 >

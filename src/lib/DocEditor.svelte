@@ -47,7 +47,11 @@
 
 <div class="editor">
   {#if $currentDoc}
-    <FormBuilder schema={schemas[collection]}/>
+    <FormBuilder 
+      schema={schemas[collection]}
+      customFields={{ImageInput: ImageInput}}
+      data={$currentDoc}
+    />
     <div>
       <label for="title">Title
         <input 

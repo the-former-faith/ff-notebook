@@ -1,4 +1,5 @@
 <script>
+  export let data
   export let key
   export let descriptionKey
   export let required = false
@@ -16,4 +17,5 @@
   max={maximum}
   aria-describedby={descriptionKey}
   step={multipleOf}
+  value={data[key]}
 >

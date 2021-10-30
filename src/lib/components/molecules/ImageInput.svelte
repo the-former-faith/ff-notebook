@@ -7,6 +7,7 @@
   let base64URI
   let previousId
   let service
+  let input
   export let src
   export let id
 
@@ -89,9 +90,6 @@
           }
         }
       },
-      //Can change to 2 diffent 'idle' states:
-      //1. Has image
-      //2. Doesn't have image
       idle: {
         on: {
           NEW_UPLOAD: {
@@ -103,12 +101,7 @@
             ]
           },
           DELETE_FILE: {
-            target: 'converting_to_binary',
-            actions: [
-              assign({
-                file: (ctx, evt) => evt.file
-              })
-            ]
+            target: 'deleting_file',
           },
         }
       },
@@ -116,7 +109,13 @@
         invoke: {
           id: 'deleteFile',
           src: (ctx, evt) => (send)=> {
+            const request = ctx.db.transaction("files", "readwrite")
+              .objectStore("files")
+              .delete($currentDoc.id)
 
+            request.onsuccess = function(event) {
+              send({ type: 'SUCCESS' })
+            }
           },
         },
         on: {
@@ -166,7 +165,7 @@
             let files = transaction.objectStore("files")
 
             let file = {
-              id: ctx.id,
+              id: $currentDoc.id,
               file: ctx.base64URI
             }
 
@@ -199,7 +198,7 @@
   }
 
 
-  $: if($service?.context?.base64URI) {
+  $: if($service?.context) {
     base64URI = $service.context.base64URI
   }
 
@@ -220,9 +219,12 @@
 
 {#if base64URI}
   <img src={base64URI} />
+  <button on:click={(e)=> {
+    service.send({type: 'DELETE_FILE'})
+    files = undefined
+    input.value = ''
+  }}>Delete Image</button>
 {/if}
-
-<button on:click={(e)=> service.send({type: 'DELETE_FILE'})}>Delete Image</button>
 
 <label for="image">Choose a profile picture:</label>
 
@@ -231,6 +233,7 @@
   id="image"
   name="image"
   accept="image/*"
+  bind:this={input}
   bind:files
   on:change={ (e)=> service.send({type: 'NEW_UPLOAD', file: e.target.files[0]}) }
 />

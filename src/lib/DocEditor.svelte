@@ -52,7 +52,7 @@
           id="title"
           type="text" 
           value={$currentDoc.get('title') ? $currentDoc.get('title') : ''} 
-          on:keyup={(e) => $currentDoc.atomicPatch({title: e.target.value})}
+          on:input={(e) => $currentDoc.atomicPatch({title: e.target.value})}
           use:clearField={$currentDoc}
         />
       </label>

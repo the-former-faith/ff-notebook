@@ -192,11 +192,8 @@
   })
 
   const handleChange = () => {
-    //Store blob.
     //Clear URL from RxDB, if exists.
-    //If old blob is waiting to be uploaded, delete from indexedDB
   }
-
 
   $: if($service?.context) {
     base64URI = $service.context.base64URI

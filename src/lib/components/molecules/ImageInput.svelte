@@ -1,17 +1,22 @@
 <script>
   import { createMachine, assign, interpret } from 'xstate'
+  import { beforeUpdate, onDestroy } from 'svelte'
+  import { currentDoc } from '$lib/scripts/stores'
+
 	let files
   let base64URI
+  let previousId
+  let service
   export let src
   export let id
 
-  $: if(base64URI) console.log('changed')
+  console.log($currentDoc.id)
 
   const fileMachine = createMachine({
     id: 'fileMachine',
     initial: 'loading',
     context: {
-      id: id,
+      id: $currentDoc.id,
       db: undefined,
       error: undefined,
       file: undefined,
@@ -58,7 +63,8 @@
 
             let files = transaction.objectStore("files")
 
-            var request = files.get(ctx.id)
+            console.log($currentDoc.id)
+            var request = files.get($currentDoc.id)
 
             request.onerror = function(event) {
             }
@@ -166,16 +172,27 @@
     //If old blob is waiting to be uploaded, delete from indexedDB
   }
 
-  const service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
 
   $: if($service?.context?.base64URI) {
-    console.log('here')
     base64URI = $service.context.base64URI
   }
 
+  beforeUpdate(() => {
+    if (previousId !== id) {
+      service = interpret(fileMachine).onTransition((state) => {console.log(state.context.id)}).start()
+      previousId = id
+    }
+  })
+
+  onDestroy(() => console.log('bye'))
+
 </script>
 
-<img src={src ? scr : base64URI} />
+{#if base64URI}
+  <img src={base64URI} />
+{/if}
+
+<button on:click={()=> base64URI = undefined}>Clear image</button>
 
 <label for="image">Choose a profile picture:</label>
 

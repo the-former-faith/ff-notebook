@@ -7,6 +7,8 @@
   import { useSelector } from '@xstate/svelte'
   import { browser } from '$app/env'
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
+  import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
+  import { schemas } from '$lib/schema'
 
   let ydoc
   let collections
@@ -38,13 +40,14 @@
 			update(currentDoc) {
         node.value = currentDoc[node.name]
 			},
-    } 
+    }
   }
 
 </script>
 
 <div class="editor">
   {#if $currentDoc}
+    <FormBuilder schema={schemas[collection]}/>
     <div>
       <label for="title">Title
         <input 
@@ -58,7 +61,7 @@
       </label>
   
       {#if $currentDoc.collection.name === 'images'}
-        <ImageInput {id} />
+        <ImageInput {id} customFields={{ImageInput: ImageInput}}/>
       {/if}
     </div>
   {/if}
@@ -83,4 +86,3 @@
     grid-column: 2;
   }
 </style>
-

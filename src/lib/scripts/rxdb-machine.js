@@ -4,6 +4,7 @@ import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
 import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
+import { RxDBMigrationPlugin } from 'rxdb/plugins/migration'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
@@ -13,6 +14,7 @@ import { postSchema, imageSchema } from '$lib/schema'
 addRxPlugin(RxDBUpdatePlugin)
 addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBValidatePlugin)
+addRxPlugin(RxDBMigrationPlugin)
 addPouchPlugin(idb)
 
 const rxdbMachine = createMachine({
@@ -40,7 +42,10 @@ const rxdbMachine = createMachine({
           },
           onError: {
             target: 'failure',
-            actions: assign({ error: (context, event) => event.data })
+            actions: [
+              (context, event) => console.log(event.data),
+              assign({ error: (context, event) => event.data })
+            ]
           }
         }
       },
@@ -71,6 +76,7 @@ const rxdbMachine = createMachine({
           onError: {
             target: 'failure',
             actions: [
+              (context, event) => console.log(event.data),
               assign({ error: (context, event) => event.data })
             ]
           }

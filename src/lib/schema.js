@@ -70,7 +70,7 @@ export const postSchema = {
 export const imageSchema = {
   title: 'image',
   description: 'an individual note',
-  version: 0,
+  version: 1,
   type: 'object',
   indexes: [
     'createdAt',
@@ -81,8 +81,14 @@ export const imageSchema = {
     ...meta,
     'url': {
       "type": "string",
-      "format": "uri"
+      "format": "uri",
+      "component": "ImageInput"
     }
   },
   required: ['title'],
-};
+}
+
+export const schemas = {
+  posts: postSchema,
+  images: imageSchema
+} 

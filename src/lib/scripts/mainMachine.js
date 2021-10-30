@@ -104,6 +104,6 @@ const mainMachine = createMachine(
   }
 )
 
-//export const mainService = interpret(mainMachine).onTransition((state) => {console.log(state)}).start()
-export const mainService = interpret(mainMachine).start()
+export const mainService = interpret(mainMachine).onTransition((state) => {console.log(state)}).start()
+//export const mainService = interpret(mainMachine).start()
 //export const { state, send } = useMachine(mainMachine)

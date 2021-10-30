@@ -3,7 +3,9 @@
 	let files
   let base64URI
   export let src
-  export let id = 'a'
+  export let id
+
+  $: if(base64URI) console.log('changed')
 
   const fileMachine = createMachine({
     id: 'fileMachine',

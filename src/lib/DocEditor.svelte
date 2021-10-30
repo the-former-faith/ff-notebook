@@ -58,7 +58,7 @@
       </label>
   
       {#if $currentDoc.collection.name === 'images'}
-        <ImageInput />
+        <ImageInput {id} />
       {/if}
     </div>
   {/if}

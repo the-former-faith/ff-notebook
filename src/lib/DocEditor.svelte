@@ -35,20 +35,12 @@
 
   $: if(browser) loadDoc(id)
 
-  const clearField = (node, currentDoc) => {
-    return {
-			update(currentDoc) {
-        node.value = currentDoc[node.name]
-			},
-    }
-  }
-
 </script>
 
 <div class="editor">
   {#if $currentDoc}
     <FormBuilder 
-      schema={schemas[collection]}
+      schema={schemas[collection].schema}
       customFields={{ImageInput: ImageInput}}
       data={$currentDoc}
     />

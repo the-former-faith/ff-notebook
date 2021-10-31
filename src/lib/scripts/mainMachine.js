@@ -2,12 +2,9 @@ import {
   createMachine, 
   assign, 
   interpret, 
-  send, 
   spawn,
   forwardTo 
 } from 'xstate'
-//import DbWorker from '$lib/scripts/db-worker.js?worker'
-//import { fromWebWorker } from '$lib/scripts/from-web-worker.js'
 import { browser } from '$app/env'
 import rxdbMachine from '$lib/scripts/rxdb-machine'
 
@@ -43,13 +40,7 @@ const mainMachine = createMachine(
       user: {
         initial: 'loggedIn',
         states: {
-          loggedIn: {
-            // on: {
-            //   'CREATE': {
-            //     actions: [send({ type: 'CREATE' }, { to: 'db' })],
-            //   },
-            // },
-          },
+          loggedIn: {},
           loggedOut: {}
         }
       },
@@ -75,12 +66,6 @@ const mainMachine = createMachine(
               },
               'COLLECTIONS_LOADED': {
                 target: 'idle',
-                // actions: [
-                //   (context, event)=>console.log(event),
-                //   assign({ 
-                //     collections: (context, event) => event.collections.posts
-                //   }),
-                // ]
               },
             }
           },
@@ -104,6 +89,5 @@ const mainMachine = createMachine(
   }
 )
 
-export const mainService = interpret(mainMachine).onTransition((state) => {console.log(state)}).start()
-//export const mainService = interpret(mainMachine).start()
-//export const { state, send } = useMachine(mainMachine)
+//export const mainService = interpret(mainMachine).onTransition((state) => {console.log(state)}).start()
+export const mainService = interpret(mainMachine).start()

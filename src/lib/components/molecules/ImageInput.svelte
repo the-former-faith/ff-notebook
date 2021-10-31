@@ -200,7 +200,8 @@
 
   beforeUpdate(() => {
     if (previousId !== data.id) {
-      service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
+      //service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
+      service = interpret(fileMachine).start()
       previousId = data.id
     }
   })
@@ -222,8 +223,7 @@
   }}>Delete Image</button>
 {/if}
 
-<label for="image">Choose a profile picture:</label>
-
+<label for="image">Choose an image</label>
 <input
   type="file"
   id="image"

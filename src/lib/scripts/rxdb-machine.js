@@ -8,7 +8,7 @@ import { RxDBMigrationPlugin } from 'rxdb/plugins/migration'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
-import { postSchema, imageSchema } from '$lib/schema'
+import { schemas } from '$lib/schema'
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)
@@ -23,7 +23,8 @@ const rxdbMachine = createMachine({
     context: {
       db: undefined,
       collections: undefined,
-      error: undefined
+      error: undefined,
+      schemas: schemas
     },
     states: {
       initiating: {
@@ -52,26 +53,26 @@ const rxdbMachine = createMachine({
       addingCollections: {
         invoke: {
           id: 'addCollection',
-          src: (context, event) => context.db.addCollections({ 
-            posts: { schema: postSchema },
-            images: { schema: imageSchema }
-          }),
+          src: (context, event) => context.db.addCollections(context.schemas),
           onDone: {
             target: 'idle',
-            actions: assign({
-              collections: (context, event) => {
-                let observers = []
-                for (const [key, value] of Object.entries(event.data)) {
-                  const o = value
-                    .find()
-                    .sort({ updatedAt: 'desc' })
-                    .$
-                  observers[key] = o
-                }
+            actions: [
+              (c, e) => console.log(e.data),
+              assign({
+                collections: (context, event) => {
+                  let observers = []
+                  for (const [key, value] of Object.entries(event.data)) {
+                    const o = value
+                      .find()
+                      .sort({ updatedAt: 'desc' })
+                      .$
+                    observers[key] = o
+                  }
 
-                return observers
-              }
-            })
+                  return observers
+                }
+              })
+            ]
           },
           onError: {
             target: 'failure',

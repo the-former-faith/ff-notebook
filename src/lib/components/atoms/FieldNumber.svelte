@@ -6,6 +6,12 @@
   export let minimum = undefined
   export let maximum = undefined
   export let multipleOf = undefined
+
+  const handleInput = e => {
+    let patch = { updatedAt: new Date().getTime() }
+    patch[key] = e.target.value
+    data.atomicPatch(patch)
+  }
 </script>
   
 <input 
@@ -18,4 +24,5 @@
   aria-describedby={descriptionKey}
   step={multipleOf}
   value={data[key]}
+  on:input={(e) => handleInput(e)}
 >

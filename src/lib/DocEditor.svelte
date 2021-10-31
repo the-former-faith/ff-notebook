@@ -52,18 +52,6 @@
       customFields={{ImageInput: ImageInput}}
       data={$currentDoc}
     />
-    <div>
-      <label for="title">Title
-        <input 
-          name="title"
-          id="title"
-          type="text" 
-          value={$currentDoc.get('title') ? $currentDoc.get('title') : ''} 
-          on:input={(e) => $currentDoc.atomicPatch({title: e.target.value})}
-          use:clearField={$currentDoc}
-        />
-      </label>
-    </div>
   {/if}
   {#if $providerIDB}
     <Tiptap {ydoc} />

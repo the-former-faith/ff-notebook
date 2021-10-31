@@ -1,7 +1,6 @@
 <script>
   import { createMachine, assign, interpret } from 'xstate'
   import { beforeUpdate, onDestroy } from 'svelte'
-  import { currentDoc } from '$lib/scripts/stores'
 
 	let files
   let base64URI
@@ -62,7 +61,7 @@
 
             let files = transaction.objectStore("files")
 
-            var request = files.get($currentDoc.id)
+            var request = files.get(data.id)
 
             request.onerror = function(event) {
             }
@@ -111,7 +110,7 @@
           src: (ctx, evt) => (send)=> {
             const request = ctx.db.transaction("files", "readwrite")
               .objectStore("files")
-              .delete($currentDoc.id)
+              .delete(data.id)
 
             request.onsuccess = function(event) {
               send({ type: 'SUCCESS' })
@@ -165,7 +164,7 @@
             let files = transaction.objectStore("files")
 
             let file = {
-              id: $currentDoc.id,
+              id: data.id,
               file: ctx.base64URI
             }
 

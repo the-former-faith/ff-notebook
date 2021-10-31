@@ -9,13 +9,13 @@
   let service
   let input
   export let src
-  export let id
+  export let data
 
   const fileMachine = createMachine({
     id: 'fileMachine',
     initial: 'loading',
     context: {
-      id: id, //Not using at the moment because it wasn't updating
+      id: data.id, //Not using at the moment because it wasn't updating
       db: undefined,
       error: undefined,
       file: undefined,
@@ -200,9 +200,9 @@
   }
 
   beforeUpdate(() => {
-    if (previousId !== id) {
+    if (previousId !== data.id) {
       service = interpret(fileMachine).onTransition((state) => {console.log(state)}).start()
-      previousId = id
+      previousId = data.id
     }
   })
 

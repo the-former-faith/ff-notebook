@@ -63,10 +63,6 @@
           use:clearField={$currentDoc}
         />
       </label>
-  
-      {#if $currentDoc.collection.name === 'images'}
-        <ImageInput {id} customFields={{ImageInput: ImageInput}}/>
-      {/if}
     </div>
   {/if}
   {#if $providerIDB}

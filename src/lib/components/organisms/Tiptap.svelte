@@ -19,6 +19,7 @@
   const create = () => {
     if (editor) {
       editor.destroy()
+      //TODO: destroy doc and provider
     }
     ydoc = new Y.Doc()
     const providerIDB = new IndexeddbPersistence(data.id, ydoc)
@@ -50,6 +51,8 @@
       editor.commands.insertContent('<p></p>')
     }
   }
+
+  //TODO: add cleanup onDestroy
   
 </script>
 
@@ -57,9 +60,6 @@
   <Toolbar {editor} />
 {/if}
 <div class="tiptap">
-  <!--@TODO: see if I can get rid of this div now that I am
-  using Svelte Tiptap-->
-  <!--<div use:createTiptap={data.id} />-->
   <EditorContent editor={editor} />
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>

@@ -9,20 +9,21 @@
   import { IndexeddbPersistence } from 'y-indexeddb'
 
   let editor
-  let ydoc = new Y.Doc()
+  let ydoc
   export let id
 
   const createTiptap = (node, doc) => {
-    const providerIDB = new IndexeddbPersistence(id, ydoc)
 
-    const create = (node, doc) => {
+    const create = (node) => {
+      ydoc = new Y.Doc()
+      const providerIDB = new IndexeddbPersistence(id, ydoc)
       editor = new Editor({
         extensions: [
           StarterKit.configure({
             history: false,
           }),
           Collaboration.configure({
-            document: doc,
+            document: ydoc,
             field: 'content',
           }),
           Link.configure({
@@ -71,7 +72,7 @@
 <div class="tiptap">
   <!--@TODO: see if I can get rid of this div now that I am
   using Svelte Tiptap-->
-  <div use:createTiptap={ydoc} />
+  <div use:createTiptap={id} />
   <EditorContent editor={editor} />
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>

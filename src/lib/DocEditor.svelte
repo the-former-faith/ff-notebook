@@ -46,7 +46,7 @@
     />
   {/if}
   {#if $providerIDB}
-    <Tiptap {ydoc} />
+    <Tiptap {id} />
   {/if}
 </div>
 

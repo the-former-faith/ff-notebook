@@ -5,11 +5,16 @@
   import Link from '@tiptap/extension-link'
   import Toolbar from '$lib/components/molecules/TiptapToolbar.svelte'
   import ImageBlock from '$lib/components/molecules/TiptapImageBlock'
+  import * as Y from 'yjs'
+  import { IndexeddbPersistence } from 'y-indexeddb'
 
   let editor
-  export let ydoc
+  let ydoc = new Y.Doc()
+  export let id
 
   const createTiptap = (node, doc) => {
+    const providerIDB = new IndexeddbPersistence(id, ydoc)
+
     const create = (node, doc) => {
       editor = new Editor({
         extensions: [
@@ -47,7 +52,7 @@
           editor.destroy()
         }
       }
-    };
+    }
   }
 
   const addParagraphToEnd = () => {

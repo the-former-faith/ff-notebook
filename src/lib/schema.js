@@ -58,7 +58,6 @@ const meta = {
 export const postSchema = {
   schema: {
     title: 'post',
-    singularTitle: 'post',
     description: 'an individual note',
     version: 0,
     type: 'object',

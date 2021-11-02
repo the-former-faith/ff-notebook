@@ -57,7 +57,6 @@ const rxdbMachine = createMachine({
           onDone: {
             target: 'idle',
             actions: [
-              (c, e) => console.log(e.data),
               assign({
                 collections: (context, event) => {
                   let observers = []

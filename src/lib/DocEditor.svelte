@@ -1,16 +1,12 @@
 <script>
   import Tiptap from '$lib/components/organisms/Tiptap.svelte'
-  import * as Y from 'yjs'
-  import { IndexeddbPersistence } from 'y-indexeddb'
-  import { currentDoc, providerIDB } from '$lib/scripts/stores'
+  import { currentDoc } from '$lib/scripts/stores'
   import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
-  import { browser } from '$app/env'
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
   import { schemas } from '$lib/schema'
 
-  let ydoc
   let collections
   export let id
   export let collection
@@ -26,27 +22,15 @@
         .then(doc => $currentDoc = doc)
     }
   }
-
-  const loadDoc = async (doc) => {
-    //Lift ydoc to store so it can be destroyed
-    ydoc = new Y.Doc()
-    $providerIDB = new IndexeddbPersistence(doc, ydoc)
-  }
-
-  $: if(browser) loadDoc(id)
-
 </script>
 
 <div class="editor">
   {#if $currentDoc}
     <FormBuilder 
       schema={schemas[collection].schema}
-      customFields={{ImageInput: ImageInput}}
+      customFields={{ImageInput: ImageInput, TipTap: Tiptap}}
       data={$currentDoc}
     />
-  {/if}
-  {#if $providerIDB}
-    <Tiptap {id} />
   {/if}
 </div>
 

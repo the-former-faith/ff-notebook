@@ -6,7 +6,8 @@
   export let format
   export let descriptionKey
   export let data
-  let value = data[key] ? data[key] : ''
+  let value 
+  $: value = data[key] ? data[key] : ''
 
   //TODO: Check to make sure 'format' is a valid input type
 

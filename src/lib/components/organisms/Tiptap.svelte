@@ -10,50 +10,37 @@
 
   let editor
   let ydoc
-  export let id
+  export let data
 
-  const createTiptap = (node, doc) => {
+  $: if(data.id) {
+    create()
+  }
 
-    const create = (node) => {
-      ydoc = new Y.Doc()
-      const providerIDB = new IndexeddbPersistence(id, ydoc)
-      editor = new Editor({
-        extensions: [
-          StarterKit.configure({
-            history: false,
-          }),
-          Collaboration.configure({
-            document: ydoc,
-            field: 'content',
-          }),
-          Link.configure({
-            openOnClick: false,
-          }),
-          ImageBlock,
-        ],
-        onTransaction: (e) => {
-          // force re-render so `editor.isActive` works as expected
-          editor = editor
-        },
-      })
+  const create = () => {
+    if (editor) {
+      editor.destroy()
     }
-
-    create(node, doc)
-
-    return {
-      update(newDoc) {
-        if(editor) {
-          editor.destroy()
-        }
-    
-        create(node, newDoc)
+    ydoc = new Y.Doc()
+    const providerIDB = new IndexeddbPersistence(data.id, ydoc)
+    editor = new Editor({
+      extensions: [
+        StarterKit.configure({
+          history: false,
+        }),
+        Collaboration.configure({
+          document: ydoc,
+          field: 'content',
+        }),
+        Link.configure({
+          openOnClick: false,
+        }),
+        ImageBlock,
+      ],
+      onTransaction: (e) => {
+        // force re-render so `editor.isActive` works as expected
+        editor = editor
       },
-      destroy() {
-        if(editor) {
-          editor.destroy()
-        }
-      }
-    }
+    })
   }
 
   const addParagraphToEnd = () => {
@@ -72,7 +59,7 @@
 <div class="tiptap">
   <!--@TODO: see if I can get rid of this div now that I am
   using Svelte Tiptap-->
-  <div use:createTiptap={id} />
+  <!--<div use:createTiptap={data.id} />-->
   <EditorContent editor={editor} />
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>

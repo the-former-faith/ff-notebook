@@ -32,6 +32,8 @@
           document: ydoc,
           field: 'content',
         }),
+        //Pull out blocks and marks
+        //To a config file based on schema.
         Link.configure({
           openOnClick: false,
         }),

@@ -60,7 +60,7 @@
   </DialogContent>
 </DialogOverlay>
 
-<button on:click={() => setLink(editor)} class:active={editor.isActive('link')}>
+<button type="button" on:click={() => setLink(editor)} class:active={editor.isActive('link')}>
   link
 </button>
 {#if editor.isActive('link')}

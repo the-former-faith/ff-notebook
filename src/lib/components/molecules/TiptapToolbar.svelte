@@ -5,12 +5,12 @@
 </script>
 
 <div class="toolbar">
-  <button on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
+  <button type="button" on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
     B<span class="screen-reader-text">old</span>
   </button>
   <Link {editor} />
   <TiptapHeaderSelect {editor} />
-  <button on:click={() => editor.chain().focus().setImage().run()}>Image</button>
+  <button type="button" on:click={() => editor.chain().focus().setImage().run()}>Image</button>
   <!-- <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
     lang
   </button> -->

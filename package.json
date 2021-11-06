@@ -2,7 +2,8 @@
   "name": "ff-notebook",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev --host",
+    "dev": "svelte-kit dev",
+    "host": "svelte-kit dev --host",
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --ignore-path .gitignore  --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -28,7 +29,7 @@
     "rxdb": "^10.1.0",
     "rxjs": "^7.3.0",
     "stream": "^0.0.2",
-    "svelte": "^3.34.0",
+    "svelte": "^3.44.1",
     "y-indexeddb": "^9.0.6",
     "y-websocket": "https://github.com/the-former-faith/y-websocket.git",
     "yjs": "^13.5.13"

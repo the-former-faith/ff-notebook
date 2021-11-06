@@ -1,3 +1,27 @@
+const link = {
+  title: 'link',
+  type: 'object',
+  properties: {
+    type: {
+      "type": "string",
+      "enum": ["link"]
+    },
+    attrs: {
+      type: 'object',
+      properties: {
+        href: {
+          type: 'string',
+          format: 'uri'
+        },
+        target: {
+          "type": "string",
+          "enum": ["_self", "_blank", "_parent", "_top"]
+        }
+      }
+    }
+  }
+}
+
 const meta = {
   id: {
     type: 'string',
@@ -26,14 +50,7 @@ const meta = {
                 },
                 marks: {
                   type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      type: {
-                        type: 'string'
-                      }
-                    },
-                  }
+                  items: [link]
                 },
                 text: {
                   type: 'string'

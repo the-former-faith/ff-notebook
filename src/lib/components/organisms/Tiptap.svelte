@@ -11,6 +11,15 @@
   let editor
   let ydoc
   export let data
+  export let items
+
+  //Probably should do an 'each loop' on items and load Tiptap extensions,
+  //Because there can be different options
+  //---OR don't because the blocks could have sub-editors
+  //with their own allowed options
+  console.log(items[0].properties.content.items.properties.marks.items)
+  //@TODO: set up nodes and marks as objects to be selected from.
+  //Dynamically load nodes and marks in Tiptap based on schema
 
   $: if(data.id) {
     create()

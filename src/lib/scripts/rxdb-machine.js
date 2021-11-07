@@ -88,8 +88,6 @@ const rxdbMachine = createMachine({
         on: {
           'CREATE_DOC': {
             actions: [
-              ()=> console.log('child received event'),
-              (context, event)=> console.log('event: ',event),
               'createDoc'
             ]
           }

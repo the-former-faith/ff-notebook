@@ -13,6 +13,8 @@
   export let data
   export let items
 
+  //@TODO: set up nodes and marks as objects to be selected from.
+  //Dynamically load nodes and marks in Tiptap based on schema
   const extensions = {
     link: Link.configure({
       openOnClick: false,
@@ -26,9 +28,6 @@
       return extensions[mark.title]
     })
   }
-  
-  //@TODO: set up nodes and marks as objects to be selected from.
-  //Dynamically load nodes and marks in Tiptap based on schema
 
   $: if(data.id) {
     create()
@@ -43,6 +42,11 @@
     const providerIDB = new IndexeddbPersistence(data.id, ydoc)
     editor = new Editor({
       extensions: [
+        //@TODO: remove starterKit 
+        //and load extensions based on schema instead.
+        //@TODO: dynamically load toolbar buttons.
+        //@TODO: Make creation of custom extensions dynamic?
+        //@TODO: Dynamically load attribute modals with formbuilder
         StarterKit.configure({
           history: false,
         }),

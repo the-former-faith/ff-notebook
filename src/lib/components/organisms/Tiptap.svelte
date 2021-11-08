@@ -13,11 +13,20 @@
   export let data
   export let items
 
-  //Probably should do an 'each loop' on items and load Tiptap extensions,
-  //Because there can be different options
-  //---OR don't because the blocks could have sub-editors
-  //with their own allowed options
-  console.log(items[0].properties.content.items.properties.marks.items)
+  const extensions = {
+    link: Link.configure({
+      openOnClick: false,
+    }),
+  }
+
+  const marks = items[0].properties.content.items.properties.marks.items
+
+  const createMarksArray = (marks, extensions) => {
+    return marks.map(mark => {
+      return extensions[mark.title]
+    })
+  }
+  
   //@TODO: set up nodes and marks as objects to be selected from.
   //Dynamically load nodes and marks in Tiptap based on schema
 
@@ -43,10 +52,8 @@
         }),
         //Pull out blocks and marks
         //To a config file based on schema.
-        Link.configure({
-          openOnClick: false,
-        }),
         ImageBlock,
+        ...createMarksArray(marks, extensions)
       ],
       onTransaction: (e) => {
         // force re-render so `editor.isActive` works as expected

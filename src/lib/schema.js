@@ -36,6 +36,7 @@ const meta = {
     items: [
       {
         type: 'object',
+        title: 'paragraph',
         properties: {
           type: {
             type: 'string'

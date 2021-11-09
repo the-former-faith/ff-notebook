@@ -1,8 +1,13 @@
 <script>
   import { Editor, EditorContent } from 'svelte-tiptap';
-  import StarterKit from '@tiptap/starter-kit'
+  import Document from '@tiptap/extension-document'
+  import Paragraph from '@tiptap/extension-paragraph'
+  import Text from '@tiptap/extension-text'
+  import Heading from '@tiptap/extension-heading'
+  import Bold from '@tiptap/extension-bold'
   import Collaboration from '@tiptap/extension-collaboration'
   import Link from '@tiptap/extension-link'
+  
   import Toolbar from '$lib/components/molecules/TiptapToolbar.svelte'
   import ImageBlock from '$lib/components/molecules/TiptapImageBlock'
   import * as Y from 'yjs'
@@ -42,14 +47,17 @@
     const providerIDB = new IndexeddbPersistence(data.id, ydoc)
     editor = new Editor({
       extensions: [
+        Document,
+        Paragraph,
+        Text,
+        Heading.configure({
+          levels: [1, 2],
+        }),
         //@TODO: remove starterKit 
         //and load extensions based on schema instead.
         //@TODO: dynamically load toolbar buttons.
         //@TODO: Make creation of custom extensions dynamic?
         //@TODO: Dynamically load attribute modals with formbuilder
-        StarterKit.configure({
-          history: false,
-        }),
         Collaboration.configure({
           document: ydoc,
           field: 'content',

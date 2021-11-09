@@ -22,13 +22,13 @@
 	}
 }
 
-/* :root {
+:root {
 	--foreground-color: #bababa;
 	--background-color: #1a1a1a;
 	--accent-color: #4d4d4d;
 	--action-color-brightness: 40%;
 	--action-color: hsl(313, 81%, var(--action-color-brightness));
-} */
+}
 
 :link {
 	color: var(--action-color);

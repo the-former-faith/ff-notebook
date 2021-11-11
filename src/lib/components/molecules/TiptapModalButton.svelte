@@ -2,9 +2,12 @@
   import { DialogOverlay, DialogContent } from 'svelte-accessible-dialog'
 
   export let editor
+  export let title
+  export let mark
+  //@TODO: need schema passed here for FormBuilder
 
   let isOpen
-
+  
   let url = ''
   let previousUrl
 
@@ -17,6 +20,7 @@
   }
 
   const setLink = (editor) => {
+    console.log(editor.getAttributes(mark))
     previousUrl = editor.getAttributes('link').href
     url = previousUrl
     open()
@@ -53,22 +57,28 @@
 
 <DialogOverlay {isOpen} onDismiss={close} class="overlay">
   <DialogContent aria-label="Set link" class="content">
+
+    <!--@TODO: use formBuilder-->
     <label for="url">Link Address</label>
     <input id="url" type="url" bind:value={url} />
+
     <div class="dialog-footer">
       <button on:click={close}>Cancel</button>
-    <button on:click={()=> saveChanges(url, previousUrl)}>Save</button>
+      <button on:click={()=> saveChanges(url, previousUrl)}>Save</button>
     </div>
   </DialogContent>
 </DialogOverlay>
 
-<button type="button" on:click={() => setLink(editor)} class:active={editor.isActive('link')}>
-  link
+<button type="button" on:click={() => setLink(editor)} class:active={editor.isActive(title)}>
+  {title}
 </button>
+
 {#if editor.isActive('link')}
-<button on:click={() => editor.chain().focus().unsetLink().run()} >
-  unsetLink
-</button>
+
+  <button on:click={() => editor.chain().focus().unsetLink().run()} >
+    unset {title}
+  </button>
+
 {/if}
 
 <style>

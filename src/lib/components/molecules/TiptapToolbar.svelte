@@ -1,25 +1,44 @@
 <script>
-  import Link from '$lib/components/atoms/TiptapLinkButton.svelte'
   import TiptapHeaderSelect from '$lib/components/molecules/TiptapHeaderSelect.svelte'
+  import TiptapModalButton from '$lib/components/molecules/TiptapModalButton.svelte'
   export let editor
+
+  function isEmptyObject(obj){
+    return JSON.stringify(obj) === '{}'
+  }
+
+  const marks = editor.extensionManager.schema.marks
+
+  console.log(marks)
 </script>
 
 <div class="toolbar">
-  <button type="button" on:click={() => editor.chain().focus().toggleBold().run()} class:active={editor.isActive('bold')}>
-    B<span class="screen-reader-text">old</span>
-  </button>
-  <Link {editor} />
+  {#each Object.entries(marks) as [title, mark] }
+
+    {#if isEmptyObject(mark.attrs)}
+      <button 
+        type="button" 
+        on:click={() => editor.chain().focus().toggleMark(title).run()} 
+        class:active={editor.isActive(title)}
+      >{title}
+      </button>
+    {:else}
+      <TiptapModalButton {title} {mark} {editor} />
+    {/if}
+
+  {/each}
   <TiptapHeaderSelect {editor} />
   <button type="button" on:click={() => editor.chain().focus().setImage().run()}>Image</button>
-  <!-- <button on:click={() => editor.chain().focus().toggleLang().run()} class:active={editor.isActive('lang')}>
-    lang
-  </button> -->
 </div>
 
 <style>
   button {
     text-align: center;
     justify-content: center;
+  }
+
+  .active {
+    background-color: var(--action-color);
   }
 
   .toolbar {

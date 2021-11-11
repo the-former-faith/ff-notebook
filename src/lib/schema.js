@@ -22,6 +22,17 @@ const link = {
   }
 }
 
+const bold = {
+  title: 'bold',
+  type: 'object',
+  properties: {
+    type: {
+      "type": "string",
+      "enum": ["bold"]
+    }
+  }
+}
+
 const meta = {
   id: {
     type: 'string',
@@ -51,7 +62,7 @@ const meta = {
                 },
                 marks: {
                   type: 'array',
-                  items: [link]
+                  items: [link, bold]
                 },
                 text: {
                   type: 'string'

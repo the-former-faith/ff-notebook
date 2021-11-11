@@ -24,6 +24,7 @@
     link: Link.configure({
       openOnClick: false,
     }),
+    bold: Bold
   }
 
   const marks = items[0].properties.content.items.properties.marks.items
@@ -51,20 +52,20 @@
         Paragraph,
         Text,
         Heading.configure({
-          levels: [1, 2],
+          //I can set this dynamically based on allowed values in the schema.
+          //But it can also have a default.
+          levels: [2, 3, 4, 5, 6],
         }),
-        //@TODO: remove starterKit 
-        //and load extensions based on schema instead.
+        ImageBlock,
+        //@TODO: load nodes based on schema.
         //@TODO: dynamically load toolbar buttons.
         //@TODO: Make creation of custom extensions dynamic?
-        //@TODO: Dynamically load attribute modals with formbuilder
+        //@TODO: Dynamically load attribute modals with formbuilder.
+        //?? Use a div with role instead of paragraph?
         Collaboration.configure({
           document: ydoc,
           field: 'content',
         }),
-        //Pull out blocks and marks
-        //To a config file based on schema.
-        ImageBlock,
         ...createMarksArray(marks, extensions)
       ],
       onTransaction: (e) => {

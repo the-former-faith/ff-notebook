@@ -2,28 +2,21 @@
   import TiptapHeaderSelect from '$lib/components/molecules/TiptapHeaderSelect.svelte'
   import TiptapModalButton from '$lib/components/molecules/TiptapModalButton.svelte'
   export let editor
-
-  function isEmptyObject(obj){
-    return JSON.stringify(obj) === '{}'
-  }
-
-  const marks = editor.extensionManager.schema.marks
-
-  console.log(marks)
+  export let marks
 </script>
 
 <div class="toolbar">
-  {#each Object.entries(marks) as [title, mark] }
+  {#each marks as mark}
 
-    {#if isEmptyObject(mark.attrs)}
+    {#if !mark.properties.attrs}
       <button 
         type="button" 
-        on:click={() => editor.chain().focus().toggleMark(title).run()} 
-        class:active={editor.isActive(title)}
-      >{title}
+        on:click={() => editor.chain().focus().toggleMark(mark.title).run()} 
+        class:active={editor.isActive(mark.title)}
+      >{mark.title}
       </button>
     {:else}
-      <TiptapModalButton {title} {mark} {editor} />
+      <TiptapModalButton title={mark.title} schema={mark.properties.attrs} {editor} />
     {/if}
 
   {/each}

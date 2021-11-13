@@ -1,15 +1,12 @@
 <script>
   import { DialogOverlay, DialogContent } from 'svelte-accessible-dialog'
+  import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
 
   export let editor
   export let title
-  export let mark
-  //@TODO: need schema passed here for FormBuilder
-
+  export let schema
+  let data
   let isOpen
-  
-  let url = ''
-  let previousUrl
 
   const open = () => {
     isOpen = true
@@ -20,33 +17,31 @@
   }
 
   const setLink = (editor) => {
-    console.log(editor.getAttributes(mark))
-    previousUrl = editor.getAttributes('link').href
-    url = previousUrl
+    data = editor.getAttributes(title)
     open()
   }
 
   const saveChanges = (url, previousUrl) => {
     close()
     // cancelled
-    if (url === previousUrl) {
-      return
-    }
+    // if (url === previousUrl) {
+    //   return
+    // }
 
-    // empty
-    if (url === '') {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .unsetLink()
-        .run()
+    // // empty
+    // if (url === '') {
+    //   editor
+    //     .chain()
+    //     .focus()
+    //     .extendMarkRange('link')
+    //     .unsetLink()
+    //     .run()
 
-      return
-    }
+    //   return
+    // }
 
-    // update link
-    editor
+    // // update link
+    // editor
       .chain()
       .focus()
       .extendMarkRange('link')
@@ -59,12 +54,13 @@
   <DialogContent aria-label="Set link" class="content">
 
     <!--@TODO: use formBuilder-->
-    <label for="url">Link Address</label>
-    <input id="url" type="url" bind:value={url} />
+    {#if data}
+      <FormBuilder {schema} {data} />
+    {/if}
 
     <div class="dialog-footer">
       <button on:click={close}>Cancel</button>
-      <button on:click={()=> saveChanges(url, previousUrl)}>Save</button>
+      <!--<button on:click={()=> saveChanges(url, previousUrl)}>Save</button>-->
     </div>
   </DialogContent>
 </DialogOverlay>

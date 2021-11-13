@@ -88,7 +88,7 @@
 </script>
 
 {#if editor}
-  <Toolbar {editor} />
+  <Toolbar {editor} {marks} />
 {/if}
 <div class="tiptap">
   <EditorContent editor={editor} />

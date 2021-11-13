@@ -14,6 +14,7 @@
 
   const close = () => {
     isOpen = false
+    editor.commands.focus()
   }
 
   const setLink = (editor) => {
@@ -21,31 +22,13 @@
     open()
   }
 
-  const saveChanges = (url, previousUrl) => {
-    close()
-    // cancelled
-    // if (url === previousUrl) {
-    //   return
-    // }
-
-    // // empty
-    // if (url === '') {
-    //   editor
-    //     .chain()
-    //     .focus()
-    //     .extendMarkRange('link')
-    //     .unsetLink()
-    //     .run()
-
-    //   return
-    // }
-
-    // // update link
-    // editor
+  const handleChange = (e, editor) => {
+    let patch = {}
+    patch[e.target.name] = e.target.value
+    editor
       .chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: url })
+      .extendMarkRange('link') //@TODO: remove all named 'link'
+      .setLink(patch)
       .run()
   }
 </script>
@@ -53,14 +36,16 @@
 <DialogOverlay {isOpen} onDismiss={close} class="overlay">
   <DialogContent aria-label="Set link" class="content">
 
-    <!--@TODO: use formBuilder-->
     {#if data}
-      <FormBuilder {schema} {data} />
+      <FormBuilder 
+        {schema} 
+        {data} 
+        changeHandler={(e) => handleChange(e, editor)}
+      />
     {/if}
 
     <div class="dialog-footer">
-      <button on:click={close}>Cancel</button>
-      <!--<button on:click={()=> saveChanges(url, previousUrl)}>Save</button>-->
+      <button on:click={close}>Close</button>
     </div>
   </DialogContent>
 </DialogOverlay>

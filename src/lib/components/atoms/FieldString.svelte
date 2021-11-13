@@ -6,16 +6,12 @@
   export let format
   export let descriptionKey
   export let data
+  export let changeHandler
   let value 
   $: value = data[key] ? data[key] : ''
 
   //TODO: Check to make sure 'format' is a valid input type
 
-  const handleInput = e => {
-    let patch = { updatedAt: new Date().getTime() }
-    patch[key] = e.target.value
-    data.atomicPatch(patch)
-  }
 </script>
 
 <input 
@@ -27,5 +23,5 @@
   maxlength={maxLength}
   aria-describedby={descriptionKey}
   {value}
-  on:input={(e) => handleInput(e)}
+  on:input={changeHandler}
 >

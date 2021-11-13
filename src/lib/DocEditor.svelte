@@ -22,6 +22,12 @@
         .then(doc => $currentDoc = doc)
     }
   }
+
+  const handleInput = (e, data) => {
+    let patch = { updatedAt: new Date().getTime() }
+    patch[e.target.name] = e.target.value
+    data.atomicPatch(patch)
+  }
 </script>
 
 <div class="editor">
@@ -30,6 +36,7 @@
       schema={schemas[collection].schema}
       customFields={{ImageInput: ImageInput, TipTap: Tiptap}}
       data={$currentDoc}
+      changeHandler={(e) => handleInput(e, $currentDoc)}
     />
   {/if}
 </div>

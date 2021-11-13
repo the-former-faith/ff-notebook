@@ -1,11 +1,11 @@
 <script>
-  //@TODO - change to be a component: https://github.com/sveltejs/component-template
   import string from "$lib/components/atoms/FieldString.svelte"
   import number from "$lib/components/atoms/FieldNumber.svelte"
   import Field from '$lib/components/atoms/Field.svelte'
   export let customFields = {}
   export let schema
   export let data
+  export let changeHandler
 
   const fields = {
     string: string,
@@ -36,6 +36,7 @@
               {...field}
               descriptionKey={descriptionKey}
               {data}
+              {changeHandler}
             />
           </Field>
         {/if}

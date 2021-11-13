@@ -17,7 +17,7 @@
     editor.commands.focus()
   }
 
-  const setLink = (editor) => {
+  const openModal = (editor) => {
     data = editor.getAttributes(title)
     open()
   }
@@ -27,14 +27,14 @@
     patch[e.target.name] = e.target.value
     editor
       .chain()
-      .extendMarkRange('link') //@TODO: remove all named 'link'
-      .setLink(patch)
+      .extendMarkRange(title)
+      .setMark(title, patch)
       .run()
   }
 </script>
 
 <DialogOverlay {isOpen} onDismiss={close} class="overlay">
-  <DialogContent aria-label="Set link" class="content">
+  <DialogContent aria-label="Set {title}" class="content">
 
     {#if data}
       <FormBuilder 
@@ -50,13 +50,14 @@
   </DialogContent>
 </DialogOverlay>
 
-<button type="button" on:click={() => setLink(editor)} class:active={editor.isActive(title)}>
+<!--@TODO: select full word-->
+<button type="button" on:click={() => openModal(editor)} class:active={editor.isActive(title)}>
   {title}
 </button>
 
-{#if editor.isActive('link')}
+{#if editor.isActive(title)}
 
-  <button on:click={() => editor.chain().focus().unsetLink().run()} >
+  <button on:click={() => editor.chain().focus().extendMarkRange(title).unsetMark(title).run()} >
     unset {title}
   </button>
 

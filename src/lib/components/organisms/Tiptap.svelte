@@ -95,7 +95,15 @@
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>
   </button>
-  <button type="button" preventDefault={true} on:click={()=> console.log(editor.getJSON())}>Log Editor</button>
+  <button type="button" 
+    preventDefault={true} 
+    on:click={()=> {
+      editor.commands.focus()
+      setTimeout(() => { 
+        console.log(editor.state.selection) 
+      }, 300)
+    }}
+  >Log Editor</button>
 </div>
 
 <style>

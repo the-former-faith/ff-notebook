@@ -1,15 +1,17 @@
 <script>
   import string from "$lib/components/atoms/FieldString.svelte"
   import number from "$lib/components/atoms/FieldNumber.svelte"
-  import Field from '$lib/components/atoms/Field.svelte'
+  import fieldset from "$lib/components/atoms/FieldSet.svelte"
   export let customFields = {}
   export let schema
   export let data
   export let changeHandler
+  export let path
 
   const fields = {
     string: string,
     number: number,
+    object: fieldset,
     ...customFields
   }
 
@@ -18,33 +20,22 @@
   //And the modals can save to Tiptap.
 </script>
 
-<div>
-	<form>
-    {#each Object.entries(schema.properties) as [key, field] }
+    {#each Object.entries(schema) as [key, field] }
       {#if field.display !== 'private'}
         {#if fields[field.component] || fields[field.type]}
-          <Field 
+          <svelte:component
+            this={field.component ? fields[field.component] : fields[field.type]} 
             {key} 
-            description={field.description} 
             required={schema.required ? schema.required.includes(key) : false} 
-            let:descriptionKey={descriptionKey}
-          >
-            <svelte:component
-              this={field.component ? fields[field.component] : fields[field.type]} 
-              {key} 
-              required={schema.required ? schema.required.includes(key) : false} 
-              {...field}
-              descriptionKey={descriptionKey}
-              {data}
-              {changeHandler}
-            />
-          </Field>
+            {...field}
+            {data}
+            {changeHandler}
+            path={ path ? [...path, key] : [key] }
+          />
         {/if}
       {/if}
     {/each}
     <!--<input type="submit" value="submit" />-->
-  </form>
-</div>
 
 <style>
   form {

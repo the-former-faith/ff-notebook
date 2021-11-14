@@ -6,6 +6,7 @@
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
   import { schemas } from '$lib/schema'
+  import set from 'lodash.set'
 
   let collections
   export let id
@@ -23,20 +24,24 @@
     }
   }
 
-  const handleInput = (e, data) => {
-    let patch = { updatedAt: new Date().getTime() }
-    patch[e.target.name] = e.target.value
-    data.atomicPatch(patch)
+  const updateRxDB = (oldData, value, path) => {
+    oldData.updatedAt = new Date().getTime()
+    set(oldData, path.join('.'), value)
+    return oldData
+  }
+
+  const handleInput = (value, path, data) => {
+    data.atomicUpdate((x) => updateRxDB(x, value, path))
   }
 </script>
 
 <div class="editor">
   {#if $currentDoc}
     <FormBuilder 
-      schema={schemas[collection].schema}
+      schema={schemas[collection].schema.properties}
       customFields={{ImageInput: ImageInput, TipTap: Tiptap}}
       data={$currentDoc}
-      changeHandler={(e) => handleInput(e, $currentDoc)}
+      changeHandler={(value, path) => handleInput(value, path, $currentDoc)}
     />
   {/if}
 </div>

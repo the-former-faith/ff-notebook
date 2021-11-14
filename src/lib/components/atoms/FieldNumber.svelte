@@ -1,28 +1,40 @@
 <script>
+  import Field from '$lib/components/atoms/Field.svelte'
   export let data
   export let key
-  export let descriptionKey
+  export let path
   export let required = false
   export let minimum = undefined
   export let maximum = undefined
   export let multipleOf = undefined
+  export let changeHandler
+  export let description
 
-  const handleInput = e => {
-    let patch = { updatedAt: new Date().getTime() }
-    patch[key] = e.target.value
-    data.atomicPatch(patch)
+  const handleChange = (e, path) => {
+    changeHandler(e.target.valueAsNumber, path)
   }
-</script>
   
-<input 
-  type="number" 
-  id={key} 
-  name={key} 
-  required={required} 
-  min={minimum}
-  max={maximum}
-  aria-describedby={descriptionKey}
-  step={multipleOf}
-  value={data[key]}
-  on:input={(e) => handleInput(e)}
->
+</script>
+
+<Field 
+  {key} 
+  {description} 
+  {required}
+  {data}
+  {path}
+  let:descriptionKey
+  let:value
+> 
+  <input 
+    type="number" 
+    id={key} 
+    name={key} 
+    required={required} 
+    min={minimum}
+    max={maximum}
+    aria-describedby={descriptionKey}
+    step={multipleOf}
+    value={value ? value : 0}
+    on:input={(e)=> handleChange(e, path)}
+  >
+</Field>

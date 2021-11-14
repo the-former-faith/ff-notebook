@@ -1,3 +1,5 @@
+/* Marks */
+
 const link = {
   title: 'link',
   type: 'object',
@@ -33,6 +35,20 @@ const bold = {
   }
 }
 
+/* Objects */
+const date = {
+  title: 'date',
+  type: 'object',
+  properties: {
+    date: {
+      "type": "number",
+    },
+    test: {
+      type: 'string'
+    }
+  }
+}
+
 const meta = {
   id: {
     type: 'string',
@@ -41,6 +57,7 @@ const meta = {
   title: {
     type: 'string',
   },
+  date,
   body: {
     type: 'array',
     component: 'TipTap',

@@ -26,5 +26,6 @@
   div {
     display: grid;
     gap: 0.25rem;
+    grid-auto-rows: max-content;
   }
 </style>

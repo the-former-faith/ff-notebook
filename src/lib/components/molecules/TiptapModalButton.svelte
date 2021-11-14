@@ -22,9 +22,9 @@
     open()
   }
 
-  const handleChange = (e, editor) => {
+  const handleChange = (value, path, editor) => {
     let patch = {}
-    patch[e.target.name] = e.target.value
+    patch[path] = value
     editor
       .chain()
       .extendMarkRange(title)
@@ -38,9 +38,9 @@
 
     {#if data}
       <FormBuilder 
-        {schema} 
+        schema={schema.properties} 
         {data} 
-        changeHandler={(e) => handleChange(e, editor)}
+        changeHandler={(value, path) => handleChange(value, path, editor)}
       />
     {/if}
 

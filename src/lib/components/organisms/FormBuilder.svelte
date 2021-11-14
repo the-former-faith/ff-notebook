@@ -20,26 +20,18 @@
   //And the modals can save to Tiptap.
 </script>
 
-    {#each Object.entries(schema) as [key, field] }
-      {#if field.display !== 'private'}
-        {#if fields[field.component] || fields[field.type]}
-          <svelte:component
-            this={field.component ? fields[field.component] : fields[field.type]} 
-            {key} 
-            required={schema.required ? schema.required.includes(key) : false} 
-            {...field}
-            {data}
-            {changeHandler}
-            path={ path ? [...path, key] : [key] }
-          />
-        {/if}
-      {/if}
-    {/each}
-    <!--<input type="submit" value="submit" />-->
-
-<style>
-  form {
-    display: grid;
-    gap: 1rem;
-  }
-</style>
+{#each Object.entries(schema) as [key, field] }
+  {#if field.display !== 'private'}
+    {#if fields[field.component] || fields[field.type]}
+      <svelte:component
+        this={field.component ? fields[field.component] : fields[field.type]} 
+        {key} 
+        required={schema.required ? schema.required.includes(key) : false} 
+        {...field}
+        {data}
+        {changeHandler}
+        path={ path ? [...path, key] : [key] }
+      />
+    {/if}
+  {/if}
+{/each}

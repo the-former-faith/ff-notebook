@@ -50,8 +50,7 @@
   .editor {
     display: grid;
     grid-template-columns: 0 1fr 0;
-    /*Will have to make the rows programatic when we use form builder*/
-    grid-template-rows: repeat(2, max-content) 1fr;
+    grid-auto-rows: max-content;
     gap: 1rem;
     margin-top: 1rem;
     margin-bottom: 1rem;

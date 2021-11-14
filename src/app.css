@@ -60,7 +60,7 @@ button {
 	width: 100%;
 }
 
-input {
+input:not([type='radio']) {
 	background: inherit;
 	color: inherit;
 	border: 0;

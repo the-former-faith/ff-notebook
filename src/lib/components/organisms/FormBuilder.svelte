@@ -2,6 +2,7 @@
   import string from "$lib/components/atoms/FieldString.svelte"
   import number from "$lib/components/atoms/FieldNumber.svelte"
   import fieldset from "$lib/components/atoms/FieldSet.svelte"
+  import radio from "$lib/components/atoms/FieldRadio.svelte"
   export let customFields = {}
   export let schema
   export let data
@@ -12,6 +13,7 @@
     string: string,
     number: number,
     object: fieldset,
+    radio: radio,
     ...customFields
   }
 

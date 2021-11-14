@@ -17,7 +17,8 @@ const link = {
         },
         target: {
           "type": "string",
-          "enum": ["_self", "_blank", "_parent", "_top"]
+          "enum": ["_self", "_blank", "_parent", "_top"],
+          "component": "radio"
         }
       }
     }

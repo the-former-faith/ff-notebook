@@ -1,12 +1,12 @@
 <script>
-  import get from 'lodash.get'
+  import rPath from 'ramda/src/path'
   export let key
   export let description
   export let required
   export let data
   export let path
   let descriptionKey = description ? `${key}-description` : undefined
-  let value = get(data, path.join('.'))
+  let value = rPath(path, data)
 </script>
 
 <div>

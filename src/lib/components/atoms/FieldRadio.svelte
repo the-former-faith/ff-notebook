@@ -1,5 +1,6 @@
 <script>
-  import get from 'lodash.get'
+  import rPath from 'ramda/src/path'
+
   let options
   export { options as enum }
   export let key
@@ -7,8 +8,7 @@
   export let path
   export let required = false
   export let data
-  let value = get(data, path.join('.'))
-  console.log(value)
+  let value = rPath(path, data)
 </script>
 
 <fieldset>
@@ -22,6 +22,6 @@
       checked={value === option ? true : undefined}
       on:input={(e)=> changeHandler(option, path)}
     >
-    <label for={option}>{option} - {value === key}</label><br/>
+    <label for={option}>{option}</label><br/>
   {/each}
 </fieldset>

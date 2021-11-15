@@ -1,4 +1,7 @@
 <script>
+  import lensPath from 'ramda/src/lensPath'
+  import set from 'ramda/src/set'
+  import view from 'ramda/src/view'
   import Tiptap from '$lib/components/organisms/Tiptap.svelte'
   import { currentDoc } from '$lib/scripts/stores'
   import { mainService } from '$lib/scripts/mainMachine'
@@ -6,7 +9,6 @@
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
   import { schemas } from '$lib/schema'
-  import set from 'lodash.set'
 
   let collections
   export let id
@@ -25,9 +27,10 @@
   }
 
   const updateRxDB = (oldData, value, path) => {
+    const lens = lensPath(path)
     oldData.updatedAt = new Date().getTime()
-    set(oldData, path.join('.'), value)
-    return oldData
+    const newData = set(lens, value, oldData)
+    return newData
   }
 
   const handleInput = (value, path, data) => {

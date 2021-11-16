@@ -11,7 +11,7 @@
   },
   "type": "module",
   "devDependencies": {
-    "@sveltejs/adapter-netlify": "^1.0.0-next.30",
+    "@sveltejs/adapter-netlify": "^1.0.0-next.0",
     "@sveltejs/kit": "next",
     "@tiptap/core": "^2.0.0-beta.106",
     "@tiptap/extension-bold": "^2.0.0-beta.21",

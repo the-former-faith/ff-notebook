@@ -1,7 +1,6 @@
 <script>
   import lensPath from 'ramda/src/lensPath'
   import set from 'ramda/src/set'
-  import view from 'ramda/src/view'
   import Tiptap from '$lib/components/organisms/Tiptap.svelte'
   import { currentDoc } from '$lib/scripts/stores'
   import { mainService } from '$lib/scripts/mainMachine'

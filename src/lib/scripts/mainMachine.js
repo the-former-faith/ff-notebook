@@ -6,7 +6,7 @@ import {
   forwardTo 
 } from 'xstate'
 import { browser } from '$app/env'
-import rxdbMachine from '$lib/scripts/rxdb-machine'
+//import rxdbMachine from '$lib/scripts/rxdb-machine'
 
 //Set online state
 

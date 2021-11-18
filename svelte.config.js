@@ -1,4 +1,5 @@
 import vercel from '@sveltejs/adapter-vercel'
+//Added note
 
 const config = {
 	kit: {

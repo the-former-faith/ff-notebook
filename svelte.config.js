@@ -10,7 +10,7 @@ const config = {
 		},
 		vite: {
 			ssr: {
-				noExternal: ['pouchdb-browser', 'pouchdb-utils']
+				noExternal: ['pouchdb-browser', 'pouchdb-utils', 'rxdb', 'uuid', 'rxjs']
 			},
 			define: {
 				'process.env': {}

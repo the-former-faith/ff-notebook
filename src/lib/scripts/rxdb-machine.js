@@ -1,6 +1,6 @@
 import { createMachine, assign, sendParent } from 'xstate'
 import { createRxDatabase, addRxPlugin } from 'rxdb'
-import { RxDBUpdatePlugin } from 'rxdb/plugins/update'
+import * as RxDBUpdatePlugin from 'rxdb/dist/lib/plugins/update.js'
 import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
 import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
 import { RxDBValidatePlugin } from 'rxdb/plugins/validate'

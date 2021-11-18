@@ -1,10 +1,10 @@
 import { createMachine, assign, sendParent } from 'xstate'
 import { createRxDatabase, addRxPlugin } from 'rxdb'
 import * as RxDBUpdatePlugin from 'rxdb/dist/lib/plugins/update.js'
-import { RxDBQueryBuilderPlugin } from 'rxdb/plugins/query-builder'
+import { RxDBQueryBuilderPlugin } from 'rxdb/dist/lib/plugins/query-builder'
 import { getRxStoragePouch, addPouchPlugin } from 'rxdb/plugins/pouchdb'
-import { RxDBValidatePlugin } from 'rxdb/plugins/validate'
-import { RxDBMigrationPlugin } from 'rxdb/plugins/migration'
+import * as RxDBValidatePlugin from 'rxdb/dist/lib/plugins/validate.js'
+import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 

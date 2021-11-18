@@ -20,7 +20,7 @@
 </svelte:head>
 
 <article>
-  <DocEditor {id} {collection} />
+  <!--<DocEditor {id} {collection} />-->
 </article>
 
 <style>

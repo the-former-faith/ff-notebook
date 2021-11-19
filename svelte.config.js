@@ -1,22 +1,9 @@
-import netlify from '@sveltejs/adapter-netlify'
-
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: netlify(),
 		// hydrate the <div id="svelte"> element in src/app.html
-		target: '#svelte',
-		files: {
-			serviceWorker: 'src/service-worker',
-		},
-		vite: {
-			ssr: {
-				noExternal: ['pouchdb-browser', 'pouchdb-utils']
-			},
-			define: {
-				'process.env': {}
-			}
-    }
-	},
+		target: '#svelte'
+	}
 };
 
 export default config;

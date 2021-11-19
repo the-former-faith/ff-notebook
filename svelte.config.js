@@ -1,10 +1,18 @@
-import adapter from '@sveltejs/adapter-netlify';
+import adapter from '@sveltejs/adapter-netlify'
 
 const config = {
 	kit: {
 		adapter: adapter(),
-		target: '#svelte'
+		target: '#svelte',
+    vite: {
+			ssr: {
+				noExternal: ['pouchdb-browser', 'pouchdb-utils']
+			},
+			define: {
+				'process.env': {}
+			}
+    }
 	}
-};
+}
 
-export default config;
+export default config

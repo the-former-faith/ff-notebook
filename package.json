@@ -11,12 +11,16 @@
   "devDependencies": {
     "@sveltejs/adapter-netlify": "^1.0.0-next.35",
     "@sveltejs/kit": "next",
+    "@xstate/svelte": "^0.2.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.4.0",
-    "svelte": "^3.42.6"
+    "rxdb": "^10.5.2",
+    "svelte": "^3.42.6",
+    "uuid": "^8.3.2",
+    "xstate": "^4.26.0"
   },
   "type": "module"
 }

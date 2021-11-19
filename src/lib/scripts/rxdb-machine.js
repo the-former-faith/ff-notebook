@@ -1,21 +1,21 @@
 import { createMachine, assign, sendParent } from 'xstate'
-import { createRxDatabase, addRxPlugin } from 'rxdb'
-import * as RxDBUpdatePlugin from 'rxdb/dist/lib/plugins/update.js'
-import { RxDBQueryBuilderPlugin } from 'rxdb/dist/lib/plugins/query-builder/index.js'
-import { getRxStoragePouch, addPouchPlugin } from 'rxdb/dist/lib/plugins/pouchdb/index.js'
-import * as RxDBValidatePlugin from 'rxdb/dist/lib/plugins/validate.js'
-import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration/index.js'
-import * as idb from 'pouchdb-adapter-idb'
+// import { createRxDatabase, addRxPlugin } from 'rxdb'
+// import * as RxDBUpdatePlugin from 'rxdb/dist/lib/plugins/update.js'
+// import { RxDBQueryBuilderPlugin } from 'rxdb/dist/lib/plugins/query-builder/index.js'
+// import { getRxStoragePouch, addPouchPlugin } from 'rxdb/dist/lib/plugins/pouchdb/index.js'
+//import * as RxDBValidatePlugin from 'rxdb/dist/lib/plugins/validate.js'
+// import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration/index.js'
+// import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
-import { schemas } from '$lib/schema'
+import { schemas } from '$lib/scripts/schema'
 
 //Add plugins
-addRxPlugin(RxDBUpdatePlugin)
-addRxPlugin(RxDBQueryBuilderPlugin)
-addRxPlugin(RxDBValidatePlugin)
-addRxPlugin(RxDBMigrationPlugin)
-addPouchPlugin(idb)
+//addRxPlugin(RxDBUpdatePlugin)
+//addRxPlugin(RxDBQueryBuilderPlugin)
+//addRxPlugin(RxDBValidatePlugin)
+//addRxPlugin(RxDBMigrationPlugin)
+//addPouchPlugin(idb)
 
 const rxdbMachine = createMachine({
     id: 'rxdb',
@@ -28,27 +28,27 @@ const rxdbMachine = createMachine({
     },
     states: {
       initiating: {
-        invoke: {
-          id: 'initiateDb',
-          src: () => createRxDatabase({
-            name: 'rxdbdemo',
-            storage: getRxStoragePouch('idb'),
-            ignoreDuplicate: true
-          }),
-          onDone: {
-            target: 'addingCollections',
-            actions: [
-              assign({ db: (context, event) => event.data }),
-            ]
-          },
-          onError: {
-            target: 'failure',
-            actions: [
-              (context, event) => console.log(event.data),
-              assign({ error: (context, event) => event.data })
-            ]
-          }
-        }
+        // invoke: {
+        //   id: 'initiateDb',
+        //   src: () => createRxDatabase({
+        //     name: 'rxdbdemo',
+        //     storage: getRxStoragePouch('idb'),
+        //     ignoreDuplicate: true
+        //   }),
+        //   onDone: {
+        //     target: 'addingCollections',
+        //     actions: [
+        //       assign({ db: (context, event) => event.data }),
+        //     ]
+        //   },
+        //   onError: {
+        //     target: 'failure',
+        //     actions: [
+        //       (context, event) => console.log(event.data),
+        //       assign({ error: (context, event) => event.data })
+        //     ]
+        //   }
+        // }
       },
       addingCollections: {
         invoke: {

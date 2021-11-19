@@ -6,10 +6,10 @@ const config = {
 		target: '#svelte',
     vite: {
 			ssr: {
-				noExternal: ['pouchdb-browser', 'pouchdb-utils']
+				noExternal: ['pouchdb-browser', 'pouchdb-utils'] //For RxDB
 			},
 			define: {
-				'process.env': {}
+				'process.env': {} //For RxDB
 			}
     }
 	}

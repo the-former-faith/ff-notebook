@@ -11,11 +11,11 @@ import { v1 as uuidv1 } from 'uuid'
 import { schemas } from '$lib/scripts/schema'
 
 //Add plugins
-//addRxPlugin(RxDBUpdatePlugin)
-//addRxPlugin(RxDBQueryBuilderPlugin)
-//addRxPlugin(RxDBValidatePlugin)
-//addRxPlugin(RxDBMigrationPlugin)
-//addPouchPlugin(idb)
+addRxPlugin(RxDBUpdatePlugin)
+addRxPlugin(RxDBQueryBuilderPlugin)
+addRxPlugin(RxDBValidatePlugin)
+addRxPlugin(RxDBMigrationPlugin)
+addPouchPlugin(idb)
 
 const rxdbMachine = createMachine({
     id: 'rxdb',

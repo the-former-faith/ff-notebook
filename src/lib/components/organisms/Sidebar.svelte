@@ -1,7 +1,7 @@
 <script>
   import { allDocsOpened } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
-  //import { mainService } from '$lib/scripts/mainMachine'
+  import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
   import DocList from '$lib/components/molecules/DocList.svelte'
 
@@ -14,10 +14,10 @@
 
 <aside>
   <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
-    {#if $collections}
+    <!-- {#if $collections}
       {#each Object.entries($collections) as [title, collection] }
         <DocList {title} {collection} />
       {/each}
-    {/if}
+    {/if} -->
   </DetailsSummary>
 </aside>

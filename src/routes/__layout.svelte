@@ -1,14 +1,14 @@
 <script>
 	import '../app.css'
-	//import { browser } from '$app/env'
-	//import { mainService } from '$lib/scripts/mainMachine'
+	import { browser } from '$app/env'
+	import { mainService } from '$lib/scripts/mainMachine'
 	import Sidebar from '$lib/components/organisms/Sidebar.svelte'
 
-	// $: if (browser) {
-	// 	mainService.send('BROWSER_LOADED')
-	// 	window.addEventListener('offline', () => mainService.send('TOGGLE'))
-	// 	window.addEventListener('online', () => mainService.send('TOGGLE'))
-	// }
+	$: if (browser) {
+		mainService.send('BROWSER_LOADED')
+		window.addEventListener('offline', () => mainService.send('TOGGLE'))
+		window.addEventListener('online', () => mainService.send('TOGGLE'))
+	}
 </script>
 
 <main>

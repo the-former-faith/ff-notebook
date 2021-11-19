@@ -6,7 +6,7 @@ import { createMachine, assign, sendParent } from 'xstate'
 //import * as RxDBValidatePlugin from 'rxdb/dist/lib/plugins/validate.js'
 // import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration/index.js'
 // import * as idb from 'pouchdb-adapter-idb'
-import { v1 as uuidv1 } from 'uuid'
+//import { v1 as uuidv1 } from 'uuid'
 
 import { schemas } from '$lib/scripts/schema'
 
@@ -99,7 +99,7 @@ const rxdbMachine = createMachine({
     actions: {
       createDoc: async (context, event) => {
         const blankDoc = {
-          id: uuidv1(),
+          id: 'test',//uuidv1(),
           title: '',
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),

@@ -24,31 +24,31 @@ const rxdbMachine = createMachine({
       db: undefined,
       collections: undefined,
       error: undefined,
-      schemas: undefined //schemas
+      schemas: schemas
     },
     states: {
       initiating: {
-        // invoke: {
-        //   id: 'initiateDb',
-        //   src: () => createRxDatabase({
-        //     name: 'rxdbdemo',
-        //     storage: getRxStoragePouch('idb'),
-        //     ignoreDuplicate: true
-        //   }),
-        //   onDone: {
-        //     target: 'addingCollections',
-        //     actions: [
-        //       assign({ db: (context, event) => event.data }),
-        //     ]
-        //   },
-        //   onError: {
-        //     target: 'failure',
-        //     actions: [
-        //       (context, event) => console.log(event.data),
-        //       assign({ error: (context, event) => event.data })
-        //     ]
-        //   }
-        // }
+        invoke: {
+          id: 'initiateDb',
+          src: () => createRxDatabase({
+            name: 'rxdbdemo',
+            storage: getRxStoragePouch('idb'),
+            ignoreDuplicate: true
+          }),
+          onDone: {
+            target: 'addingCollections',
+            actions: [
+              assign({ db: (context, event) => event.data }),
+            ]
+          },
+          onError: {
+            target: 'failure',
+            actions: [
+              (context, event) => console.log(event.data),
+              assign({ error: (context, event) => event.data })
+            ]
+          }
+        }
       },
       addingCollections: {
         invoke: {
@@ -99,7 +99,7 @@ const rxdbMachine = createMachine({
     actions: {
       createDoc: async (context, event) => {
         const blankDoc = {
-          id: 'test',//uuidv1(),
+          id: uuidv1(),
           title: '',
           createdAt: new Date().getTime(),
           updatedAt: new Date().getTime(),

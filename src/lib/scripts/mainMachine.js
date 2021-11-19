@@ -6,15 +6,13 @@ import {
   forwardTo 
 } from 'xstate'
 import { browser } from '$app/env'
-//import rxdbMachine from '$lib/scripts/rxdb-machine'
-
-//Set online state
+import rxdbMachine from '$lib/scripts/rxdb-machine'
 
 let initialOnlineStatus = 'online'
 
-// if (browser) {
-//   initialOnlineStatus = navigator.onLine ? 'online' : 'offline'
-// }
+if (browser) {
+  initialOnlineStatus = navigator.onLine ? 'online' : 'offline'
+}
 
 const mainMachine = createMachine(
   {

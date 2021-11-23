@@ -63,35 +63,35 @@ const meta = {
     type: 'array',
     component: 'TipTap',
     items: {
-      anyOf: [{
-        type: 'object',
-        title: 'paragraph',
-        properties: {
-          type: {
-            type: 'string'
-          },
-          content: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string'
-                },
-                marks: {
-                  type: 'array',
-                  items: {
-                    anyOf: [link, bold]
-                  }
-                },
-                text: {
-                  type: 'string'
-                }
-              },
-            }
-          }
-        }
-      }]
+      // anyOf: [{
+      //   type: 'object',
+      //   title: 'paragraph',
+      //   properties: {
+      //     type: {
+      //       type: 'string'
+      //     },
+      //     content: {
+      //       type: 'array',
+      //       items: {
+      //         type: 'object',
+      //         properties: {
+      //           type: {
+      //             type: 'string'
+      //           },
+      //           // marks: {
+      //           //   type: 'array',
+      //           //   items: {
+      //           //     anyOf: [link, bold]
+      //           //   }
+      //           // },
+      //           text: {
+      //             type: 'string'
+      //           }
+      //         },
+      //       }
+      //     }
+      //   }
+      // }]
     }
   },
   createdAt: {
@@ -126,7 +126,7 @@ export const imageSchema = {
   schema: {
     title: 'image',
     description: 'an individual note',
-    version: 1,
+    version: 0,
     type: 'object',
     indexes: [
       'createdAt',

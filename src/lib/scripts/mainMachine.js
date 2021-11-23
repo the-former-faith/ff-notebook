@@ -52,9 +52,9 @@ const mainMachine = createMachine(
         initial: 'false',
         states: {
           true: {
-            // entry: assign({
-            //   rxdb: () => spawn(rxdbMachine, { sync: true })
-            // }),
+            entry: assign({
+              rxdb: () => spawn(rxdbMachine, { sync: true })
+            }),
             on: {
               'DB_LOADED': {
                 actions: [

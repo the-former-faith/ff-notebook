@@ -9,6 +9,7 @@ import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
 import { schemas } from '$lib/scripts/schema'
+import filter from 'ramda/src/filter'
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)
@@ -16,6 +17,12 @@ addRxPlugin(RxDBQueryBuilderPlugin)
 addRxPlugin(RxDBValidatePlugin)
 addRxPlugin(RxDBMigrationPlugin)
 addPouchPlugin(idb)
+
+const checkIfArray = (x) => Array.isArray(x) !== true
+
+const schemaWithoutArrays = filter(checkIfArray, schemas)
+
+console.log(schemaWithoutArrays)
 
 const rxdbMachine = createMachine({
     id: 'rxdb',

@@ -8,16 +8,16 @@
   let collections
 
   $: if($mainService?.context.rxdb) {
-    //collections = useSelector($mainService.context.rxdb, (state) => state.context.collections)
+    collections = useSelector($mainService.context.rxdb, (state) => state.context.collections)
   }
 </script>
 
 <aside>
   <DetailsSummary title="All Docs" isOpen={$allDocsOpened}>
-    <!-- {#if $collections}
+    {#if $collections}
       {#each Object.entries($collections) as [title, collection] }
         <DocList {title} {collection} />
       {/each}
-    {/if} -->
+    {/if}
   </DetailsSummary>
 </aside>

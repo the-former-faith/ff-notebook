@@ -7,7 +7,7 @@
 
   let collections
 
-  $: if($mainService) {
+  $: if($mainService?.context.rxdb) {
     //collections = useSelector($mainService.context.rxdb, (state) => state.context.collections)
   }
 </script>

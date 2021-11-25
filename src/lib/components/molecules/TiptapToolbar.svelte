@@ -2,7 +2,7 @@
   import TiptapHeaderSelect from '$lib/components/molecules/TiptapHeaderSelect.svelte'
   import TiptapModalButton from '$lib/components/molecules/TiptapModalButton.svelte'
   export let editor
-  export let marks
+  export let marks = []
 </script>
 
 <div class="toolbar">

@@ -27,12 +27,14 @@
     bold: Bold
   }
 
-  const marks = items[0].properties.content.items.properties.marks.items
+  const marks = items[0]?.properties.content.items.properties.marks.items
 
   const createMarksArray = (marks, extensions) => {
-    return marks.map(mark => {
-      return extensions[mark.title]
-    })
+    if(marks) {
+      return marks.map(mark => extensions[mark.title])
+    } else {
+      return []
+    }
   }
 
   $: if(data.id) {

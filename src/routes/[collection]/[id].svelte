@@ -9,7 +9,7 @@
 </script>
 
 <script>
-  //import DocEditor from '$lib/DocEditor.svelte'
+  import DocEditor from '$lib/components/organisms/DocEditor.svelte'
 
   export let id
   export let collection
@@ -20,7 +20,7 @@
 </svelte:head>
 
 <article>
-  <!--<DocEditor {id} {collection} />-->
+  <DocEditor {id} {collection} />
 </article>
 
 <style>

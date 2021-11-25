@@ -1,14 +1,14 @@
 <script>
   import { currentDoc } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
-  //import CreateDocButton from '$lib/components/atoms/CreateDocButton.svelte'
+  import CreateDocButton from '$lib/components/atoms/CreateDocButton.svelte'
   import DocLink from '$lib/components/molecules/DocLink.svelte'
   export let collection
   export let title
 </script>
 
 <div>
-  <!--<CreateDocButton collection={title} />-->
+  <CreateDocButton collection={title} />
   <DetailsSummary {title} isOpen={true}>
     <ul id="note-list" class="nostyle">
       {#if $collection}

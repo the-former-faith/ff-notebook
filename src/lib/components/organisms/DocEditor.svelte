@@ -38,8 +38,6 @@
   }
 </script>
 
-<ArticleParser />
-
 <div class="editor">
   {#if $currentDoc}
     <FormBuilder 

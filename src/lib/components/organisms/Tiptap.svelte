@@ -7,7 +7,7 @@
   import Bold from '@tiptap/extension-bold'
   import Collaboration from '@tiptap/extension-collaboration'
   import Link from '@tiptap/extension-link'
-  
+  import findEntities from '$lib/scripts/findEntities'
   import Toolbar from '$lib/components/molecules/TiptapToolbar.svelte'
   import ImageBlock from '$lib/components/molecules/TiptapImageBlock'
   import * as Y from 'yjs'
@@ -93,19 +93,14 @@
   <Toolbar {editor} {marks} />
 {/if}
 <div class="tiptap">
+  <button type="button" 
+    preventDefault={true} 
+    on:click={()=> findEntities( editor.getText() )}
+  >Run Wink</button>
   <EditorContent editor={editor} />
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>
   </button>
-  <button type="button" 
-    preventDefault={true} 
-    on:click={()=> {
-      editor.commands.focus()
-      setTimeout(() => { 
-        console.log(editor.state.selection) 
-      }, 300)
-    }}
-  >Log Editor</button>
 </div>
 
 <style>

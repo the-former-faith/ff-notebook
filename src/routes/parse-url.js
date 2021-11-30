@@ -1,18 +1,18 @@
-import { extract } from 'article-parser'
+// import { extract } from 'article-parser'
 
-export async function get({ query }) {
+// export async function get({ query }) {
 
-  url = query.get('url')
+//   url = query.get('url')
 
-  let results
+//   let results
 
-  await extract(url).then((article) => {
-    results = article 
-  }).catch((err) => {
-    console.log(err)
-  })
+//   await extract(url).then((article) => {
+//     results = article 
+//   }).catch((err) => {
+//     console.log(err)
+//   })
 
-  return {
-    body: results
-  }
-}
+//   return {
+//     body: results
+//   }
+// }

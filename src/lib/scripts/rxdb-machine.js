@@ -8,7 +8,7 @@ import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration/index.js'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
-import { schemas } from '$lib/schema'
+import { schemas } from '$lib/scripts/schema'
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)

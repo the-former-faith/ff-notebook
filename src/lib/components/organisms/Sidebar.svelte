@@ -3,7 +3,7 @@
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
   import { mainService } from '$lib/scripts/mainMachine'
   import { useSelector } from '@xstate/svelte'
-  import DocList from '$lib/DocList.svelte'
+  import DocList from '$lib/components/molecules/DocList.svelte'
 
   let collections
 

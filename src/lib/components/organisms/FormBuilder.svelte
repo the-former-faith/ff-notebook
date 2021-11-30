@@ -16,10 +16,6 @@
     radio: radio,
     ...customFields
   }
-
-  //@TODO: pull actual onchange handlers out of inputs and pass as a prop.
-  //This way the top-level form can save to RxDB,
-  //And the modals can save to Tiptap.
 </script>
 
 {#each Object.entries(schema) as [key, field] }

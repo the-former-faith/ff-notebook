@@ -1,8 +1,8 @@
 <script>
-  import { currentDoc } from './scripts/stores'
+  import { currentDoc } from '$lib/scripts/stores'
   import DetailsSummary from '$lib/components/molecules/DetailsSummary.svelte'
-  import CreateDocButton from './CreateDocButton.svelte'
-  import DocLink from '$lib/DocLink.svelte'
+  import CreateDocButton from '$lib/components/atoms/CreateDocButton.svelte'
+  import DocLink from '$lib/components/molecules/DocLink.svelte'
   export let collection
   export let title
 </script>

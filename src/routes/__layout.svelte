@@ -11,7 +11,6 @@
 	}
 </script>
 
-<!--<p>Online status: {$mainMachineState.value.connectionStatus}</p>-->
 <main>
   <Sidebar />
 	<slot />

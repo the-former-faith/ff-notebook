@@ -6,9 +6,7 @@ import {
   forwardTo 
 } from 'xstate'
 import { browser } from '$app/env'
-//import rxdbMachine from '$lib/scripts/rxdb-machine'
-
-//Set online state
+import rxdbMachine from '$lib/scripts/rxdb-machine'
 
 let initialOnlineStatus = 'online'
 
@@ -54,9 +52,9 @@ const mainMachine = createMachine(
         initial: 'false',
         states: {
           true: {
-            // entry: assign({
-            //   rxdb: () => spawn(rxdbMachine, { sync: true })
-            // }),
+            entry: assign({
+              rxdb: () => spawn(rxdbMachine, { sync: true })
+            }),
             on: {
               'DB_LOADED': {
                 actions: [

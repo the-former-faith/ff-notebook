@@ -8,7 +8,7 @@
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
   import ArticleParser from '$lib/components/molecules/ArticleParser.svelte'
-  import { schemas } from '$lib/schema'
+  import { schemas } from '$lib/scripts/schema'
 
   let collections
   export let id
@@ -37,8 +37,6 @@
     data.atomicUpdate((x) => updateRxDB(x, value, path))
   }
 </script>
-
-<ArticleParser />
 
 <div class="editor">
   {#if $currentDoc}

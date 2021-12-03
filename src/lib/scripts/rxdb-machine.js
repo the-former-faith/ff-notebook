@@ -8,7 +8,27 @@ import { RxDBMigrationPlugin } from 'rxdb/dist/lib/plugins/migration/index.js'
 import * as idb from 'pouchdb-adapter-idb'
 import { v1 as uuidv1 } from 'uuid'
 
+import * as R from 'ramda'
+
 import { schemas } from '$lib/scripts/schema'
+
+const deepOmit = (target, value) => {
+  switch (R.type(value)) {
+    case "Array":
+      return value.map((elem) => deepOmit(target, elem))
+    case "Object":
+      return deepObjectOmit(target, value)
+    default:
+      return value
+  }
+}
+
+const deepObjectOmit = (target, obj) => Object.entries(R.omit(target, obj)).reduce(
+  (acc, [key, value]) => ({ ...acc, [key]: deepOmit(target, value) }),
+  {}
+)
+
+const schemaWithBodyRemoved = deepObjectOmit(['body'], schemas)
 
 //Add plugins
 addRxPlugin(RxDBUpdatePlugin)
@@ -24,7 +44,7 @@ const rxdbMachine = createMachine({
       db: undefined,
       collections: undefined,
       error: undefined,
-      schemas: schemas
+      schemas: schemaWithBodyRemoved
     },
     states: {
       initiating: {

@@ -97,9 +97,6 @@ import { async } from 'rxjs';
 
   //TODO: add cleanup onDestroy
 
-  //const marks = state.doc.resolve(pos).marks()
-
-
   const setMarks = (nlpResults, editor) => {
     nlpResults.forEach(x => {
       const existingMark = editor.state.doc.resolve(x.offset.start + (x.offset.length / 2)).marks()
@@ -139,7 +136,6 @@ import { async } from 'rxjs';
 </div>
 
 <style>
-
   .tiptap:empty {
     display: none;
   }

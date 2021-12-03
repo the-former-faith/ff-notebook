@@ -36,8 +36,6 @@ const bold = {
   }
 }
 
-export const marks = [link, bold]
-
 /* Objects */
 const date = {
   title: 'date',
@@ -64,37 +62,33 @@ const meta = {
   body: {
     type: 'array',
     component: 'TipTap',
-    items: {
-      anyOf: [{
-        type: 'object',
-        title: 'paragraph',
-        properties: {
-          type: {
-            type: 'string'
-          },
-          content: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                type: {
-                  type: 'string'
-                },
-                marks: {
-                  type: 'array',
-                  items: {
-                    anyOf: [link, bold]
-                  }
-                },
-                text: {
-                  type: 'string'
-                }
+    items: [{
+      type: 'object',
+      title: 'paragraph',
+      properties: {
+        type: {
+          type: 'string'
+        },
+        content: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              type: {
+                type: 'string'
               },
-            }
+              marks: {
+                type: 'array',
+                items: [link, bold]
+              },
+              text: {
+                type: 'string'
+              }
+            },
           }
         }
-      }]
-    }
+      }
+    }]
   },
   createdAt: {
     type: 'number',

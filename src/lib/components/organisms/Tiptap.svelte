@@ -27,9 +27,7 @@
     bold: Bold
   }
 
-  import {marks} from '$lib/scripts/schema'
-import { async } from 'rxjs';
-  //const marks = items[0]?.properties.content.items.properties.marks.items
+  const marks = items[0]?.properties.content.items.properties.marks.items
 
   const createMarksArray = (marks, extensions) => {
     if(marks) {

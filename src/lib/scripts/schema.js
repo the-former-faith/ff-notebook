@@ -36,6 +36,8 @@ const bold = {
   }
 }
 
+export const marks = [link, bold]
+
 /* Objects */
 const date = {
   title: 'date',

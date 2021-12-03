@@ -27,7 +27,9 @@
     bold: Bold
   }
 
-  const marks = items[0]?.properties.content.items.properties.marks.items
+  import {marks} from '$lib/scripts/schema'
+import { async } from 'rxjs';
+  //const marks = items[0]?.properties.content.items.properties.marks.items
 
   const createMarksArray = (marks, extensions) => {
     if(marks) {
@@ -75,6 +77,14 @@
         editor = editor
       },
     })
+
+    
+    // editor.on('update', (e) => {
+    //   const test = editor.state.doc.descendants((node) => {
+    //     console.log(node)
+    //   })
+    //   console.log(test)
+    // })
   }
 
   const addParagraphToEnd = () => {
@@ -86,6 +96,27 @@
   }
 
   //TODO: add cleanup onDestroy
+
+  //const marks = state.doc.resolve(pos).marks()
+
+
+  const setMarks = (nlpResults, editor) => {
+    nlpResults.forEach(x => {
+      const existingMark = editor.state.doc.resolve(x.offset.start + (x.offset.length / 2)).marks()
+      if (existingMark.length === 0) {
+        editor
+          .chain()
+          .setTextSelection({from: x.offset.start + 1, to: x.offset.start + x.offset.length + 1})
+          .setMark('bold')
+          .run()
+      }
+    })
+  }
+
+  const runNlp = async (editor) => {
+    const results = await findEntities( editor.getText({ blockSeparator: "\n\n" }) )
+    setMarks(results.people, editor)
+  }
   
 </script>
 
@@ -95,8 +126,12 @@
 <div class="tiptap">
   <button type="button" 
     preventDefault={true} 
-    on:click={()=> findEntities( editor.getText() )}
-  >Run Wink</button>
+    on:click={()=> runNlp(editor)}
+  >Find Entities</button>
+  <button type="button" 
+    preventDefault={true} 
+    on:click={()=> setTimeout(() => {console.log(editor.state.selection)}, 1000)}
+  >Log Editor</button>
   <EditorContent editor={editor} />
   <button class="focus-filler" on:click={addParagraphToEnd}>
     <span class="screen-reader-text">Focus to end of doc</span>

@@ -10,7 +10,7 @@ import { v1 as uuidv1 } from 'uuid'
 
 import * as R from 'ramda'
 
-import { schemas } from '$lib/scripts/schema'
+import { schemas } from '$lib/scripts/schemata'
 
 //@TODO: Move to external utility file
 const deepOmit = (target, value) => {
@@ -131,7 +131,7 @@ const rxdbMachine = createMachine({
         // $allDocsOpened = false
       }
     }
-  })
+})
 
 export default rxdbMachine
 

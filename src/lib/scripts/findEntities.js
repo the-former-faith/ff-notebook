@@ -7,6 +7,8 @@ nlp.extend(compromiseNumbers)
 
 let myWords = {
   betsey: 'FirstName',
+  dietrich: 'FirstName',
+  bonhoeffer: 'LastName',
 }
 
 const findEntities = async (text) => {

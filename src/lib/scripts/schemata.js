@@ -25,6 +25,29 @@ const link = {
   }
 }
 
+const reference = {
+  title: 'reference',
+  type: 'object',
+  properties: {
+    type: {
+      "type": "string",
+      "enum": ["reference"]
+    },
+    attrs: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'string',
+          component: 'autocomplete',
+          options: {
+            datasets: ['posts']
+          }
+        },
+      }
+    }
+  }
+}
+
 const bold = {
   title: 'bold',
   type: 'object',
@@ -79,7 +102,7 @@ const meta = {
               },
               marks: {
                 type: 'array',
-                items: [link, bold]
+                items: [link, bold, reference]
               },
               text: {
                 type: 'string'

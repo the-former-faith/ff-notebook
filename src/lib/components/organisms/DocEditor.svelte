@@ -8,7 +8,7 @@
   import ImageInput from '$lib/components/molecules/ImageInput.svelte'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
   import ArticleParser from '$lib/components/molecules/ArticleParser.svelte'
-  import { schemas } from '$lib/scripts/schema'
+  import { schemas } from '$lib/scripts/schemata'
 
   let collections
   export let id

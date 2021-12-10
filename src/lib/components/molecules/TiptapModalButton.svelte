@@ -1,6 +1,7 @@
 <script>
   import { DialogOverlay, DialogContent } from 'svelte-accessible-dialog'
   import FormBuilder from '$lib/components/organisms/FormBuilder.svelte'
+  import Autocomplete from '$lib/components/atoms/Autocomplete.svelte'
 
   export let editor
   export let title
@@ -40,6 +41,7 @@
       <FormBuilder 
         schema={schema.properties} 
         {data} 
+        customFields={{autocomplete: Autocomplete}}
         changeHandler={(value, path) => handleChange(value, path, editor)}
       />
     {/if}

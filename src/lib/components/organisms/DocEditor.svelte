@@ -42,7 +42,10 @@
   {#if $currentDoc}
     <FormBuilder 
       schema={schemas[collection].schema.properties}
-      customFields={{ImageInput: ImageInput, TipTap: Tiptap}}
+      customFields={{
+        ImageInput: ImageInput, 
+        TipTap: Tiptap
+      }}
       data={$currentDoc}
       changeHandler={(value, path) => handleInput(value, path, $currentDoc)}
     />
